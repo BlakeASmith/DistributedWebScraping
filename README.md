@@ -8,7 +8,9 @@ Clone the repo using the `--recurse-submodules` tag
 
 ```bash
 git clone --recurse-submodules https://github.com/BlakeASmith/DistributedWebScraping.git
+sh onclone.sh
 ```
+
 
 ## Routing
 
