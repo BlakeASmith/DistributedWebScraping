@@ -1,0 +1,10 @@
+
+title New Mobile Clients Enter the Network
+
+Mobile --> RoutingService: (IP, PORT)
+RoutingService --> Mobile: leader(IP, PORT), [](IP, PORT)
+Mobile --> Leader: JobRequest()
+Leader --> Mobile: Job
+Mobile --> Leader: JobComplete()
+Leader --> Mobile: Confirmation
+
