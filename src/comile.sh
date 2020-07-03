@@ -7,3 +7,4 @@ protoc \
   $(find ../proto -iname "*.proto")
 
 go build main.go
+go build proto/app.pb.go
