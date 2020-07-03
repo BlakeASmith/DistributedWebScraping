@@ -21,6 +21,6 @@ def whoIsMaster():
         return json.load(info)
 
 if __name__ == "__main__":
-    app.run(port=9696)
+    app.run(host="0.0.0.0")
 
 
