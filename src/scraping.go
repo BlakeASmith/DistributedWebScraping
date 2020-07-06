@@ -6,9 +6,9 @@ import (
 
 func nextJob() *proto.Job {
 	return &proto.Job{ Urls: []string {
-			"http://www.yahoo.com",
-			"http://www.amazon.com",
-			"http://www.wikipedia.org",
+			"https://www.yahoo.com",
+			"https://www.amazon.com",
+			"https://www.wikipedia.org",
 			"http://www.qq.com",
 			"http://www.google.co.in",
 			"http://www.twitter.com",
