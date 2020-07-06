@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">DistributedWebScraping</string>
+    <string name="working_button_text_positive">Start Working</string>
+    <string name="working_button_text_negative">Stop Working</string>
+</resources>
