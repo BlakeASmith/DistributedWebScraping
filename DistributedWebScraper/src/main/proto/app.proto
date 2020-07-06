@@ -1,0 +1,14 @@
+
+syntax = 'proto3';
+
+service Master{
+    rpc RequestJob(JobRequest) returns (Job) {};
+}
+
+message JobRequest {
+    int32 id = 1;
+}
+
+message Job {
+    int32 id = 1;
+}
