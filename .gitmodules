@@ -1,6 +1,0 @@
-[submodule "DistributedWebScraping-Android"]
-	path = DistributedWebScraping-Android
-	url = https://github.com/BlakeASmith/DistributedWebScraping-Android.git
-[submodule "DistributedWebScraper"]
-	path = DistributedWebScraper
-	url = https://github.com/BlakeASmith/DistributedWebScraper.git
