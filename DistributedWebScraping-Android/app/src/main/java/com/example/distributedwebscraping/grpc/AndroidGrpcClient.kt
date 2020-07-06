@@ -10,7 +10,7 @@ import org.json.JSONObject
 import withConnectionToMaster
 
 val routingServerRequestHandler = object : HttpRequestHandler<Pair<String, Int>> {
-    override fun <R> get(url: String, action: (Pair<String, Int>) -> R) = GlobalScope.async {
+    override fun <R> get(url: String, error: (Throwable) -> R,  action: (Pair<String, Int>) -> R) = GlobalScope.async {
         OkHttpClient().newCall(Request.Builder().url(url).build()).execute()
             .body().string().also(::println)
             .let { JSONObject(it) }

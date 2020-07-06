@@ -40,9 +40,6 @@ class MainActivity : PermissionHandler() {
                     val txtview: TextView = findViewById(R.id.textview1)
                     txtview.text = it.urlsList.toString()
                     GlobalScope.launch {
-                        scrape(it.urlsList).forEach {json ->
-                            runOnUiThread { setViewText(json) }
-                        }
                     }
                 }
         }

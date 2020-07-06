@@ -1,0 +1,4 @@
+#Mon Jul 06 14:03:24 PDT 2020
+base.0=/home/larbs/projects/DistributedWebScraping/DistributedWebScraping-Android/app/build/intermediates/dex/debug/mergeDexDebug/classes.dex
+path.0=classes.dex
+renamed.0=classes.dex
