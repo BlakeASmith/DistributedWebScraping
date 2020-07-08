@@ -1,16 +1,16 @@
 package com.example.distributedwebscraping
 import android.Manifest
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import com.example.distributedwebscraping.grpc.AndroidGrpcClient
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import scrape
+import com.example.distributedwebscraping.grpc.AndroidMasterServiceConnection
+import jobRequest
+import jobResult
 
 val INTERNET = Permission(Manifest.permission.INTERNET)
+
+val masterConnection = AndroidMasterServiceConnection()
 
 class MainActivity : PermissionHandler() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,25 +23,9 @@ class MainActivity : PermissionHandler() {
         txtview.text = text
     }
 
-    fun startWorking(startWorkingButton: View) {
-        startWorkingButton as Button
-        /*startWorkingButton.text =
-            if (startWorkingButton.text == getString(R.string.working_button_text_positive))
-                getString(R.string.working_button_text_negative)
-            else
-                getString(R.string.working_button_text_positive)
-         */
-
-        withPermission(INTERNET){
-            Log.d("RESP", "requesting work")
-            AndroidGrpcClient().requestWork(App.JobRequest.newBuilder().setId(10).build())
-                .also {
-                    startWorkingButton.text = it.id.toString()
-                    val txtview: TextView = findViewById(R.id.textview1)
-                    txtview.text = it.urlsList.toString()
-                    GlobalScope.launch {
-                    }
-                }
-        }
+    suspend fun startWorking(startWorkingButton: View) = requiring(INTERNET){
+            startWorkingButton as Button
+            val job = masterConnection.requestWork(jobRequest(7))
+            masterConnection.completeWork(jobResult(job, listOf("FOOOO")))
     }
 }

@@ -56,11 +56,13 @@ abstract class PermissionHandler: AppCompatActivity() {
             this.onPermissionDenied(requestCode, permissions)
     }
 
-    fun <R> withPermission(vararg permission: Permission, action: () -> R){
+    suspend fun <R> requiring(vararg permission: Permission, action: suspend () -> R): R?{
         permission.forEach {
-            if (!it.check(this)) return
+            if (!it.check(this)) return null
         }
         // If we are here we must have all permissions
-        action()
+        return action()
     }
+
+
 }

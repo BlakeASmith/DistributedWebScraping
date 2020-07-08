@@ -1,16 +1,17 @@
 import com.google.gson.Gson
-import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import org.jsoup.nodes.Document
 import org.jsoup.Jsoup
 
 object JsoupHttp: HttpRequestHandler<Document>{
-    override fun <R> get(url: String,error: (Throwable) -> R, action: (Document) -> R) = GlobalScope.async(Dispatchers.IO) {
-        val httpsurl = if ("https" in url) url else url.replace("http", "https")
-        kotlin.runCatching {  Jsoup.connect(httpsurl).get().let(action) }
-            .getOrElse(error)
-    }
+    override suspend fun <R> get(url: String,error: (Throwable) -> R, action: suspend (Document) -> R) = kotlin.runCatching {
+        action(Jsoup.connect(
+                if ("https" in url) url
+                else url.replace("http", "https")
+        ).get())
+    }.getOrElse(error)
 }
+
 
 /**
  * perform an operation on all of the HTML pages present
@@ -23,26 +24,16 @@ object JsoupHttp: HttpRequestHandler<Document>{
  * @return a sequence of JSON strings. The HTTP requests are executed in parallel
  * but are not awaited until requested from the sequence
  * */
-fun scrape(
-    urls: Iterable<String>, nParallel: Int = 10,
-    action: (Document) -> String
-) = urls
-    .asSequence()
-    .chunked(nParallel)
-    .flatMap { list ->
-        list.map {
-            JsoupHttp.get(it, { err -> err.toString() }, action)
-        }.asSequence()
-    }
-    .map{ runBlocking { it.await() } }
+suspend fun scrape(
+    urls: Iterable<String>,
+    action: suspend (Document) -> String
+) = urls.asFlow().map { JsoupHttp.get(it, { err -> err.toString() }, action) }
 
 fun links(document: Document) = document.select("a")
-    .map { it.attr("href") }
+    .map { it.attr("href") }.asFlow()
 
 suspend fun crawlPage(root: String, startPath: String = ""): Flow<String> = flowOf(root + startPath)
-        .map { JsoupHttp.get(it) { html -> links(html) } }
-        .map { it.await() }
-        .flatMapMerge { it.asFlow() }
+        .map { JsoupHttp.get(it) { html -> links(html) } }.flattenMerge()
         .filter { "http" in it && root !in it }
         .map { if (root in it) it else root+it }
 
@@ -55,9 +46,6 @@ suspend fun crawl(root: String, startPath: String, depth: Int = 3, curDepth: Int
         }.toList()
 }
 
-fun main() {
-
-}
 
 
 
@@ -70,4 +58,5 @@ fun wc(html: Document)= html.allElements
     .groupBy { it }
     .mapValues { (_ , value) -> value.size }
     .let { Gson().toJson(it) }
+
 
