@@ -2,7 +2,55 @@ package main
 
 import (
 	"./proto"
+	"net/http"
+	"strings"
+	"log"
+	"github.com/PuerkitoBio/goquery"
 )
+
+
+// get a goquery document from a url
+func getDocument(url string) *goquery.Document {
+	response, err := http.Get(url)
+	if err != nil { log.Fatal(err) }
+	defer response.Body.Close()
+
+	document, err := goquery.NewDocumentFromReader(response.Body)
+	if err != nil { log.Fatal(err) }
+	return document
+}
+
+// get all links from a goquery Document
+func getLinks(doc *goquery.Document) []string {
+	links := make([]string, 0)
+	doc.Find("a").Each(func (foo int, elem *goquery.Selection) {
+		href, exists := elem.Attr("href")
+		if exists {
+			links = append(links, href)
+		}
+	})
+	return links
+}
+
+// add the baseuri to any urls which do not contain it
+// required for interpreting relative urls
+func normalizeUrls(baseuri string, urls []string) []string {
+	for i, url := range urls {
+		if !strings.Contains(url, "http") && !strings.Contains(url, baseuri) {
+			urls[i] = baseuri + url
+		}
+	}
+	return urls
+}
+
+func main() {
+	links := getLinks(getDocument("https://stackoverflow.com/questions/45266784/go-test-string-contains-substring"))
+	log.Println(normalizeUrls("https://stackoverflow.com/questions/45266784/go-test-string-contains-substring", links))
+}
+
+func crawl(root string, path string){
+}
+
 
 func nextJob() *proto.Job {
 	return &proto.Job{ Urls: []string {

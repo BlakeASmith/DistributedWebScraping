@@ -10,3 +10,6 @@ go get -v golang.org/x/text/secure/bidirule
 go get -v golang.org/x/text/unicode/bidi
 go get -v golang.org/x/text/unicode/norm
 go get -v github.com/golang/protobuf/proto
+
+# for jquery like html parsing
+go get github.com/PuerkitoBio/goquery
