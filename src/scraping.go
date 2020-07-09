@@ -10,14 +10,14 @@ import (
 
 
 // get a goquery document from a url
-func getDocument(url string) *goquery.Document {
+func getDocument(url string) (*goquery.Document, error) {
 	response, err := http.Get(url)
-	if err != nil { log.Fatal(err) }
+	if err != nil { return nil, err }
 	defer response.Body.Close()
 
 	document, err := goquery.NewDocumentFromReader(response.Body)
 	if err != nil { log.Fatal(err) }
-	return document
+	return document, nil
 }
 
 // get all links from a goquery Document
@@ -36,19 +36,66 @@ func getLinks(doc *goquery.Document) []string {
 // required for interpreting relative urls
 func normalizeUrls(baseuri string, urls []string) []string {
 	for i, url := range urls {
-		if !strings.Contains(url, "http") && !strings.Contains(url, baseuri) {
+		if !strings.Contains(url, "http") &&
+		!strings.Contains(url, baseuri) &&
+		!strings.Contains(url, "www."){
 			urls[i] = baseuri + url
 		}
 	}
 	return urls
 }
 
-func main() {
-	links := getLinks(getDocument("https://stackoverflow.com/questions/45266784/go-test-string-contains-substring"))
-	log.Println(normalizeUrls("https://stackoverflow.com/questions/45266784/go-test-string-contains-substring", links))
+func restrictDomain(baseuri string, urls []string) []string {
+	restricted := make([]string, 0)
+	for _, url := range urls {
+		if strings.Contains(url, baseuri) {
+			restricted = append(restricted, url)
+		}
+	}
+	return restricted
 }
 
-func crawl(root string, path string){
+func main() {
+	urlchan := make(chan string)
+	seen := make(map[string] bool)
+	go crawl("https://www.usedvictoria.com/", "", urlchan, -1, seen)
+	for url := range urlchan {
+		log.Println(url)
+	}
+
+	log.Println(seen)
+
+
+}
+
+// crawl all pages without leaving a set domain. Only return urls which have not yet been seen
+func crawl(root string, path string, inputchan chan string, depth int, ht map[string] bool){
+	if depth == 0 { return }
+	if doc, err := getDocument(root+path); err == nil {
+		urls := restrictDomain(root, normalizeUrls(root,
+				getLinks(doc)))
+
+		for _, url := range urls {
+			if val, ok := ht[url]; !ok || !val {
+				inputchan <- url
+			}else {
+				//log.Println("already seen ", url)
+			}
+		}
+
+		for _, url := range urls {
+			if _, ok := ht[url]; !ok {
+				ht[url] = true
+				if depth % 26 == 0 {
+					go crawl(root, strings.Replace(url, root, "", 1), inputchan, depth - 1, ht)
+				}else {
+					crawl(root, strings.Replace(url, root, "", 1), inputchan, depth - 1, ht)
+				}
+			}
+		}
+	} else {
+		log.Println("could not get document from ", root+path)
+	}
 }
 
 
