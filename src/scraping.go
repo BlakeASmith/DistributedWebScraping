@@ -55,18 +55,6 @@ func restrictDomain(baseuri string, urls []string) []string {
 	return restricted
 }
 
-func main() {
-	urlchan := make(chan string)
-	seen := make(map[string] bool)
-	go crawl("https://www.usedvictoria.com/", "", urlchan, -1, seen)
-	for url := range urlchan {
-		log.Println(url)
-	}
-
-	log.Println(seen)
-
-
-}
 
 // crawl all pages without leaving a set domain. Only return urls which have not yet been seen
 func crawl(root string, path string, inputchan chan string, depth int, ht map[string] bool){
@@ -96,6 +84,27 @@ func crawl(root string, path string, inputchan chan string, depth int, ht map[st
 	} else {
 		log.Println("could not get document from ", root+path)
 	}
+}
+
+func makeJobChannel(urlchan chan string, chunksize int) chan proto.Job {
+	jobChan := make(chan proto.Job)
+	var jobIds int32 = 0
+	go func () {
+		for{
+			chunk := make([]string, 0, chunksize)
+			for i := 0; i < chunksize; i++ {
+				chunk = append(chunk, <-urlchan)
+			}
+
+			jobIds += 1
+			jobChan <- proto.Job{
+				Id: jobIds,
+				Urls: chunk,
+				Type: proto.Job_SCRAPING,
+			}
+		}
+	}()
+	return jobChan
 }
 
 

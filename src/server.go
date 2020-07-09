@@ -22,14 +22,17 @@ type Server struct {
 
 	IPAddress Address
 	currentLeaderAddress Address
+	RoutingServiceAddress Address
 	peers []Server
 
-	RoutingServiceAddress Address
+	JobChannel chan proto.Job
+
 }
 
 func (server *Server) RequestJob(context context.Context, request *proto.JobRequest) (*proto.Job, error) {
 	fmt.Println("Job Requested")
-	return nextJob(), nil
+	job := <-server.JobChannel
+	return &job, nil
 }
 
 func (server *Server) CompleteJob(context context.Context, job *proto.JobResult) (*proto.JobCompletion, error) {
