@@ -2,6 +2,7 @@ import com.google.gson.Gson
 import kotlinx.coroutines.flow.*
 import org.jsoup.nodes.Document
 import org.jsoup.Jsoup
+import java.net.URL
 
 object JsoupHttp: HttpRequestHandler<Document>{
     override suspend fun <R> get(url: String,error: (Throwable) -> R, action: suspend (Document) -> R) = kotlin.runCatching {
@@ -24,10 +25,8 @@ object JsoupHttp: HttpRequestHandler<Document>{
  * @return a sequence of JSON strings. The HTTP requests are executed in parallel
  * but are not awaited until requested from the sequence
  * */
-suspend fun scrape(
-    urls: Iterable<String>,
-    action: suspend (Document) -> String
-) = urls.asFlow().map { JsoupHttp.get(it, { err -> err.toString() }, action) }
+
+fun Flow<URL>.scrape(action: suspend (Document) -> String) = this.map { JsoupHttp.get(it.toString(), { err -> err.toString() }, action) }
 
 fun links(document: Document) = document.select("a")
     .map { it.attr("href") }.asFlow()
