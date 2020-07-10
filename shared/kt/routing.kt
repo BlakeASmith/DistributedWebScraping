@@ -1,8 +1,6 @@
 import io.grpc.ManagedChannelBuilder
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
+import io.grpc.stub.AbstractBlockingStub
+import kotlinx.coroutines.*
 import shared.Configuration
 
 data class Address(val ip: String, val port: Int){
@@ -25,17 +23,16 @@ open class MasterServiceConnection(
     private val http: HttpRequestHandler<Address>) : GrpcClient{
 
     constructor(getMasterAddr: () -> Address): this(object : HttpRequestHandler<Address> {
-        override suspend fun <R> get(url: String, error: (Throwable) -> R, action: suspend (Address) -> R) = action(getMasterAddr())
-
+        override suspend fun <R> get(url: String, action: suspend (Address) -> R) = action(getMasterAddr())
     })
 
     var stub: MasterGrpc.MasterBlockingStub = runBlocking { obtainBlockingStub() }
 
-    private suspend fun obtainBlockingStub() = http
+    private suspend fun obtainBlockingStub():MasterGrpc.MasterBlockingStub = http
         .get("${Configuration.routingServiceAddress}/masterAddress"){ (ip, port) ->
             ManagedChannelBuilder.forAddress(ip, port).usePlaintext().build()
                 .let { MasterGrpc.newBlockingStub(it) }
-        }
+        } ?: suspend { delay(100); obtainBlockingStub() }()
 
     private suspend  fun <R> withStub(
         error: (Throwable) -> R = { throw it },

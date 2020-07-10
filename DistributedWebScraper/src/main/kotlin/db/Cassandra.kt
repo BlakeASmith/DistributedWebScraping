@@ -1,6 +1,8 @@
 package db
 
+import Address
 import com.datastax.driver.core.Cluster
+import com.datastax.driver.core.ResultSet
 import com.datastax.driver.core.Session
 import com.datastax.driver.core.querybuilder.QueryBuilder
 import com.datastax.driver.core.querybuilder.Select
@@ -9,10 +11,17 @@ import com.datastax.driver.mapping.MappingManager
 import com.datastax.driver.mapping.annotations.PartitionKey
 import com.datastax.driver.mapping.annotations.Table
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.selects.select
+
+val createWordCountTable = """CREATE TABLE webscraper.wordcounts ( url text PRIMARY KEY, counts map<text, int> );"""
+val createWebscpraperKeyspace = """CREATE KEYSPACE webscraper WITH REPLICATION = {
+    'class' : 'SimpleStrategy',
+    'replication_factor' : 1
+};""".trimIndent()
+
+interface CassandraTableObject
 
 @Table(keyspace = "webscraper", name = "wordcounts")
-class WordCount {
+class WordCount : CassandraTableObject{
     @PartitionKey var url: String? = null
     var counts: Map<String, Int>? = null
 
@@ -26,20 +35,14 @@ class Cassandra (val node: String, val port: Int): Session by Cluster
     .build()
     .connect(){
 
-    suspend fun select(queryFunc: Select.Selection.() -> Select) = execute(QueryBuilder.select().queryFunc().queryString)
+    constructor(address: Address): this(address.ip, address.port)
 
-    fun usingKeyspace(name: String) = this.also {
-        execute("USE $name")
-    }
+    suspend fun select(queryFunc: Select.Selection.() -> Select): ResultSet = execute(QueryBuilder.select().queryFunc().queryString)
+
+    fun usingKeyspace(name: String) = this.also { execute("USE $name") }
 
     fun <T> mapperFor(clazz: Class<T>): Mapper<T> = MappingManager(this).mapper(clazz)
 }
-
-val createWordCountTable = """CREATE TABLE webscraper.wordcounts ( url text PRIMARY KEY, counts map<text, int> );"""
-val createWebscpraperKeyspace = """CREATE KEYSPACE webscraper WITH REPLICATION = {
-    'class' : 'SimpleStrategy',
-    'replication_factor' : 1
-};""".trimIndent()
 
 fun main() { runBlocking {
     val cassandra = Cassandra("127.0.0.1", 9042)
