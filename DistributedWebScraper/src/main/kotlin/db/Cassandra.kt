@@ -11,6 +11,7 @@ import com.datastax.driver.mapping.MappingManager
 import com.datastax.driver.mapping.annotations.PartitionKey
 import com.datastax.driver.mapping.annotations.Table
 import kotlinx.coroutines.runBlocking
+import kotlin.reflect.KClass
 
 val createWordCountTable = """CREATE TABLE webscraper.wordcounts ( url text PRIMARY KEY, counts map<text, int> );"""
 val createWebscpraperKeyspace = """CREATE KEYSPACE webscraper WITH REPLICATION = {
@@ -19,6 +20,9 @@ val createWebscpraperKeyspace = """CREATE KEYSPACE webscraper WITH REPLICATION =
 };""".trimIndent()
 
 interface CassandraTableObject
+
+inline fun <reified T: CassandraTableObject> KClass<T>.readingFrom(cassandra: Cassandra) =
+        cassandra.mapperFor(this.java)
 
 @Table(keyspace = "webscraper", name = "wordcounts")
 class WordCount : CassandraTableObject{
@@ -38,6 +42,8 @@ class Cassandra (val node: String, val port: Int): Session by Cluster
     constructor(address: Address): this(address.ip, address.port)
 
     suspend fun select(queryFunc: Select.Selection.() -> Select): ResultSet = execute(QueryBuilder.select().queryFunc().queryString)
+    suspend fun <T: CassandraTableObject> select(readAs: KClass<T>, queryFunc: Select.Selection.() -> Select) =
+            select(queryFunc).let { mapperFor(readAs.java).map(it) }.all()
 
     fun usingKeyspace(name: String) = this.also { execute("USE $name") }
 
@@ -45,17 +51,19 @@ class Cassandra (val node: String, val port: Int): Session by Cluster
 }
 
 fun main() { runBlocking {
-    val cassandra = Cassandra("127.0.0.1", 9042)
-
-    val table = cassandra
-        .mapperFor(WordCount::class.java)
-
-    table.save(WordCount().apply { this.counts = mapOf("f00" to 7); this.url = "fooo" })
-
-    cassandra.usingKeyspace("webscraper")
-        .select { all().from("wordcounts") }
-        .let { table.map(it) }
-        .forEach(::println)
+    Cassandra("127.0.0.1", 9042).usingKeyspace("webscraper")
+        .select(WordCount::class) { all().from("wordcounts") }
+            .map { it.counts!!.toMutableMap() }
+            .reduce { acc, map ->
+                map.forEach {
+                    if (it.key in acc)
+                        acc[it.key] = acc[it.key]!! + it.value
+                    else
+                        acc[it.key] = it.value
+                }
+                acc
+            }.onEach(::println)
+            .also { print(it.size) }
 } }
 
 

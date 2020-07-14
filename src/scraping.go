@@ -6,6 +6,7 @@ import (
 	"strings"
 	"log"
 	"github.com/PuerkitoBio/goquery"
+	"sync"
 )
 
 
@@ -65,6 +66,7 @@ func crawl(root string, path string, inputchan chan string, depth int, ht map[st
 
 		for _, url := range urls {
 			if val, ok := ht[url]; !ok || !val {
+				log.Println("pushing ", url)
 				inputchan <- url
 			}else {
 				//log.Println("already seen ", url)
@@ -74,8 +76,9 @@ func crawl(root string, path string, inputchan chan string, depth int, ht map[st
 		for _, url := range urls {
 			if _, ok := ht[url]; !ok {
 				ht[url] = true
-				if depth % 26 == 0 {
-					go crawl(root, strings.Replace(url, root, "", 1), inputchan, depth - 1, ht)
+				if depth % 2 == 0 {
+					log.Println(depth)
+					 crawl(root, strings.Replace(url, root, "", 1), inputchan, depth - 1, ht)
 				}else {
 					crawl(root, strings.Replace(url, root, "", 1), inputchan, depth - 1, ht)
 				}
@@ -89,19 +92,29 @@ func crawl(root string, path string, inputchan chan string, depth int, ht map[st
 func makeJobChannel(urlchan chan string, chunksize int) chan proto.Job {
 	jobChan := make(chan proto.Job)
 	var jobIds int32 = 0
+	N := 5
+	var wg sync.WaitGroup
 	go func () {
 		for{
-			chunk := make([]string, 0, chunksize)
-			for i := 0; i < chunksize; i++ {
-				chunk = append(chunk, <-urlchan)
-			}
+			wg.Add(N)
+			for i:= 0; i<=N; i++ {
+				chunk := make([]string, 0, chunksize)
+				for i := 0; i < chunksize; i++ {
+					chunk = append(chunk, <-urlchan)
+				}
 
-			jobIds += 1
-			jobChan <- proto.Job{
-				Id: jobIds,
-				Urls: chunk,
-				Type: proto.Job_SCRAPING,
+				jobIds += 1
+				log.Println("created a new job")
+				go func () {
+					jobChan <- proto.Job{
+						Id: jobIds,
+						Urls: chunk,
+						Type: proto.Job_SCRAPING,
+					}
+					wg.Done()
+				}()
 			}
+			wg.Wait()
 		}
 	}()
 	return jobChan

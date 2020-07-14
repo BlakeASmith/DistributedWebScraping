@@ -21,15 +21,17 @@ val master = MasterServiceConnection{
 fun main() = runBlocking {
     val cassandra = Cassandra(Configuration.cassandraAddress)
 
-    val job = master.requestWork(jobRequest(1))
-    val confirmation = job.urlsList
-            .map { URL(it) }.asFlow()
-            .scrape { wc(it) }
-            .store(cassandra)
-            .onEach { println("Storing $it") }
-            .toList()
-            .map { it.json() }
-            .let { jobResult(job, it) }
-            .let { master.completeWork(it) }
+    while(true) {
+        val job = master.requestWork(jobRequest(1))
+        job.urlsList
+                .map { URL(it) }.asFlow()
+                .scrape { wc(it) }
+                .store(cassandra)
+                .onEach { println("Storing $it") }
+                .toList()
+                .map { it.json() }
+                .let { jobResult(job, it) }
+                .let { master.completeWork(it) }
+    }
 }
 

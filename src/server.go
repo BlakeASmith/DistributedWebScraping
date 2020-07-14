@@ -30,8 +30,8 @@ type Server struct {
 }
 
 func (server *Server) RequestJob(context context.Context, request *proto.JobRequest) (*proto.Job, error) {
-	fmt.Println("Job Requested")
 	job := <-server.JobChannel
+	fmt.Println("Job Assigned", job)
 	return &job, nil
 }
 

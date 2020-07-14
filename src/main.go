@@ -1,13 +1,11 @@
 package main
 
-import (
-)
 
 
 func main() {
 	urlchan := make(chan string)
 	seen := make(map[string] bool)
-	go crawl("https://www.usedvictoria.com", "", urlchan, 1, seen)
+	go crawl("https://www.usedvictoria.com", "", urlchan, 7, seen)
 	jobs := makeJobChannel(urlchan, 10)
 
 	RoutingServiceAddress :=  Address { IP: "0.0.0.0", Port: 5000 }
