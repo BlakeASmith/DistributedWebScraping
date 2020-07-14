@@ -1,6 +1,7 @@
 import com.google.gson.Gson
 import db.Cassandra
 import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
@@ -24,7 +25,8 @@ fun main() = runBlocking {
     while(true) {
         val job = master.requestWork(jobRequest(1))
         job.urlsList
-                .map { URL(it) }.asFlow()
+                .map { kotlin.runCatching {  URL(it) }.getOrNull()  }.asFlow()
+                .filterNotNull()
                 .scrape { wc(it) }
                 .store(cassandra)
                 .onEach { println("Storing $it") }

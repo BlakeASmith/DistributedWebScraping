@@ -10,8 +10,17 @@ infoFile = Path("masterinfo.json")
 
 @app.route("/update/<ip>/<port>")
 def updateMaster(ip, port):
-    with infoFile.open('w') as info:
-        json.dump(dict(ip=ip, port=port), info)
+    info = whoIsMaster()
+    with infoFile.open('w') as infof:
+        json.dump(info.update({ ip: ip, port:port }), infof)
+
+    return dict(result=True, address=(ip, port))
+
+@app.route("/update/db/<ip>/<port>")
+def updateDB(ip, port):
+    info = whoIsMaster()
+    with infoFile.open('w') as infof:
+        json.dump(info.update({ dbip: ip, dbport: port}), infof)
 
     return dict(result=True, address=(ip, port))
 
