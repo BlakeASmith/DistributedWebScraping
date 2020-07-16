@@ -1,30 +1,34 @@
 package main
 
 import (
-	"./proto"
+	"log"
 	"net/http"
 	"strings"
-	"log"
-	"github.com/PuerkitoBio/goquery"
 	"sync"
-)
 
+	"github.com/BlakeASmith/DistributedWebScraping/src/proto"
+	"github.com/PuerkitoBio/goquery"
+)
 
 // get a goquery document from a url
 func getDocument(url string) (*goquery.Document, error) {
 	response, err := http.Get(url)
-	if err != nil { return nil, err }
+	if err != nil {
+		return nil, err
+	}
 	defer response.Body.Close()
 
 	document, err := goquery.NewDocumentFromReader(response.Body)
-	if err != nil { log.Fatal(err) }
+	if err != nil {
+		log.Fatal(err)
+	}
 	return document, nil
 }
 
 // get all links from a goquery Document
 func getLinks(doc *goquery.Document) []string {
 	links := make([]string, 0)
-	doc.Find("a").Each(func (foo int, elem *goquery.Selection) {
+	doc.Find("a").Each(func(foo int, elem *goquery.Selection) {
 		href, exists := elem.Attr("href")
 		if exists {
 			links = append(links, href)
@@ -38,8 +42,8 @@ func getLinks(doc *goquery.Document) []string {
 func normalizeUrls(baseuri string, urls []string) []string {
 	for i, url := range urls {
 		if !strings.Contains(url, "http") &&
-		!strings.Contains(url, baseuri) &&
-		!strings.Contains(url, "www."){
+			!strings.Contains(url, baseuri) &&
+			!strings.Contains(url, "www.") {
 			urls[i] = baseuri + url
 		}
 	}
@@ -56,19 +60,20 @@ func restrictDomain(baseuri string, urls []string) []string {
 	return restricted
 }
 
-
 // crawl all pages without leaving a set domain. Only return urls which have not yet been seen
-func crawl(root string, path string, inputchan chan string, depth int, ht map[string] bool){
-	if depth == 0 { return }
-	if doc, err := getDocument(root+path); err == nil {
+func crawl(root string, path string, inputchan chan string, depth int, ht map[string]bool) {
+	if depth == 0 {
+		return
+	}
+	if doc, err := getDocument(root + path); err == nil {
 		urls := restrictDomain(root, normalizeUrls(root,
-				getLinks(doc)))
+			getLinks(doc)))
 
 		for _, url := range urls {
 			if val, ok := ht[url]; !ok || !val {
 				//log.Println("pushing ", url)
 				inputchan <- url
-			}else {
+			} else {
 				//log.Println("already seen ", url)
 			}
 		}
@@ -76,12 +81,12 @@ func crawl(root string, path string, inputchan chan string, depth int, ht map[st
 		for _, url := range urls {
 			if _, ok := ht[url]; !ok {
 				ht[url] = true
-				//if depth % 3 == 0 {
-					//log.Println(depth)
-					//go crawl(root, strings.Replace(url, root, "", 1), inputchan, depth - 1, ht)
-				//}else {
-					crawl(root, strings.Replace(url, root, "", 1), inputchan, depth - 1, ht)
-				//}
+				if depth%2 == 0 {
+					log.Println(depth)
+					crawl(root, strings.Replace(url, root, "", 1), inputchan, depth-1, ht)
+				} else {
+					crawl(root, strings.Replace(url, root, "", 1), inputchan, depth-1, ht)
+				}
 			}
 		}
 	} else {
@@ -94,8 +99,8 @@ func makeJobChannel(urlchan chan string, chunksize int) chan proto.Job {
 	var jobIds int32 = 0
 	N := 10
 	var wg sync.WaitGroup
-	go func () {
-		for{
+	go func() {
+		for {
 			wg.Add(N)
 			for i:= 0; i < N; i++ {
 				chunk := make([]string, 0, chunksize)
@@ -105,8 +110,9 @@ func makeJobChannel(urlchan chan string, chunksize int) chan proto.Job {
 
 				jobIds += 1
 				go func () {
+				//log.Println("created a new job")
 					jobChan <- proto.Job{
-						Id: jobIds,
+						Id:   jobIds,
 						Urls: chunk,
 						Type: proto.Job_SCRAPING,
 					}
@@ -118,5 +124,3 @@ func makeJobChannel(urlchan chan string, chunksize int) chan proto.Job {
 	}()
 	return jobChan
 }
-
-

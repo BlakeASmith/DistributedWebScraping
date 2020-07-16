@@ -1,33 +1,32 @@
 package main
 
 import (
-	"fmt"
-	"net"
-	"log"
-	"google.golang.org/grpc"
-	"./proto"
 	"context"
-	"net/http"
+	"fmt"
 	"io/ioutil"
+	"log"
+	"net"
+	"net/http"
+
+	"github.com/BlakeASmith/DistributedWebScraping/src/proto"
+	"google.golang.org/grpc"
 )
 
 type Address struct {
-	IP string
+	IP   string
 	Port int
 }
-
 
 type Server struct {
 	proto.UnimplementedMasterServer
 	proto.UnimplementedDatabaseServer
 
-	IPAddress Address
-	currentLeaderAddress Address
-	RoutingServiceAddress string
-	peers []Server
+	IPAddress             Address
+	currentLeaderAddress  Address
+	RoutingServiceAddress Address
+	peers                 []Server
 
 	JobChannel chan proto.Job
-
 }
 
 func (server *Server) RequestJob(context context.Context, request *proto.JobRequest) (*proto.Job, error) {
@@ -42,10 +41,9 @@ func (server *Server) CompleteJob(context context.Context, job *proto.JobResult)
 	return &proto.JobCompletion{}, nil
 }
 
-
 func (server *Server) Store(context context.Context, json *proto.JsonObjects) (*proto.StorageConfirmation, error) {
 	fmt.Println("stored results")
-	return &proto.StorageConfirmation{Success:true}, nil
+	return &proto.StorageConfirmation{Success: true}, nil
 }
 
 // send IP addresses to the routing service so that new mobile clients
@@ -71,7 +69,6 @@ func (server *Server) sendUpdateToRoutingService() {
 		panic(err)
 	}
 
-
 	log.Println(string(body))
 }
 
@@ -87,4 +84,3 @@ func (server *Server) start() {
 	}
 
 }
-
