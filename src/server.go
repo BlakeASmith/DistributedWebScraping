@@ -23,7 +23,7 @@ type Server struct {
 
 	IPAddress             Address
 	currentLeaderAddress  Address
-	RoutingServiceAddress Address
+	RoutingServiceAddress string
 	peers                 []Server
 
 	JobChannel chan proto.Job
