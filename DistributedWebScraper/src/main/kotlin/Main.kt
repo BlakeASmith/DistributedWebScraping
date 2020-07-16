@@ -1,37 +1,46 @@
-import com.google.gson.Gson
-import db.Cassandra
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.runBlocking
-import shared.Configuration
+import io.grpc.ManagedChannel
+import io.grpc.ManagedChannelBuilder
+import kotlinx.coroutines.flow.*
 import java.net.URL
 
-fun Any.json(gson: Gson = Gson()): String = gson.toJson(this)
-inline fun <reified T> String.fromJson(gson: Gson = Gson()) = gson.fromJson(this, T::class.java)
 
-val master = MasterServiceConnection{
-    URL("${Configuration.routingServiceAddress}/masterAddress")
+class WordCount {
+    var url: String? = null
+    var counts: Map<String, Int>? = null
+
+    override fun toString(): String = "$url\n$counts"
+}
+
+fun connectByRoutingService(path: String): () -> ManagedChannel = {
+    URL("${Configuration.routingServiceAddress}/$path")
             .openConnection()
             .getInputStream()
             .bufferedReader()
-            .let { Gson().fromJson(it, Address::class.java) }
+            .let { Address::class.fromJson(it) }
+            .also { println(it) }
+            .let { ManagedChannelBuilder.forAddress(it.ip, it.port).usePlaintext().build() }
 }
 
-fun main() = runBlocking {
-    val cassandra = Cassandra(Configuration.cassandraAddress)
+val channel = connectByRoutingService("masterAddress")
+val dbChannel = connectByRoutingService("dbAddress")
+
+suspend fun main() {
+    val master = MasterServiceConnection(channel)
+    val database = DatabaseServiceConnection(dbChannel)
 
     while(true) {
         val job = master.requestWork(jobRequest(1))
         job.urlsList
-                .map { URL(it) }.asFlow()
-                .scrape { wc(it) }
-                .store(cassandra)
-                .onEach { println("Storing $it") }
-                .toList()
+                .map { kotlin.runCatching {  URL(it) }.getOrNull()  }.asFlow()
+                .filterNotNull()
+                .scrape {  wc(it) }
+                .map { (url, map) ->  WordCount().apply { this.url = url.toString(); this.counts = map  } }
                 .map { it.json() }
-                .let { jobResult(job, it) }
-                .let { master.completeWork(it) }
+                .onEach { println(it) }
+                .toList()
+                .let { Db.JsonObjects.newBuilder().addAllText(it).setType("WORDCOUNT").build() }
+                .also { database.store(it) }
+        master.completeWork(jobResult(job, true))
     }
 }
 

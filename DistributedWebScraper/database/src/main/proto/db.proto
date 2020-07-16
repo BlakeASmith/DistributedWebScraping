@@ -1,0 +1,15 @@
+
+syntax = 'proto3';
+
+service Database{
+    rpc Store(JsonObjects) returns (StorageConfirmation) {};
+}
+
+message JsonObjects {
+	repeated string text = 1;
+	string type = 2;
+}
+
+message StorageConfirmation {
+	bool success = 1;
+}

@@ -71,7 +71,7 @@ func crawl(root string, path string, inputchan chan string, depth int, ht map[st
 
 		for _, url := range urls {
 			if val, ok := ht[url]; !ok || !val {
-				log.Println("pushing ", url)
+				//log.Println("pushing ", url)
 				inputchan <- url
 			} else {
 				//log.Println("already seen ", url)
@@ -109,7 +109,7 @@ func makeJobChannel(urlchan chan string, chunksize int) chan proto.Job {
 				}
 
 				jobIds += 1
-				log.Println("created a new job")
+				//log.Println("created a new job")
 				go func() {
 					jobChan <- proto.Job{
 						Id:   jobIds,

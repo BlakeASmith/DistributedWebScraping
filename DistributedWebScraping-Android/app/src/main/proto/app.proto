@@ -1,12 +1,12 @@
 
 syntax = 'proto3';
-
 option go_package = ".;proto";
 
 service Master{
     rpc RequestJob(JobRequest) returns (Job) {};
     rpc CompleteJob(JobResult) returns (JobCompletion) {};
 }
+
 
 message JobRequest {
     int32 id = 1;
@@ -24,7 +24,7 @@ message Job {
 
 message JobResult{
 	Job job = 1;
-	repeated string results = 2;
+    bool complete = 2;
 }
 
 message JobCompletion{

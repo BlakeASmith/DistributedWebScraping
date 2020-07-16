@@ -1,53 +1,45 @@
-import io.grpc.ManagedChannelBuilder
-import io.grpc.stub.AbstractBlockingStub
+import io.grpc.ManagedChannel
 import kotlinx.coroutines.*
-import shared.Configuration
 
 data class Address(val ip: String, val port: Int){
     override fun toString(): String = "http://$ip:$port"
 }
 
-suspend fun <T> withConnectionToMaster (http: HttpRequestHandler<Pair<String, Int>>, action: MasterGrpc.MasterBlockingStub.() -> T) =
-    http.get("http://${Configuration.routingServiceAddress}/masterAddress"){ (ip, port) ->
-        ManagedChannelBuilder.forAddress(ip, port)
-            .usePlaintext().build()
-            .let { MasterGrpc.newBlockingStub(it) }
-            .let(action)
-    }
+/**
+ * Open a connection to a gRPC service via a ManagedChannel,
+ * Automatically reconnect to the service when required
+ * */
+abstract class ServiceConnection<STUB>(val channel: () -> ManagedChannel) {
 
+    var stub: STUB = runBlocking { obtainStub() }
+
+    abstract suspend fun obtainStub(): STUB
+
+    protected suspend  fun <R> withStub(
+            error: (Throwable) -> R = { throw it },
+            action: STUB.() -> R
+    ): R = kotlin.runCatching { stub.action() }
+            .recoverCatching {
+                stub = obtainStub()
+                stub.action()
+            }
+            .recover(error)
+            .getOrThrow()
+}
+
+class DatabaseServiceConnection(channel: () -> ManagedChannel)
+    : ServiceConnection<DatabaseGrpc.DatabaseBlockingStub>(channel) {
+    override suspend fun obtainStub(): DatabaseGrpc.DatabaseBlockingStub = DatabaseGrpc.newBlockingStub(channel())
+    suspend fun store(objects: Db.JsonObjects) = withStub { store(objects) }
+}
 
 /**
- * A connection to the M
+ * A connection to the MasterService
  */
-open class MasterServiceConnection(
-    private val http: HttpRequestHandler<Address>) : GrpcClient{
-
-    constructor(getMasterAddr: () -> Address): this(object : HttpRequestHandler<Address> {
-        override suspend fun <R> get(url: String, action: suspend (Address) -> R) = action(getMasterAddr())
-    })
-
-    var stub: MasterGrpc.MasterBlockingStub = runBlocking { obtainBlockingStub() }
-
-    private suspend fun obtainBlockingStub():MasterGrpc.MasterBlockingStub = http
-        .get("${Configuration.routingServiceAddress}/masterAddress"){ (ip, port) ->
-            ManagedChannelBuilder.forAddress(ip, port).usePlaintext().build()
-                .let { MasterGrpc.newBlockingStub(it) }
-        } ?: suspend { delay(100); obtainBlockingStub() }()
-
-    private suspend  fun <R> withStub(
-        error: (Throwable) -> R = { throw it },
-        action: MasterGrpc.MasterBlockingStub.() -> R
-    ): R = kotlin.runCatching { stub.action() }
-        .recoverCatching {
-            stub = obtainBlockingStub()
-            stub.action()
-        }
-        .recover(error)
-        .getOrThrow()
-
+class MasterServiceConnection(connect: () -> ManagedChannel) : ServiceConnection<MasterGrpc.MasterBlockingStub>(connect), MasterGrpcClient{
+    override suspend fun obtainStub():MasterGrpc.MasterBlockingStub = MasterGrpc.newBlockingStub(channel())
     override suspend fun requestWork(jobRequest: App.JobRequest): App.Job =
         withStub { requestJob(jobRequest) }
-
     override suspend fun completeWork(job: App.JobResult): App.JobCompletion =
         withStub { completeJob(job) }
 }

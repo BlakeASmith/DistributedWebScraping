@@ -1,7 +1,3 @@
-import com.datastax.driver.mapping.Mapper
-import db.Cassandra
-import db.CassandraTableObject
-import db.WordCount
 import kotlinx.coroutines.flow.*
 import org.jsoup.nodes.Document
 import org.jsoup.Jsoup
@@ -16,7 +12,6 @@ object JsoupHttp: HttpRequestHandler<Document>{
     }.getOrDefault(null)
 }
 
-
 /**
  * perform an operation on all of the HTML pages present
  * at the given URLs. The HTML is parsed using JSoup
@@ -29,35 +24,8 @@ object JsoupHttp: HttpRequestHandler<Document>{
  * but are not awaited until requested from the sequence
  * */
 
-fun <R: CassandraTableObject> Flow<URL>.scrape(action: suspend (Document) -> R): Flow<R> =
-        this.map { JsoupHttp.get(it.toString(), action) }.filterNotNull()
-
-fun links(document: Document) = document.select("a")
-    .map { it.attr("href") }.asFlow()
-
-suspend fun crawlPage(root: String, startPath: String = ""): Flow<String> = flowOf(root + startPath)
-        .map { JsoupHttp.get(it) { html -> links(html) } }
-        .filterNotNull()
-        .flattenMerge()
-        .filter { "http" in it && root !in it }
-        .map { if (root in it) it else root+it }
-
-suspend fun crawl(root: String, startPath: String, depth: Int = 3, curDepth: Int = 0) = flow<String> {
-        val pages = crawlPage(root, startPath)
-        pages.onEach {
-            emit(it)
-            val nextSet = crawlPage(root, it.replace(root, ""))
-            emitAll(nextSet)
-        }.toList()
-}
-
-inline fun <reified T: CassandraTableObject> Flow<T>.store(
-        cassandra: Cassandra,
-        mapper: Mapper<T> = cassandra.mapperFor(T::class.java)
-) = onEach { mapper.save(it) }
-
-
-
+fun <R> Flow<URL>.scrape(action: suspend (Document) -> R): Flow<Pair<URL,R>> =
+        this.map { it to JsoupHttp.get(it.toString(), action) }.filterNot { it.second == null }.map { it.first to it.second!! }
 
 /**
  * count the occurrences of each word in the Document
@@ -67,11 +35,6 @@ fun wc(html: Document)= html.allElements
         .flatMap { it.split(" ") }
         .groupBy { it }
         .mapValues { (_ , value) -> value.size }
-        .let {
-            WordCount().apply {
-                url = html.location()
-                counts = it }
-        }
 
 
 
