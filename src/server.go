@@ -1,32 +1,31 @@
 package main
 
 import (
-	"fmt"
-	"net"
-	"log"
-	"google.golang.org/grpc"
-	"./proto"
 	"context"
-	"net/http"
+	"fmt"
 	"io/ioutil"
+	"log"
+	"net"
+	"net/http"
+
+	"github.com/BlakeASmith/DistributedWebScraping/src/proto"
+	"google.golang.org/grpc"
 )
 
 type Address struct {
-	IP string
+	IP   string
 	Port int
 }
-
 
 type Server struct {
 	proto.UnimplementedMasterServer
 
-	IPAddress Address
-	currentLeaderAddress Address
+	IPAddress             Address
+	currentLeaderAddress  Address
 	RoutingServiceAddress Address
-	peers []Server
+	peers                 []Server
 
 	JobChannel chan proto.Job
-
 }
 
 func (server *Server) RequestJob(context context.Context, request *proto.JobRequest) (*proto.Job, error) {
@@ -65,7 +64,6 @@ func (server *Server) sendUpdateToRoutingService() {
 		panic(err)
 	}
 
-
 	log.Println(string(body))
 }
 
@@ -80,4 +78,3 @@ func (server *Server) start() {
 	}
 
 }
-
