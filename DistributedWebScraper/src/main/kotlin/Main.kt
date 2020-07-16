@@ -1,39 +1,33 @@
-import com.google.gson.Gson
-import db.Cassandra
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.runBlocking
-import shared.Configuration
+import io.grpc.ManagedChannelBuilder
+import kotlinx.coroutines.flow.*
 import java.net.URL
 
-fun Any.json(gson: Gson = Gson()): String = gson.toJson(this)
-inline fun <reified T> String.fromJson(gson: Gson = Gson()) = gson.fromJson(this, T::class.java)
-
-val master = MasterServiceConnection{
+val channel = {
     URL("${Configuration.routingServiceAddress}/masterAddress")
             .openConnection()
             .getInputStream()
             .bufferedReader()
-            .let { Gson().fromJson(it, Address::class.java) }
+            .let { Address::class.fromJson(it) }
+            .also(::println)
+            .let { ManagedChannelBuilder.forAddress(it.ip, it.port).usePlaintext().build() }
 }
 
-fun main() = runBlocking {
-    val cassandra = Cassandra(Configuration.cassandraAddress)
+suspend fun main() {
+    val master = MasterServiceConnection(channel)
+    val database = DatabaseServiceConnection(channel)
 
     while(true) {
         val job = master.requestWork(jobRequest(1))
         job.urlsList
                 .map { kotlin.runCatching {  URL(it) }.getOrNull()  }.asFlow()
                 .filterNotNull()
-                .scrape { wc(it) }
-                .store(cassandra)
-                .onEach { println("Storing $it") }
-                .toList()
+                .scrape {  wc(it) }
                 .map { it.json() }
-                .let { jobResult(job, it) }
-                .let { master.completeWork(it) }
+                .onEach { println(it) }
+                .toList()
+                .let { Db.JsonObjects.newBuilder().addAllText(it).setType("WORDCOUNT").build() }
+                .also { database.store(it) }
+        master.completeWork(jobResult(job, true))
     }
 }
 

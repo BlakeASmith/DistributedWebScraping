@@ -1,9 +1,8 @@
-(python routing.py)& routing=$!
+#(python routing.py)& routing=$!
 go run ./src/*.go& server=$!
-sleep 1 # give some time for server to start
+sleep 2 # give some time for server to start
 
 java -jar ./DistributedWebScraper/build/DistributedWebScraper-1.0-SNAPSHOT.jar > /dev/null& client1=$!
-java -jar ./DistributedWebScraper/build/DistributedWebScraper-1.0-SNAPSHOT.jar > /dev/null& 
 java -jar ./DistributedWebScraper/build/DistributedWebScraper-1.0-SNAPSHOT.jar > /dev/null& 
 java -jar ./DistributedWebScraper/build/DistributedWebScraper-1.0-SNAPSHOT.jar > /dev/null& 
 

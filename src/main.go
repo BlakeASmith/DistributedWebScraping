@@ -8,9 +8,9 @@ func main() {
 	go crawl("https://www.usedvictoria.com", "", urlchan, 7, seen)
 	jobs := makeJobChannel(urlchan, 10)
 
-	RoutingServiceAddress :=  Address { IP: "0.0.0.0", Port: 5000 }
+	RoutingServiceAddress :=  "http://blakesmith.pythonanywhere.com"
 	server := Server{
-		IPAddress: Address{ IP:"192.168.1.147", Port: 6969 },
+		IPAddress: Address{ IP:"127.0.0.1", Port: 6969 },
 		RoutingServiceAddress: RoutingServiceAddress,
 		JobChannel: jobs,
 	}
