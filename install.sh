@@ -13,3 +13,7 @@ go get -v -u github.com/golang/protobuf/proto
 
 # for jquery like html parsing
 go get -v -u github.com/PuerkitoBio/goquery
+
+# etcd for keyvalue store and raft
+# go get -v -u go.etcd.io/etcd
+# go get -v -u go.etcd.io/etcd/etcdctl
