@@ -1,11 +1,27 @@
 plugins {
     id 'java'
-    id 'org.jetbrains.kotlin.jvm' version '1.3.72'
-    id 'com.google.protobuf' version '0.8.8'
+    id 'org.jetbrains.kotlin.jvm'
+    id 'com.google.protobuf'
 }
 
 group 'csc.distributed'
 version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
 
 repositories {
     mavenCentral()
@@ -28,6 +44,11 @@ dependencies {
     // https://mvnrepository.com/artifact/org.jsoup/jsoup
     compile group: 'org.jsoup', name: 'jsoup', version: '1.11.3'
     compile 'com.google.code.gson:gson:2.8.6'
+
+// https://mvnrepository.com/artifact/com.datastax.cassandra/cassandra-driver-core
+    compile group: 'com.datastax.cassandra', name: 'cassandra-driver-core', version: '3.9.0'
+// https://mvnrepository.com/artifact/com.datastax.cassandra/cassandra-driver-mapping
+    compile group: 'com.datastax.cassandra', name: 'cassandra-driver-mapping', version: '3.9.0'
 
 }
 

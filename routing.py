@@ -7,12 +7,15 @@ from pathlib import Path
 app = flask.Flask("Routing Service")
 infoFile = Path("masterinfo.json")
 
+<<<<<<< HEAD
 infoFile.write_text(json.dumps({
         "master_ip": "NOT SET",
         "master_port": "NOT SET",
         "db_ip": "NOT SET",
         "db_port": 9042,
 }))
+=======
+>>>>>>> d43b49d05202b1ca7bab1bdffd6e58a3ee8f3b8b
 
 @app.route("/update/<ip>/<port>")
 def updateMaster(ip, port):
@@ -32,6 +35,7 @@ def updateDB(ip, port):
 
     return dict(result=True, address=(ip, port))
 
+
 @app.route("/masterAddress")
 def whoIsMaster():
     with infoFile.open('r') as info:
@@ -44,7 +48,6 @@ def whoIsdb():
         infod = json.load(info)
         return dict(ip=infod["db_ip"], port=infod["db_port"])
 
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
-
-

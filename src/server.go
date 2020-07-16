@@ -44,7 +44,7 @@ func (server *Server) CompleteJob(context context.Context, job *proto.JobResult)
 
 
 func (server *Server) Store(context context.Context, json *proto.JsonObjects) (*proto.StorageConfirmation, error) {
-	fmt.prinln("stored results")
+	fmt.Println("stored results")
 	return &proto.StorageConfirmation{Success:true}, nil
 }
 
@@ -79,7 +79,7 @@ func (server *Server) start() {
 	if lis, err := net.Listen("tcp", fmt.Sprintf("%s:%d", server.IPAddress.IP, server.IPAddress.Port)); err == nil {
 		gserver := grpc.NewServer()
 		proto.RegisterMasterServer(gserver, server)
-		proto.RegisterDatabaseServer(gserver, server)
+		//proto.RegisterDatabaseServer(gserver, server)
 		fmt.Println("Server live at ", server.IPAddress)
 		gserver.Serve(lis)
 	} else {

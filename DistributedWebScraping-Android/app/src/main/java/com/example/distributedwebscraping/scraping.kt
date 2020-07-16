@@ -24,8 +24,8 @@ object JsoupHttp: HttpRequestHandler<Document>{
  * but are not awaited until requested from the sequence
  * */
 
-fun <R> Flow<URL>.scrape(action: suspend (Document) -> R): Flow<R> =
-        this.map { JsoupHttp.get(it.toString(), action) }.filterNot { it == null }.map { it!! }
+fun <R> Flow<URL>.scrape(action: suspend (Document) -> R): Flow<Pair<URL,R>> =
+        this.map { it to JsoupHttp.get(it.toString(), action) }.filterNot { it.second == null }.map { it.first to it.second!! }
 
 /**
  * count the occurrences of each word in the Document
