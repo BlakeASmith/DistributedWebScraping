@@ -23,7 +23,7 @@ type Server struct {
 
 	IPAddress             Address
 	currentLeaderAddress  Address
-	RoutingServiceAddress Address
+	RoutingServiceAddress string
 	peers                 []Server
 
 	JobChannel chan proto.Job
@@ -37,7 +37,6 @@ func (server *Server) RequestJob(context context.Context, request *proto.JobRequ
 
 func (server *Server) CompleteJob(context context.Context, job *proto.JobResult) (*proto.JobCompletion, error) {
 	fmt.Println("Job Completed")
-	fmt.Println(len(job.Results))
 	return &proto.JobCompletion{}, nil
 }
 
