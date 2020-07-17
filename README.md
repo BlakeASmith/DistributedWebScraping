@@ -21,6 +21,8 @@ export GOPATH=$HOME/go
 export GOBIN=$GOPATH/bin
 ```
 
+For compiling the proto files, make sure to manually install the [protoc compiler](https://grpc.io/docs/protoc-installation/)
+
 ## Routing
 
 Since the ip address of the RAFT leader will be changing, a routing service which is available
