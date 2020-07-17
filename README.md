@@ -119,7 +119,6 @@ Then pull the images by running
 docker pull blakeasmith/webscraper_client
 docker pull blakeasmith/webscraper_database_service
 docker pull blakeasmith/webscraper_go_master_service
-
 ```
 
 To quickly run the whole shebang;
