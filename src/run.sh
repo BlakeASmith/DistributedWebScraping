@@ -12,5 +12,5 @@ go build proto/*.go
 # build the execution components for the server
 go build main.go server.go scraping.go
 
-# execute the server
+# execute the server and specify the ip address
 go run main.go server.go scraping.go $1
