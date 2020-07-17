@@ -13,4 +13,4 @@ go build proto/*.go
 go build main.go server.go scraping.go
 
 # execute the server
-go run main.go server.go scraping.go
+go run main.go server.go scraping.go $1

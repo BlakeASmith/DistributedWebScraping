@@ -97,20 +97,20 @@ func crawl(root string, path string, inputchan chan string, depth int, ht map[st
 func makeJobChannel(urlchan chan string, chunksize int) chan proto.Job {
 	jobChan := make(chan proto.Job)
 	var jobIds int32 = 0
-	N := 5
+	N := 10
 	var wg sync.WaitGroup
 	go func() {
 		for {
 			wg.Add(N)
-			for i := 0; i <= N; i++ {
+			for i:= 0; i < N; i++ {
 				chunk := make([]string, 0, chunksize)
 				for i := 0; i < chunksize; i++ {
 					chunk = append(chunk, <-urlchan)
 				}
 
 				jobIds += 1
+				go func () {
 				//log.Println("created a new job")
-				go func() {
 					jobChan <- proto.Job{
 						Id:   jobIds,
 						Urls: chunk,
