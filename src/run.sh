@@ -3,8 +3,7 @@
 # generate proto files
 protoc \
   --proto_path=../proto \
-  --go_out=proto \
-  --go-grpc_out=proto \
+  --go_out=plugins=grpc:./proto \
   $(find ../proto -iname "*.proto")
 
 # build gRPC files
