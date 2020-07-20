@@ -11,18 +11,10 @@ class WordCount {
     override fun toString(): String = "$url\n$counts"
 }
 
-fun connectByRoutingService(path: String): () -> ManagedChannel = {
-    URL("${Configuration.routingServiceAddress}/$path")
-            .openConnection()
-            .getInputStream()
-            .bufferedReader()
-            .let { Address::class.fromJson(it) }
-            .also { println(it) }
-            .let { ManagedChannelBuilder.forAddress(it.ip, it.port).usePlaintext().build() }
-}
+val routing = RoutingService(Configuration.routingServiceAddress)
 
-val channel = connectByRoutingService("masterAddress")
-val dbChannel = connectByRoutingService("dbAddress")
+val channel = routing.connectMaster()
+val dbChannel = routing.connectDb()
 
 suspend fun main() {
     val master = MasterServiceConnection(channel)
