@@ -1,5 +1,6 @@
 
 syntax = 'proto3';
+option go_package = ".;proto";
 
 service Database{
     rpc Store(JsonObjects) returns (StorageConfirmation) {};

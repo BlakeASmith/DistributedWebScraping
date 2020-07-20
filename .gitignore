@@ -1,3 +1,9 @@
+# Ignore everything but go, docker and sh files in src
+./src/**
+!**/src/*.go
+!**/src/Dockerfile
+!**/src/*.sh
+
 # Java gitignores
 # Compiled class file
 *.class
