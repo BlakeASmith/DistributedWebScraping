@@ -6,6 +6,8 @@ import db.WordCount
 import db.readingFrom
 import io.grpc.netty.shaded.io.grpc.netty.NettyServerBuilder
 import io.grpc.stub.StreamObserver
+import kotlinx.coroutines.delay
+import java.lang.Thread.sleep
 import java.net.InetSocketAddress
 import java.net.URL
 
@@ -29,10 +31,9 @@ fun main(args: Array<String>) {
                 .exec(createWebscpraperKeyspace)
                 .exec(createWordCountTable)
                 .usingKeyspace("webscraper")
-    }.getOrElse { connectToCass() }
+    }.getOrElse { sleep(100); connectToCass() }
 
     val cass = connectToCass()
-
 
     val wcMapper = WordCount::class.readingFrom(cass)
 
@@ -44,6 +45,7 @@ fun main(args: Array<String>) {
             responseObserver.onCompleted()
         }
     }
+
 
     val server = NettyServerBuilder.forAddress(InetSocketAddress(ip, 9696))
         .addService(wcService)

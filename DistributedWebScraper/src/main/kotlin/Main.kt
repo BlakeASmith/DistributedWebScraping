@@ -1,20 +1,24 @@
-import io.grpc.ManagedChannel
-import io.grpc.ManagedChannelBuilder
 import kotlinx.coroutines.flow.*
+import java.io.File
 import java.net.URL
+import java.util.jar.JarFile
 
-
-class WordCount {
-    var url: String? = null
-    var counts: Map<String, Int>? = null
-
-    override fun toString(): String = "$url\n$counts"
-}
+const val PLUGIN_DIR = "./plugins"
 
 val routing = RoutingService(Configuration.routingServiceAddress)
-
 val channel = routing.connectMaster()
 val dbChannel = routing.connectDb()
+
+val plugins : Map<String, RoverPlugin> = File(PLUGIN_DIR).apply {
+    if (!exists()) {
+        createNewFile()
+        mkdir()
+    }
+}.walk().drop(1)
+        .filter { it.extension == "jar" }
+        .map { JarFile(it) }
+        .associateBy { it.name }
+        .mapValues { (_, jar) -> loadPlugin(jar) }
 
 suspend fun main() {
     val master = MasterServiceConnection(channel)
@@ -22,15 +26,16 @@ suspend fun main() {
 
     while(true) {
         val job = master.requestWork(jobRequest(1))
+        val plugs = job.pluginsList
+                .map { plugins.getOrElse(it) {
+                    routing.getPlugin(it, PLUGIN_DIR)
+                } }
         job.urlsList
                 .map { kotlin.runCatching {  URL(it) }.getOrNull()  }.asFlow()
                 .filterNotNull()
-                .scrape {  wc(it) }
-                .map { (url, map) ->  WordCount().apply { this.url = url.toString(); this.counts = map  } }
-                .map { it.json() }
-                .onEach { println(it) }
-                .toList()
-                .let { Db.JsonObjects.newBuilder().addAllText(it).setType("WORDCOUNT").build() }
+                .scrape { doc ->  plugs.map { it.scrape(doc) } }
+                .flatMapConcat { (_, results) -> results.asFlow() }
+                .let { Db.JsonObjects.newBuilder().addAllText(it.toList()).setType("WORDCOUNT").build() }
                 .also { database.store(it) }
         master.completeWork(jobResult(job, true))
     }
