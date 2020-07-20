@@ -20,9 +20,6 @@ RUN apt-get update -y && \
     apt-get clean && \
     update-ca-certificates -f;
 
-# Setup JAVA_HOME -- useful for docker commandline
-ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64/
-RUN export JAVA_HOME
 
 RUN echo "deb http://www.apache.org/dist/cassandra/debian 40x main" | tee /etc/apt/sources.list.d/cassandra.list
 RUN apt-get update -y && apt-get upgrade -y
@@ -34,4 +31,5 @@ RUN cp database/build/database-1.0-SNAPSHOT.jar database.jar
 RUN java -version
 
 CMD ["cassandra", "-R"]
+CMD ["sleep", "10"]
 ENTRYPOINT ["java", "-jar", "database.jar", "127.0.0.1"]

@@ -4,11 +4,9 @@ import db.Address
 import db.Cassandra
 import db.WordCount
 import db.readingFrom
-import io.grpc.ServerBuilder
 import io.grpc.netty.shaded.io.grpc.netty.NettyServerBuilder
 import io.grpc.stub.StreamObserver
 import java.net.InetSocketAddress
-import java.net.SocketAddress
 import java.net.URL
 
 const val createWordCountTable = """CREATE TABLE IF NOT EXISTS webscraper.wordcounts ( url text PRIMARY KEY, counts map<text, int> );"""
@@ -26,10 +24,15 @@ fun main(args: Array<String>) {
 
     URL("http://blakesmith.pythonanywhere.com/update/db/$ip/9696").openStream()
 
-    val cass = Cassandra(Address("127.0.0.1", 9042))
-        .exec(createWebscpraperKeyspace)
-        .exec(createWordCountTable)
-        .usingKeyspace("webscraper")
+    fun connectToCass() :Cassandra = runCatching {
+        Cassandra(Address("127.0.0.1", 9042))
+                .exec(createWebscpraperKeyspace)
+                .exec(createWordCountTable)
+                .usingKeyspace("webscraper")
+    }.getOrElse { connectToCass() }
+
+    val cass = connectToCass()
+
 
     val wcMapper = WordCount::class.readingFrom(cass)
 

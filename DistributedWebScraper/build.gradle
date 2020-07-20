@@ -29,6 +29,7 @@ dependencies {
     compile group: 'org.jsoup', name: 'jsoup', version: '1.11.3'
     compile 'com.google.code.gson:gson:2.8.6'
 
+
 }
 
 
@@ -67,6 +68,9 @@ dependencies {
 
 }
 
+task jarLoaderAgentJar(type: Jar){
+
+}
 
 task sourcesJar(type: Jar) {
     manifest {

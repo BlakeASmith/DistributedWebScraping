@@ -15,7 +15,7 @@ data class Address(val ip: String, val port: Int)
 
 
 interface CassandraTableObject
-inline fun <reified T: CassandraTableObject> KClass<T>.readingFrom(cassandra: Cassandra) =
+fun <T: CassandraTableObject> KClass<T>.readingFrom(cassandra: Cassandra) =
         cassandra.mapperFor(this.java)
 
 @Table(keyspace = "webscraper", name = "wordcounts")
