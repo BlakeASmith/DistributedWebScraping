@@ -1,6 +1,4 @@
 FROM ubuntu
-#FROM gradle:4.7.0-jdk8-alpine
-#FROM openjdk:8-jre-slim
 
 RUN apt update
 RUN apt-get install -y vim
@@ -9,11 +7,13 @@ RUN apt-get install -y gpg
 
 # get GPG key for cassandra
 RUN curl https://downloads.apache.org/cassandra/KEYS | apt-key add -
+
  #Install OpenJDK-8
-RUN apt-get update && \
+RUN apt-get update -y && \
     apt-get install -y openjdk-8-jdk && \
     apt-get install -y ant && \
     apt-get clean;
+
 #Fix certificate issues
 RUN apt-get update -y && \
     apt-get install -y ca-certificates-java && \
@@ -25,11 +25,15 @@ RUN echo "deb http://www.apache.org/dist/cassandra/debian 40x main" | tee /etc/a
 RUN apt-get update -y && apt-get upgrade -y
 RUN apt-get install -y cassandra 
 
+RUN apt-get install -y openjdk-11-jdk
+
 COPY . .
-RUN ./gradlew sourcesJar
+
+RUN echo "#!/bin/sh" >> entry.sh && \
+	echo "trap \"service cassandra stop\" INT" >> entry.sh && \
+	echo "service cassandra start" >> entry.sh && \
+	echo "java -jar database.jar \"$1\"" >> entry.sh
+#RUN ./gradlew sourcesJar
 RUN cp database/build/database-1.0-SNAPSHOT.jar database.jar 
 RUN java -version
-
-CMD ["cassandra", "-R"]
-CMD ["sleep", "10"]
-ENTRYPOINT ["java", "-jar", "database.jar", "127.0.0.1"]
+ENTRYPOINT ["sh", "entry.sh"]

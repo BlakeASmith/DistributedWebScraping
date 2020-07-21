@@ -125,7 +125,7 @@ To quickly run the whole shebang;
 
 ```bash
 docker run -d --network host --name master blakeasmith/webscraper_go_master_service <ip-addr>
-docker run -d --network host --name database blakeasmith/webscraper_database_service <ip-addr>
+docker run -d -it --network host --name database blakeasmith/webscraper_database_service <ip-addr>
 docker run -d --network host --name client blakeasmith/webscraper_client
 ```
 
