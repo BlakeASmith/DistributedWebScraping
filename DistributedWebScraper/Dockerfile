@@ -27,13 +27,13 @@ RUN apt-get install -y cassandra
 
 RUN apt-get install -y openjdk-11-jdk
 
-COPY . .
+COPY database/build/database*.jar .
 
 RUN echo "#!/bin/sh" >> entry.sh && \
 	echo "trap \"service cassandra stop\" INT" >> entry.sh && \
 	echo "service cassandra start" >> entry.sh && \
 	echo "java -jar database.jar \"$1\"" >> entry.sh
 #RUN ./gradlew sourcesJar
-RUN cp database/build/database-1.0-SNAPSHOT.jar database.jar 
+RUN mv database*.jar database.jar 
 RUN java -version
 ENTRYPOINT ["sh", "entry.sh"]

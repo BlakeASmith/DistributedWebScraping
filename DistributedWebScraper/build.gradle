@@ -25,6 +25,9 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion"
 
+    // https://mvnrepository.com/artifact/org.apache.kafka/kafka-streams
+    compile 'org.apache.kafka:kafka-streams:2.0.0'
+
     // https://mvnrepository.com/artifact/org.jsoup/jsoup
     compile group: 'org.jsoup', name: 'jsoup', version: '1.11.3'
     compile 'com.google.code.gson:gson:2.8.6'

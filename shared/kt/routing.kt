@@ -15,7 +15,7 @@ class RoutingService(val url: String){
     fun connectMaster() = connectByRoutingService("/masterAddress")
     fun connectDb() = connectByRoutingService("/dbAddress")
     fun getPlugin(name: String, storagePath: String) = requestToRoutingService("/plugins/$name")
-            .let { File("$storagePath/$name").apply {
+            .let { File("$storagePath$name").apply {
                 if (!exists()) createNewFile()
                 writeBytes(it.readBytes())
             } }

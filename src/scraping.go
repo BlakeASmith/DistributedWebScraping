@@ -81,8 +81,7 @@ func crawl(root string, path string, inputchan chan string, depth int, ht map[st
 		for _, url := range urls {
 			if _, ok := ht[url]; !ok {
 				ht[url] = true
-				if depth%2 == 0 {
-					log.Println(depth)
+				if depth%6 == 0 {
 					crawl(root, strings.Replace(url, root, "", 1), inputchan, depth-1, ht)
 				} else {
 					crawl(root, strings.Replace(url, root, "", 1), inputchan, depth-1, ht)
@@ -94,7 +93,7 @@ func crawl(root string, path string, inputchan chan string, depth int, ht map[st
 	}
 }
 
-func makeJobChannel(urlchan chan string, chunksize int) chan proto.Job {
+func makeJobChannel(urlchan chan string, chunksize int, plugins []string) chan proto.Job {
 	jobChan := make(chan proto.Job)
 	var jobIds int32 = 0
 	N := 10
@@ -115,6 +114,7 @@ func makeJobChannel(urlchan chan string, chunksize int) chan proto.Job {
 						Id:   jobIds,
 						Urls: chunk,
 						Type: proto.Job_SCRAPING,
+						Plugins: plugins,
 					}
 					wg.Done()
 				}()
