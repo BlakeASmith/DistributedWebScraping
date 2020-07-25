@@ -4,6 +4,8 @@
 !**/src/Dockerfile
 !**/src/*.sh
 
+.attach*
+
 # Java gitignores
 # Compiled class file
 *.class
