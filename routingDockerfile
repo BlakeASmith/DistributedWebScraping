@@ -1,8 +1,0 @@
-FROM python:3
-
-COPY requirements.txt ./
-RUN pip install flask
-
-COPY routing.py .
-
-CMD [ "python3", "routing.py" ]
