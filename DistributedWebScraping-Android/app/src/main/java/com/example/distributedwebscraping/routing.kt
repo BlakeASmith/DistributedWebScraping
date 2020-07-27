@@ -1,4 +1,5 @@
 import com.google.gson.Gson
+import csc.distributed.webscraper.plugins.loadPlugin
 import io.grpc.ManagedChannel
 import io.grpc.ManagedChannelBuilder
 import kotlinx.coroutines.*

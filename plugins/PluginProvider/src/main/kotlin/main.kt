@@ -1,3 +1,4 @@
+import csc.distributed.webscraper.plugins.registerPlugin
 import java.io.File
 
 fun main(args: Array<String>) {
@@ -8,4 +9,5 @@ fun main(args: Array<String>) {
                 println("registering plugin $it")
                 registerPlugin(it.nameWithoutExtension, it)
             }
+    println("all plugins registered")
 }

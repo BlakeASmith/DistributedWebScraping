@@ -27,6 +27,18 @@ compileKotlin {
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
+task sourcesJar(type: Jar) {
+    manifest {
+        attributes(
+                'Main-Class': 'MainKt',
+                'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
+        )
+    }
+    from sourceSets.main.allSource
+    from sourceSets.main.output
+    destinationDirectory = buildDir
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+}
 
 shadowJar {
     manifest {

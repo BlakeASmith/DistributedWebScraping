@@ -1,3 +1,5 @@
 rootProject.name = 'DistributedWebScraper'
 include 'database'
+include 'clientlib'
+include 'PluginProvider'
 

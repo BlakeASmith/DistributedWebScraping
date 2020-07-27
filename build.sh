@@ -1,7 +1,17 @@
 #!/bin/bash
 
+# this script will perform a build for each component and put the resulting JAR files under the
+# build direcectry
+
 ./link.sh # link shared files
-(cd DistributedWebScraper; ./gradlew sourcesJar) # perform gradle build
+
+#perform builds
+(cd plugins/PluginProvider; ./gradlew sourcesJar) 
+(cd DistributedWebScraper; ./gradlew clientlib:sourcesJar ; ./gradlew sourcesJar) 
 mkdir -p build
+
+# copy jar files
 cp DistributedWebScraper/build/DistributedWebScraper*.jar build/client.jar
 cp DistributedWebScraper/database/build/database*.jar build/database.jar
+cp DistributedWebScraper/clientlib/build/clientlib*.jar build/clientlib.jar
+cp plugins/PluginProvider/build/libs/PluginProvider*.jar build/pluginprovider.jar
