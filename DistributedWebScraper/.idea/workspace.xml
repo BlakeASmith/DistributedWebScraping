@@ -7,43 +7,30 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4025b87d-8fc3-4768-a6f4-c47afbdee317" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/clientlib/src/main/kotlin/csc/distributed/webscraper/kafka/Kafka.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/clientlib/src/main/kotlin/csc/distributed/webscraper/plugins/register.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/clientlib/src/main/kotlin/csc/distributed/webscraper/services/Serialization.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/clientlib/src/main/kotlin/csc/distributed/webscraper/services/Service.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/main/kafka.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clientlib/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/clientlib/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clientlib/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/clientlib/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clientlib/src/main/kotlin/Kafka.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/clientlib/src/main/kotlin/Plugin.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/clientlib/src/main/kotlin/plugins/ExamplePlugin.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/clientlib/src/main/kotlin/plugins/Plugin.kt" beforeDir="false" afterPath="$PROJECT_DIR$/clientlib/src/main/kotlin/csc/distributed/webscraper/plugins/Plugin.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clientlib/src/main/kotlin/services/Serialization.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/clientlib/src/main/kotlin/services/Service.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/src/main/kotlin/plugin/plugins.kt" beforeDir="false" afterPath="$PROJECT_DIR$/database/src/main/kotlin/plugin/plugins.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/config.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/config.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/plugin/plugins.kt" beforeDir="false" afterPath="$PROJECT_DIR$/clientlib/src/main/kotlin/csc/distributed/webscraper/plugins/loading.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/routing.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/routing.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DistributedWebScraping-Android/app/src/main/java/com/example/distributedwebscraping/config.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../DistributedWebScraping-Android/app/src/main/java/com/example/distributedwebscraping/config.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DistributedWebScraping-Android/app/src/main/java/com/example/distributedwebscraping/routing.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../DistributedWebScraping-Android/app/src/main/java/com/example/distributedwebscraping/routing.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../clientlib/src/main/kotlin/csc/distributed/webscraper/kafka/ProducerChannel.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../clientlib/src/main/kotlin/csc/distributed/webscraper/plugins/KafkaExtensions.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clientlib/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/clientlib/build.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/clientlib/src/main/kotlin/csc/distributed/webscraper/kafka/Kafka.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/clientlib/src/main/kotlin/csc/distributed/webscraper/plugins/Plugin.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/clientlib/src/main/kotlin/csc/distributed/webscraper/plugins/loading.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/clientlib/src/main/kotlin/csc/distributed/webscraper/plugins/register.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/clientlib/src/main/kotlin/csc/distributed/webscraper/services/Serialization.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/clientlib/src/main/kotlin/csc/distributed/webscraper/services/Service.kt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../Dockerfile" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../build.sh" beforeDir="false" afterPath="$PROJECT_DIR$/../build.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../docker-compose.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../plugins/PluginProvider/.gradle/6.1.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../plugins/PluginProvider/.gradle/6.1.1/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../plugins/PluginProvider/.gradle/6.1.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../plugins/PluginProvider/.gradle/6.1.1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../plugins/PluginProvider/.gradle/6.1.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../plugins/PluginProvider/.gradle/6.1.1/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../plugins/PluginProvider/.gradle/6.1.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../plugins/PluginProvider/.gradle/6.1.1/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../plugins/PluginProvider/.gradle/6.1.1/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../plugins/PluginProvider/.gradle/6.1.1/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../plugins/PluginProvider/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../plugins/PluginProvider/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../plugins/PluginProvider/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../plugins/PluginProvider/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../plugins/PluginProvider/.gradle/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../plugins/PluginProvider/.gradle/checksums/checksums.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../plugins/PluginProvider/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../plugins/PluginProvider/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../plugins/PluginProvider/src/main/kotlin/main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../plugins/PluginProvider/src/main/kotlin/main.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../shared/kt/config.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../shared/kt/config.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../shared/kt/plugin/plugins.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../shared/kt/plugin/plugins.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../shared/kt/routing.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../shared/kt/routing.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../testscripts/test_plugins_load_to_kafka.sh" beforeDir="false" afterPath="$PROJECT_DIR$/../testscripts/test_plugins_load_to_kafka.sh" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,6 +85,7 @@
         <option value="Kotlin Interface" />
         <option value="Kotlin Class" />
         <option value="Kotlin File" />
+        <option value="JUnit5 Test Class" />
       </list>
     </option>
   </component>
@@ -115,30 +103,38 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit5" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/clientlib/src/main/kotlin/csc/distributed/webscraper" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/clientlib/build/clientlib-1.0.jar!/" />
-    <property name="project.structure.last.edited" value="SDKs" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../clientlib" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.17" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.annotationProcessors" />
   </component>
   <component name="RecentsManager">
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="csc.distributed.webscraper.kafka" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/../" />
+      <recent name="$PROJECT_DIR$/../clientlib" />
+      <recent name="$PROJECT_DIR$/PluginProvider/libs" />
+      <recent name="$PROJECT_DIR$/PluginProvider" />
+      <recent name="$PROJECT_DIR$/src/main/kotlin" />
+    </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/clientlib/src/main/kotlin/plugins" />
       <recent name="$PROJECT_DIR$/database/src/main/proto" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/PluginProvider/libs" />
-      <recent name="$PROJECT_DIR$/PluginProvider" />
-      <recent name="$PROJECT_DIR$/src/main/kotlin" />
-      <recent name="$PROJECT_DIR$/src/main/kotlin/plugin" />
-      <recent name="$PROJECT_DIR$/database/src/main/kotlin" />
-    </key>
   </component>
-  <component name="RunManager" selected="Kotlin.MainKt">
+  <component name="RunManager" selected="Gradle.DistributedWebScraper [sourcesJar]">
     <configuration name="DistributedWebScraper [jar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -232,14 +228,14 @@
       <item itemvalue="Gradle./home/larbs/projects/DistributedWebScraping/DistributedWebScraper/clientlib/build.gradle [sourcesJar]" />
       <item itemvalue="Gradle.DistributedWebScraper [jar]" />
       <item itemvalue="Gradle.DistributedWebScraper [javadoc]" />
-      <item itemvalue="Kotlin.MainKt" />
       <item itemvalue="Gradle.DistributedWebScraper [sourcesJar]" />
+      <item itemvalue="Kotlin.MainKt" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Kotlin.MainKt" />
-        <item itemvalue="Gradle./home/larbs/projects/DistributedWebScraping/DistributedWebScraper/clientlib/build.gradle [sourcesJar]" />
         <item itemvalue="Gradle.DistributedWebScraper [sourcesJar]" />
+        <item itemvalue="Gradle./home/larbs/projects/DistributedWebScraping/DistributedWebScraper/clientlib/build.gradle [sourcesJar]" />
+        <item itemvalue="Kotlin.MainKt" />
         <item itemvalue="Gradle.DistributedWebScraper [javadoc]" />
         <item itemvalue="Gradle.DistributedWebScraper [jar]" />
       </list>
@@ -268,14 +264,14 @@
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
     <state x="746" y="275" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1595815654373" />
-    <state x="1098" y="526" width="394" height="554" key="#com.intellij.ide.util.MemberChooser" timestamp="1595836131884">
+    <state x="1099" y="526" width="394" height="554" key="#com.intellij.ide.util.MemberChooser" timestamp="1595893645102">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state x="1098" y="526" width="394" height="554" key="#com.intellij.ide.util.MemberChooser/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1595836131884" />
-    <state x="1022" y="439" key="#com.intellij.ide.util.PackageChooserDialog" timestamp="1594246250093">
+    <state x="1099" y="526" width="394" height="554" key="#com.intellij.ide.util.MemberChooser/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1595893645102" />
+    <state x="1505" y="41" key="#com.intellij.ide.util.PackageChooserDialog" timestamp="1595895212749">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state x="1022" y="439" key="#com.intellij.ide.util.PackageChooserDialog/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1594246250093" />
+    <state x="1505" y="41" key="#com.intellij.ide.util.PackageChooserDialog/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1595895212749" />
     <state x="2" y="62" width="527" height="406" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1594242401919">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
@@ -296,29 +292,33 @@
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
     <state x="257" y="347" key="#com.intellij.util.ui.classpath.ChooseLibrariesDialog/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1595744257631" />
-    <state x="1055" y="41" width="534" height="476" key="FileChooserDialogImpl" timestamp="1595837489882">
+    <state x="1011" y="383" key="#org.jetbrains.kotlin.idea.refactoring.move.moveDeclarations.ui.MoveKotlinTopLevelDeclarationsDialog" timestamp="1595895383878">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state x="1055" y="41" width="534" height="476" key="FileChooserDialogImpl/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1595837489882" />
-    <state width="2518" height="379" key="GridCell.Tab.0.bottom" timestamp="1595839727542">
+    <state x="1011" y="383" key="#org.jetbrains.kotlin.idea.refactoring.move.moveDeclarations.ui.MoveKotlinTopLevelDeclarationsDialog/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1595895383878" />
+    <state x="1058" y="104" width="534" height="476" key="FileChooserDialogImpl" timestamp="1595907123759">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state width="2518" height="379" key="GridCell.Tab.0.bottom/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1595839727542" />
+    <state x="1058" y="104" width="534" height="476" key="FileChooserDialogImpl/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1595907123759" />
+    <state width="2518" height="379" key="GridCell.Tab.0.bottom" timestamp="1595884781605">
+      <screen x="0" y="0" width="2560" height="1080" />
+    </state>
+    <state width="2518" height="379" key="GridCell.Tab.0.bottom/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1595884781605" />
     <state width="2518" height="285" key="GridCell.Tab.0.bottom/0.0.2560.1080/259.1080.1920.1080@259.1080.1920.1080" timestamp="1594706907625" />
-    <state width="2518" height="379" key="GridCell.Tab.0.center" timestamp="1595839727542">
+    <state width="2518" height="379" key="GridCell.Tab.0.center" timestamp="1595884781605">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state width="2518" height="379" key="GridCell.Tab.0.center/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1595839727542" />
+    <state width="2518" height="379" key="GridCell.Tab.0.center/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1595884781605" />
     <state width="2518" height="285" key="GridCell.Tab.0.center/0.0.2560.1080/259.1080.1920.1080@259.1080.1920.1080" timestamp="1594706907625" />
-    <state width="2518" height="379" key="GridCell.Tab.0.left" timestamp="1595839727541">
+    <state width="2518" height="379" key="GridCell.Tab.0.left" timestamp="1595884781605">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state width="2518" height="379" key="GridCell.Tab.0.left/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1595839727541" />
+    <state width="2518" height="379" key="GridCell.Tab.0.left/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1595884781605" />
     <state width="2518" height="285" key="GridCell.Tab.0.left/0.0.2560.1080/259.1080.1920.1080@259.1080.1920.1080" timestamp="1594706907625" />
-    <state width="2518" height="379" key="GridCell.Tab.0.right" timestamp="1595839727542">
+    <state width="2518" height="379" key="GridCell.Tab.0.right" timestamp="1595884781605">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state width="2518" height="379" key="GridCell.Tab.0.right/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1595839727542" />
+    <state width="2518" height="379" key="GridCell.Tab.0.right/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1595884781605" />
     <state width="2518" height="285" key="GridCell.Tab.0.right/0.0.2560.1080/259.1080.1920.1080@259.1080.1920.1080" timestamp="1594706907625" />
     <state width="2518" height="351" key="GridCell.Tab.1.bottom" timestamp="1595823261796">
       <screen x="0" y="0" width="2560" height="1080" />
@@ -336,10 +336,10 @@
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
     <state width="2518" height="351" key="GridCell.Tab.1.right/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1595823261796" />
-    <state x="26" y="242" width="1028" height="859" key="SettingsEditor" timestamp="1595837491888">
+    <state x="28" y="221" width="1028" height="859" key="SettingsEditor" timestamp="1595895503686">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state x="26" y="242" width="1028" height="859" key="SettingsEditor/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1595837491888" />
+    <state x="28" y="221" width="1028" height="859" key="SettingsEditor/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1595895503686" />
     <state x="1124" y="566" key="chooseDestDirectoryDialog" timestamp="1595811896775">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
@@ -348,6 +348,10 @@
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
     <state x="733" y="319" width="1109" height="761" key="new project wizard/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1595746448841" />
+    <state x="1061" y="358" key="org.jetbrains.kotlin.idea.testIntegration.KotlinCreateTestDialog" timestamp="1595895245231">
+      <screen x="0" y="0" width="2560" height="1080" />
+    </state>
+    <state x="1061" y="358" key="org.jetbrains.kotlin.idea.testIntegration.KotlinCreateTestDialog/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1595895245231" />
     <state x="1136" y="456" key="refactoring.ChangeSignatureDialog" timestamp="1595726319458">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
