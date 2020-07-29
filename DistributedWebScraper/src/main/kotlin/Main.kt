@@ -1,5 +1,7 @@
 import csc.distributed.webscraper.kafka.Kafka
+import csc.distributed.webscraper.plugins.KafkaConfig
 import csc.distributed.webscraper.plugins.Plugin
+import csc.distributed.webscraper.plugins.WebScraper
 import kotlinx.coroutines.*
 import main.PluginLoader
 import org.apache.kafka.common.serialization.Serdes
@@ -28,10 +30,9 @@ val props = Properties().also {
 }
 
 @ExperimentalCoroutinesApi
-suspend fun main(args: Array<String>) {
-    val kafka = Kafka("plugin-loader", props)
-    val loader = PluginLoader(kafka)
-
-    loader["RoverPlug"]
+fun main(args: Array<String>) {
+    val webScraper = WebScraper(KafkaConfig(listOf("127.0.0.1"), false))
+    webScraper.startLoading()
+    print(webScraper["test"])
 }
 

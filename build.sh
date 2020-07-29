@@ -6,12 +6,12 @@
 ./link.sh # link shared files
 
 #perform builds
-(cd plugins/PluginProvider; ./gradlew sourcesJar) 
-(cd DistributedWebScraper; ./gradlew clientlib:sourcesJar ; ./gradlew sourcesJar) 
+(cd plugins/PluginProvider; ./gradlew shadowJar) 
+(cd clientlib; ./gradlew jar)
+(cd client; ./gradlew jar) 
 mkdir -p build
 
 # copy jar files
-cp plugins/PluginProvider/build/PluginProvider*.jar build/pluginprovider.jar
-cp DistributedWebScraper/build/DistributedWebScraper*.jar build/client.jar
-cp DistributedWebScraper/database/build/database*.jar build/database.jar
-cp DistributedWebScraper/clientlib/build/clientlib*.jar build/clientlib.jar
+cp plugins/PluginProvider/build/libs/PluginProvider*.jar build/pluginprovider.jar
+cp client/build/libs/client*.jar build/client.jar
+cp clientlib/build/libs/clientlib*.jar build/clientlib.jar

@@ -11,7 +11,7 @@ version ''
 repositories {
     mavenCentral()
     flatDir {
-        dirs 'libs'
+        dirs '../../clientlib/build/libs'
     }
 }
 
@@ -23,7 +23,7 @@ dependencies {
 
     compile 'org.apache.kafka:kafka-clients:2.0.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.8'
-    compile(name: "clientlib", ext: "jar")
+    compile(name: "clientlib-1.0", ext: "jar")
 
     compile 'com.google.code.gson:gson:2.8.6'
 }
@@ -33,18 +33,6 @@ compileKotlin {
 }
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
-}
-task sourcesJar(type: Jar) {
-    manifest {
-        attributes(
-                'Main-Class': 'MainKt',
-                'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
-        )
-    }
-    from sourceSets.main.allSource
-    from sourceSets.main.output
-    destinationDirectory = buildDir
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 }
 
 shadowJar {

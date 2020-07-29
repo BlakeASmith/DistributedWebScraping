@@ -1,18 +1,17 @@
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import csc.distributed.webscraper.plugins.KafkaConfig
-import csc.distributed.webscraper.plugins.WebScraper
+import csc.distributed.webscraper.kafka.*
+import csc.distributed.webscraper.plugins.loadPlugin
 import csc.distributed.webscraper.services.Service
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+import org.jsoup.Jsoup
 import java.io.File
+import java.time.Duration
 
-suspend fun pushFromDir(f: File, webScraper: WebScraper) = f.walk()
+fun jarsIn(dir: File) = dir.walk()
         .drop(1) // drop the directory itself
         .filter { it.extension == "jar" }
-        .forEach {
-            println("registering plugin $it")
-            webScraper.registerPlugin(it)
-        }
 
 fun openFileArgument(args: Array<String>, arg: String) = args.withIndex()
                 .find { (_, value) -> value == arg }
@@ -33,12 +32,25 @@ fun writeExampleJson(file: File){
             }
 }
 
+@ExperimentalCoroutinesApi
+@FlowPreview
 fun main(args: Array<String>) {
+    PLUGIN_TOPIC.defaultConfig = Kafka(
+            "plugin-provider",
+            listOf("127.0.0.1:9092"),
+            false,
+            GlobalScope,
+            Duration.ofSeconds(5),
+            1
+    )
     openFileArgument(args, "--genexample")?.also { writeExampleJson(it) }
-    val webScraper = WebScraper(KafkaConfig(listOf("127.0.0.1:9092")))
     openFileArgument(args, "--jars")?.also {
         runBlocking {
-            pushFromDir(it, webScraper)
+            jarsIn(it).map { it.nameWithoutExtension to it.readBytes() }
+                .asFlow()
+                .produceTo(PLUGIN_TOPIC.producer())
+                .onEach { println("sent ${it.first} to Kafka, size is ${it.second.size} bytes") }
+                .collect()
         }
     }
 }

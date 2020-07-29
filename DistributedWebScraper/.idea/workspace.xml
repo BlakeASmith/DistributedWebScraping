@@ -7,29 +7,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4025b87d-8fc3-4768-a6f4-c47afbdee317" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../clientlib/src/main/kotlin/csc/distributed/webscraper/kafka/ProducerChannel.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../clientlib/src/main/kotlin/csc/distributed/webscraper/plugins/KafkaExtensions.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/DistributedWebScraper.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/DistributedWebScraper.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/larbs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clientlib/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/clientlib/build.gradle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/clientlib/src/main/kotlin/csc/distributed/webscraper/kafka/Kafka.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/clientlib/src/main/kotlin/csc/distributed/webscraper/plugins/Plugin.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/clientlib/src/main/kotlin/csc/distributed/webscraper/plugins/loading.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/clientlib/src/main/kotlin/csc/distributed/webscraper/plugins/register.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/clientlib/src/main/kotlin/csc/distributed/webscraper/services/Serialization.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/clientlib/src/main/kotlin/csc/distributed/webscraper/services/Service.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Dockerfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../build.sh" beforeDir="false" afterPath="$PROJECT_DIR$/../build.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../plugins/PluginProvider/.gradle/6.1.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../plugins/PluginProvider/.gradle/6.1.1/executionHistory/executionHistory.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../plugins/PluginProvider/.gradle/6.1.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../plugins/PluginProvider/.gradle/6.1.1/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../plugins/PluginProvider/.gradle/6.1.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../plugins/PluginProvider/.gradle/6.1.1/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../plugins/PluginProvider/.gradle/6.1.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../plugins/PluginProvider/.gradle/6.1.1/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../plugins/PluginProvider/.gradle/6.1.1/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../plugins/PluginProvider/.gradle/6.1.1/fileHashes/resourceHashesCache.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../plugins/PluginProvider/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../plugins/PluginProvider/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../plugins/PluginProvider/.gradle/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../plugins/PluginProvider/.gradle/checksums/checksums.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../plugins/PluginProvider/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../plugins/PluginProvider/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../plugins/PluginProvider/src/main/kotlin/main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../plugins/PluginProvider/src/main/kotlin/main.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/main/Main.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/main/kafka.kt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../testscripts/test_plugins_load_to_kafka.sh" beforeDir="false" afterPath="$PROJECT_DIR$/../testscripts/test_plugins_load_to_kafka.sh" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -106,11 +95,11 @@
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit5" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/clientlib/src/main/kotlin/csc/distributed/webscraper" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../clientlib" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../clientlib/build/clientlib-1.0.jar!/" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.17" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.annotationProcessors" />
+    <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.javacompiler" />
   </component>
   <component name="RecentsManager">
     <key name="CreateTestDialog.RecentsKey">
@@ -134,7 +123,7 @@
       <recent name="$PROJECT_DIR$/database/src/main/proto" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.DistributedWebScraper [sourcesJar]">
+  <component name="RunManager" selected="Gradle.DistributedWebScraper [jar]">
     <configuration name="DistributedWebScraper [jar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -192,25 +181,6 @@
       <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="/home/larbs/projects/DistributedWebScraping/DistributedWebScraper/clientlib/build.gradle [sourcesJar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/clientlib/build.gradle" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="sourcesJar" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
-      <method v="2" />
-    </configuration>
     <configuration name="MainKt" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
       <module name="DistributedWebScraper.main" />
       <option name="VM_PARAMETERS" />
@@ -225,7 +195,6 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="Gradle./home/larbs/projects/DistributedWebScraping/DistributedWebScraper/clientlib/build.gradle [sourcesJar]" />
       <item itemvalue="Gradle.DistributedWebScraper [jar]" />
       <item itemvalue="Gradle.DistributedWebScraper [javadoc]" />
       <item itemvalue="Gradle.DistributedWebScraper [sourcesJar]" />
@@ -233,9 +202,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.DistributedWebScraper [sourcesJar]" />
-        <item itemvalue="Gradle./home/larbs/projects/DistributedWebScraping/DistributedWebScraper/clientlib/build.gradle [sourcesJar]" />
         <item itemvalue="Kotlin.MainKt" />
+        <item itemvalue="Gradle.DistributedWebScraper [sourcesJar]" />
         <item itemvalue="Gradle.DistributedWebScraper [javadoc]" />
         <item itemvalue="Gradle.DistributedWebScraper [jar]" />
       </list>
@@ -260,10 +228,10 @@
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
     <state x="769" y="173" key="#Project_Structure/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1594956971070" />
-    <state x="746" y="275" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1595815654373">
+    <state x="749" y="338" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1595918681732">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state x="746" y="275" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1595815654373" />
+    <state x="749" y="338" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1595918681732" />
     <state x="1099" y="526" width="394" height="554" key="#com.intellij.ide.util.MemberChooser" timestamp="1595893645102">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
@@ -288,18 +256,18 @@
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
     <state x="1019" y="347" width="526" height="490" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1594244100923" />
-    <state x="257" y="347" key="#com.intellij.util.ui.classpath.ChooseLibrariesDialog" timestamp="1595744257631">
+    <state x="258" y="368" key="#com.intellij.util.ui.classpath.ChooseLibrariesDialog" timestamp="1595918379010">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state x="257" y="347" key="#com.intellij.util.ui.classpath.ChooseLibrariesDialog/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1595744257631" />
+    <state x="258" y="368" key="#com.intellij.util.ui.classpath.ChooseLibrariesDialog/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1595918379010" />
     <state x="1011" y="383" key="#org.jetbrains.kotlin.idea.refactoring.move.moveDeclarations.ui.MoveKotlinTopLevelDeclarationsDialog" timestamp="1595895383878">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
     <state x="1011" y="383" key="#org.jetbrains.kotlin.idea.refactoring.move.moveDeclarations.ui.MoveKotlinTopLevelDeclarationsDialog/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1595895383878" />
-    <state x="1058" y="104" width="534" height="476" key="FileChooserDialogImpl" timestamp="1595907123759">
+    <state x="1060" y="146" width="536" height="476" key="FileChooserDialogImpl" timestamp="1595918990981">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state x="1058" y="104" width="534" height="476" key="FileChooserDialogImpl/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1595907123759" />
+    <state x="1060" y="146" width="536" height="476" key="FileChooserDialogImpl/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1595918990981" />
     <state width="2518" height="379" key="GridCell.Tab.0.bottom" timestamp="1595884781605">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
@@ -336,18 +304,18 @@
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
     <state width="2518" height="351" key="GridCell.Tab.1.right/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1595823261796" />
-    <state x="28" y="221" width="1028" height="859" key="SettingsEditor" timestamp="1595895503686">
+    <state x="33" y="221" width="1028" height="859" key="SettingsEditor" timestamp="1595918872885">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state x="28" y="221" width="1028" height="859" key="SettingsEditor/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1595895503686" />
+    <state x="33" y="221" width="1028" height="859" key="SettingsEditor/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1595918872885" />
     <state x="1124" y="566" key="chooseDestDirectoryDialog" timestamp="1595811896775">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
     <state x="1124" y="566" key="chooseDestDirectoryDialog/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1595811896775" />
-    <state x="733" y="319" width="1109" height="761" key="new project wizard" timestamp="1595746448841">
+    <state x="734" y="319" width="1109" height="761" key="new project wizard" timestamp="1595918997097">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state x="733" y="319" width="1109" height="761" key="new project wizard/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1595746448841" />
+    <state x="734" y="319" width="1109" height="761" key="new project wizard/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1595918997097" />
     <state x="1061" y="358" key="org.jetbrains.kotlin.idea.testIntegration.KotlinCreateTestDialog" timestamp="1595895245231">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
@@ -364,16 +332,5 @@
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
     <state x="943" y="269" width="672" height="678" key="search.everywhere.popup/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1595838602066" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/build.gradle</url>
-          <line>71</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

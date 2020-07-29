@@ -75,10 +75,6 @@ dependencies {
 
 }
 
-task jarLoaderAgentJar(type: Jar){
-
-}
-
 task sourcesJar(type: Jar) {
     manifest {
         attributes(
