@@ -14,3 +14,6 @@
 (cd ./DistributedWebScraper/database/src/main/kotlin; mkdir -p plugin; cd plugin;  ln -f ../../../../../../shared/kt/plugin/*.kt .)
 (cd ./DistributedWebScraper/src/main/kotlin; mkdir -p plugin; cd plugin;  ln -f ../../../../../shared/kt/plugin/*.kt .)
 
+# copy config file into go project (needed for docker build)
+(cd ./go/src; ln -f ../../config.json .)
+

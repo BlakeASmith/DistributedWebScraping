@@ -12,7 +12,7 @@ import java.time.Duration
 
 data class Kafka(
         val defaultGroupId: String,
-        val bootstraps: List<String>,
+        val bootstraps: List<String> = listOf("127.0.0.1:9092"),
         val autocommit: Boolean = true,
         val context: CoroutineScope = GlobalScope,
         val pollingRate: Duration = Duration.ofMillis(100),

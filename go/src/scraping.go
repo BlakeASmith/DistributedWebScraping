@@ -6,7 +6,6 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/BlakeASmith/DistributedWebScraping/src/proto"
 	"github.com/PuerkitoBio/goquery"
 )
 
@@ -61,7 +60,7 @@ func restrictDomain(baseuri string, urls []string) []string {
 }
 
 // crawl all pages without leaving a set domain. Only return urls which have not yet been seen
-func crawl(root string, path string, inputchan chan string, depth int, ht map[string]bool) {
+func crawl(root string, path string, inputchan chan string, depth int, ht map[string]bool, ignores []string) {
 	if depth == 0 {
 		return
 	}
@@ -71,8 +70,16 @@ func crawl(root string, path string, inputchan chan string, depth int, ht map[st
 
 		for _, url := range urls {
 			if val, ok := ht[url]; !ok || !val {
-				//log.Println("pushing ", url)
-				inputchan <- url
+				shouldIgnore := false
+				for _, ignore := range ignores {
+					if strings.Contains(url, ignore){
+						shouldIgnore = true
+					}
+				}
+				if !shouldIgnore {
+					log.Println("pushing ", url)
+					inputchan <- url
+				}
 			} else {
 				//log.Println("already seen ", url)
 			}
@@ -82,9 +89,9 @@ func crawl(root string, path string, inputchan chan string, depth int, ht map[st
 			if _, ok := ht[url]; !ok {
 				ht[url] = true
 				if depth%6 == 0 {
-					crawl(root, strings.Replace(url, root, "", 1), inputchan, depth-1, ht)
+					crawl(root, strings.Replace(url, root, "", 1), inputchan, depth-1, ht, ignores)
 				} else {
-					crawl(root, strings.Replace(url, root, "", 1), inputchan, depth-1, ht)
+					crawl(root, strings.Replace(url, root, "", 1), inputchan, depth-1, ht, ignores)
 				}
 			}
 		}
@@ -93,10 +100,10 @@ func crawl(root string, path string, inputchan chan string, depth int, ht map[st
 	}
 }
 
-func makeJobChannel(urlchan chan string, chunksize int, plugins []string) chan proto.Job {
-	jobChan := make(chan proto.Job)
-	var jobIds int32 = 0
-	N := 10
+func makeJobChannel(urlchan chan string, chunksize int, plugins []string, service string) chan Job {
+	jobChan := make(chan Job)
+	var jobIds int = 0
+	N := 5
 	var wg sync.WaitGroup
 	go func() {
 		for {
@@ -109,12 +116,11 @@ func makeJobChannel(urlchan chan string, chunksize int, plugins []string) chan p
 
 				jobIds += 1
 				go func () {
-				//log.Println("created a new job")
-					jobChan <- proto.Job{
+					jobChan <- Job{
 						Id:   jobIds,
 						Urls: chunk,
-						Type: proto.Job_SCRAPING,
 						Plugins: plugins,
+						Service: service,
 					}
 					wg.Done()
 				}()

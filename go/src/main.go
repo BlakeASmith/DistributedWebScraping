@@ -1,37 +1,65 @@
 package main
 
-import "os"
 import "log"
+import "encoding/json"
+import "strconv"
+
+type KeyValueSerializer interface {
+	Key() []byte
+	Value() []byte
+}
+
+type Job struct {
+	Id int
+	Urls []string
+	Plugins []string
+	Service string
+}
+
+func (j Job) Key() []byte {
+	return []byte(strconv.Itoa(j.Id))
+}
+
+func (j Job) Value() []byte {
+	json, err := json.Marshal(j)
+	if err != nil {
+		panic(err)
+	}
+	return json
+}
 
 func main() {
-	ip := os.Args[1]
-	plugins := os.Args[2:]
-	if len(plugins) == 0{
-		plugins = append(plugins, "wordcount.jar")
+	config := getConfig()
+	log.Println("using config ", config)
+
+
+	kaf := Kafka{ Bootstraps:config.Bootstraps }
+	consumer := kaf.Consumer("golang", "earliest", false)
+	serviceChannel := ConsumeTopicAsChannel("services", consumer)
+	producer := kaf.Producer()
+
+	for message := range serviceChannel{
+		log.Println("received service " + string(message.Key))
+		service := DeserializeService(message.Value)
+		go PushToTopic(producer, "jobs" , JobChannelFor(service))
 	}
+}
 
-	kaf := Kafka{ Bootstraps:[]string{ip+":9092"}, ClientID:"go" }
-	urlchan := make(chan string)
-	seen := make(map[string]bool)
-
-	go crawl("https://www.usedvictoria.com", "", urlchan, 35, seen)
-
-	kafChan := kaf.pushToTopic(urlchan, "url", plugins[0])
-
-	for url := range kafChan {
-		log.Println(url + " sent to kafka")
+func JobChannelFor(service *Service) chan KeyValueSerializer {
+	urls := make(chan string)
+	seen := make(map[string] bool)
+	for _, domain := range service.RootDomains{
+		log.Println("starting crawl on", domain)
+		go crawl(domain, "", urls, -1, seen, service.Filters)
 	}
+	serializerChannel := make(chan KeyValueSerializer)
+	jobs := makeJobChannel(urls, 10, service.Plugins, service.Name)
 
-
-	//jobs := makeJobChannel(urlchan, 5, plugins)
-
-	//RoutingServiceAddress := "http://blakesmith.pythonanywhere.com"
-	//server := Server{
-		//IPAddress:             Address{IP: ip, Port: 6969},
-		//RoutingServiceAddress: RoutingServiceAddress,
-		//JobChannel:            jobs,
-	//}
-	//server.sendUpdateToRoutingService()
-	//server.start()
+	go func () {
+		for job := range jobs {
+			serializerChannel <- interface{}(job).(KeyValueSerializer)
+		}
+	}()
+	return serializerChannel
 }
 

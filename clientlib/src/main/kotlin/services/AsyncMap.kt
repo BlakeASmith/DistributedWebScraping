@@ -31,9 +31,14 @@ class FlowResolver<K, V, P> (
         operation(getAsync(key).await())
     }
 
+    fun <R> withAsync(vararg keys: K, operation : suspend V.() -> R): List<Deferred<R>> = keys.map { withAsync(it, operation) }
+
     fun <R> with(key: K, operation: V.() -> R ): R = runBlocking{
         operation(getAsync(key).await())
     }
+
+    fun <R> with(vararg keys: K, operation: V.() -> R) = keys.map { with(it, operation) }
+
 
     suspend operator fun <R> invoke(key: K, operation: suspend (V) -> R) = withAsync(key, operation).await()
 }
