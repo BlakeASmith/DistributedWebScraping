@@ -7,62 +7,12 @@
     "filters": [
       "#"
     ],
-    "destination": {
-      "first": "127.0.0.1",
-      "second": 6969
-    },
     "plugins": [
       "wordcount"
-    ]
-  }, 
-  {
-    "name": "test1",
-    "rootDomains": [
-      "https://www.usedvictoria.com"
     ],
-    "filters": [
-	    "#"
-    ],
-    "destination": {
-      "first": "127.0.0.1",
-      "second": 6969
-    },
-    "plugins": [
-      "wordcount"
-    ]
-  },
-
-  {
-    "name": "test2",
-    "rootDomains": [
-      "https://www.usedvictoria.com"
-    ],
-    "filters": [
-	    "#"
-    ],
-    "destination": {
-      "first": "127.0.0.1",
-      "second": 6969
-    },
-    "plugins": [
-      "wordcount"
-    ]
-  },
-
-  {
-    "name": "test3",
-    "rootDomains": [
-      "https://www.usedvictoria.com"
-    ],
-    "filters": [
-	    "#"
-    ],
-    "destination": {
-      "first": "127.0.0.1",
-      "second": 6969
-    },
-    "plugins": [
-      "wordcount"
-    ]
+    "maxDepth": 3,
+    "timeBetweenRepeats": 40
+    "jobSize": 5
+    "numberOfConcurrentRequests": 5
   }
 ]

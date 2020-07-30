@@ -68,18 +68,4 @@ suspend fun main(args: Array<String>){
     )
 
     jobProcessorFlow.launchIn(GlobalScope)
-
-    listOf("test1").map {
-        withContext(Dispatchers.IO){
-            launch {
-                Topic("test", Serdes.String(), Serdes.String())
-                        .apply {
-                            defaultConfig = PLUGIN_TOPIC.defaultConfig
-                        }
-                        .asFlow(config = PLUGIN_TOPIC.defaultConfig!!.consumerConfig(groupId = "test"))
-                        .collectIndexed { index, value -> if(index % 50 == 0) println("$index $value") }
-            }
-        }
-    }.forEach { it.join() }
-
 }

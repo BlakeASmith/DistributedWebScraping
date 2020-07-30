@@ -3,8 +3,6 @@
 # this script will perform a build for each component and put the resulting JAR files under the
 # build direcectry
 
-./link.sh # link shared files
-
 #perform builds
 (cd plugins/PluginProvider; ./gradlew shadowJar) 
 (cd clientlib; ./gradlew jar)
