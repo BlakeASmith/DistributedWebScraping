@@ -67,5 +67,5 @@ suspend fun main(args: Array<String>){
             autocommit = false
     )
 
-    jobProcessorFlow.launchIn(GlobalScope)
+    jobProcessorFlow.collect()
 }
