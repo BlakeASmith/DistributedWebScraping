@@ -1,0 +1,33 @@
+version: '3.4'
+
+services:
+  kafka:
+    image: spotify/kafka
+    logging:
+      driver: none
+        
+  provider: 
+    image: blakeasmith/kafka_webscraper_provider
+    environment:
+      WEBSCRAPER_CONFIG: "/config/config.json"
+    volumes: 
+      - ./config:/config
+      - ./plugins:/plugins
+      - ./services:/services
+
+  producer:
+    image: blakeasmith/kafka_webscraper_producer
+    environment:
+      WEBSCRAPER_CONFIG: "/config/config.json"
+    volumes: 
+      - ./:/config
+
+  client:
+    image: blakeasmith/kafka_webscraper_client
+    environment:
+      WEBSCRAPER_CONFIG: "/config/config.json"
+    volumes: 
+      - ./:/config
+
+
+

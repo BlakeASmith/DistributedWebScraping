@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# run kafka on local host, execute the given command, then kill kafka
+
 name=$(sudo docker run -d --network host spotify/kafka)
 trap "sudo docker kill $name" SIGINT
 
