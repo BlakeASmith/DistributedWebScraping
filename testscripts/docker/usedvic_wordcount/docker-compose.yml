@@ -10,6 +10,9 @@ services:
     image: blakeasmith/kafka_webscraper_provider
     environment:
       WEBSCRAPER_CONFIG: "/config/config.json"
+    command: "--jars plugins --services services/services.json"
+    logging:
+      driver: none
     volumes: 
       - ./config:/config
       - ./plugins:/plugins
@@ -19,15 +22,24 @@ services:
     image: blakeasmith/kafka_webscraper_producer
     environment:
       WEBSCRAPER_CONFIG: "/config/config.json"
+    logging:
+      driver: none
     volumes: 
-      - ./:/config
+      - ./config:/config
 
   client:
     image: blakeasmith/kafka_webscraper_client
     environment:
       WEBSCRAPER_CONFIG: "/config/config.json"
     volumes: 
-      - ./:/config
+      - ./config:/config
+
+  logger: 
+    image: blakeasmith/kafka_webscraper_logger
+    environment:
+      WEBSCRAPER_CONFIG: "/config/config.json"
+    volumes: 
+      - ./config:/config
 
 
 

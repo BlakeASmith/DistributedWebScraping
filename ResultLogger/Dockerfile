@@ -1,15 +1,12 @@
 FROM openjdk:11
 
-
-
 COPY ./install.sh .
 RUN ./install.sh
-COPY ./entrypoint.sh .
+
 COPY ./build/libs .
+COPY ./entrypoint.sh .
 COPY ./config.json .
 
 ENV WEBSCRAPER_CONFIG="config.json"
-
-RUN mv PluginProvider*.jar provider.jar
 
 ENTRYPOINT ["./entrypoint.sh"]

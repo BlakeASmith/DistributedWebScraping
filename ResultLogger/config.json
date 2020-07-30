@@ -1,0 +1,3 @@
+{
+	"bootstraps":["localhost:9092"]
+}
