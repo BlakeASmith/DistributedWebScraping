@@ -48,4 +48,46 @@ dependencies {
 
 # Plugin Development
 
-Currently the plugin
+## Defining & Starting a  Service
+
+A **Service** is just a set of domains which you'd like to have scraped, along 
+with a set of rules for how to scrape them. You create one via the data class Service.
+
+```kotlin
+data class Service(
+    val name: String, // name of the service
+    val rootDomains: List<String>, // domains to crawl, only pages with these domains will be crawled
+    val filters: List<String>, // substrings used to filter out URLs. URLs will only be scraped if they do not
+    			       // contain these
+    val plugins: List<String> // the list of plugins which will be run on each page
+    			      // the results of every plugin are pushed to the results channel, but the 
+			      // name of the plugin used is indicated with each entry
+)
+```
+
+and create one as follows:
+
+```kotlin
+import csc.distributed.webscraper.services.Service
+
+val myService = Service(
+	name = "example",
+	rootDomains = listOf("https://www.scrapethissite.com", "http://www.important-cia-documents.com"),
+	filters = listOf("#", "/dontlook", "/garbage path"),
+	plugins = listOf("wordcount", "find-replace")
+)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
