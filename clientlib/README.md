@@ -78,6 +78,25 @@ val myService = Service(
 )
 ```
 
+Then, send the Service to Kafka so that the scraping can begin!
+
+```kotlin
+import csc.distributed.webscraper.kafka.Kafka
+import csc.distributed.webscraper.plugins.webscraper
+
+val kafka = Kafka(
+	bootstraps = listOf("kafka1:9092", "kafka2:9092") // kafka servers to try connecting to
+)
+
+val serviceChannel = serviceProduction(kafka) // exposes a Kafka producer as a Channel
+
+suspend fun main() {
+	serviceChannel.sendComplete(myService.name to myService) // sendComplete blocks until kafka has received the message
+}
+
+```
+
+
 
 
 
