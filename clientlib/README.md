@@ -48,7 +48,46 @@ dependencies {
 
 # Plugin Development
 
-## Defining & Starting a  Service
+To create a new plugin, simply create a class implementing the Plugin interface.
+
+```kotlin
+	import org.jsoup.nodes.Document
+
+	interface Plugin {
+		fun scrape(doc: Document): String
+	}
+
+	class MyPlugin: Plugin {
+		fun scrape(doc: Document) = doc.location()
+	}
+```
+
+The `Document` passed to the scrape function provides a Jquery-like interface to the *DOM*. Here we're just returning the URL.
+
+Produce a Jar file containing your Plugin class and any required dependencies (Jsoup can be exluded as it is already present at the client).
+
+## Pushing a plugin to Kafka
+
+Here is how you would send the plugin to Kafka;
+
+```kotlin
+import csc.distributed.webscraper.kafka.Kafka
+import csc.distributed.webscraper.plugins.webscraper
+...
+
+val kafka = Kafka(
+	bootstraps = listOf("kafka1:9092", "kafka2:9092") // kafka servers to try connecting to
+)
+
+val pluginChannel = pluginProduction(kafka)
+
+suspend fun main() {
+	val myPluginJar = File("/path/to/plugin/jar")
+	pluginChannel.sendComplete(myPluginJar.name, myPluginJar.readBytes()) // sendComplete blocks until kafka has received the message
+}
+```
+
+# Defining Services
 
 A **Service** is just a set of domains which you'd like to have scraped, along 
 with a set of rules for how to scrape them. You create one via the data class Service.
