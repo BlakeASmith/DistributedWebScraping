@@ -14,7 +14,9 @@ The project is made up of several components:
 	- create new plugins which define how to scrape data from the pages
 	- define services to run over the cluster (start urls, illegal urls, etc)
 	- collect results of a running service (via a Kafka topic)
+
 2. Producer nodes which crawl pages and produce URLs to be scraped
+	- written in *Golang*
 	- receive service definitions at runtime via a Kafka topic 
 	- crawl the internet starting from the base domains specified for the service
 	- ensure **at most once** processing via a distributed hash table of discovered domains
@@ -22,8 +24,16 @@ The project is made up of several components:
 	- produce jobs (groups of urls) to a kafka topic
 
 3. Client "scraper" nodes which take the URLs provided by the producer nodes and run scraping tasks over them
+	- written in Kotlin, desktop & *Android* clients available
    	- dynamically load plugins (which define scraping tasks) 
-	- produce JSON data ti 
-3. A (Cassandra) database service (Kotlin program & Cassandra database)
-4. A routing service for discovery of ip addresses (Python & Flask)
+	- produce JSON data to a different kafka topic (with the same name as the service) for each service
+		- this is how the clients will receive the results
+
+
+There are also the following components for testing purposes:
+
+4. A logger which reads from the output topics for all running services and logs the output for each to it's own file
+5. A provider/uploader service
+	- Reads plugin JARs from a directory and sends them to Kafka 
+	- Reads service definitions from a services.json file and sends them to Kafka
 
