@@ -1,32 +1,41 @@
 import com.google.gson.Gson
 import csc.distributed.webscraper.kafka.*
-import csc.distributed.webscraper.plugins.Config
-import csc.distributed.webscraper.plugins.PLUGIN_TOPIC
-import csc.distributed.webscraper.plugins.pluginResolver
+import csc.distributed.webscraper.plugins.*
+import csc.distributed.webscraper.services.ServiceDeserializer
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import org.apache.kafka.common.serialization.Serdes
+import org.apache.kafka.common.serialization.StringDeserializer
+import org.apache.kafka.common.serialization.StringSerializer
 import org.jsoup.Jsoup
 
 /* Json that this class is serialized from is produced from Golang, thus the capitals */
 data class Job(val Id: Int, val Urls: List<String>, val Plugins: List<String>, val Service: String)
-
 data class UrlResult(val url: String, val json: String)
-
 val gson = Gson()
 
-val jobsTopic = Topic("jobs", Serdes.String(), Serdes.String()).apply {
-    defaultConfig = Kafka("client", Config.get().bootstraps, autocommit = true, defaultRecordsPerPoll = 1)
-}
+val kafka = Kafka(Config.get().bootstraps)
+
+@FlowPreview
 @ExperimentalCoroutinesApi
-val jobs = jobsTopic.asFlow()
-        .map { gson.fromJson(it.second, Job::class.java) }
+val jobs = Consumer(listOf("jobs"), StringDeserializer::class.java, StringDeserializer::class.java, autocommit = true, groupId = "clients", kafka = kafka)
+        .asFlow()
+        .map { (_, job, _) ->  gson.fromJson(job, Job::class.java) }
+
+@FlowPreview
+@ExperimentalCoroutinesApi
+val pluginResolver =
+        plugins(kafka).map { (name, bytes) -> jarToPlugin(name, bytes) }.resolver()
+
+val outputProducer = Producer(
+        kafka,
+        StringSerializer::class.java,
+        StringSerializer::class.java
+)
 
 // send a job into a special topic to mark it complete TODO
 suspend fun sendComplete(results: Job) {
 }
-
-val producerDefault = Kafka("plugin-producer", Config.get().bootstraps).producerConfig()
 
 @FlowPreview
 @ExperimentalCoroutinesApi
@@ -51,21 +60,13 @@ val jobProcessorFlow = jobs.map { job ->
         }
     }
     // write each job's result to it's associated service
-    .map { (job, entries) -> Topic(job.Service, Serdes.String(), Serdes.String()) to entries.asFlow() }
+    .map { (job, entries) -> job.Service to entries.asFlow() }
     .onEach { (topic, entries) ->
         entries.map { it.first to gson.toJson(it.second) }
-                .produceTo(topic.producer(config = producerDefault))
+                .produceTo(outputProducer.produceTo(topic))
                 .launchIn(GlobalScope)
     }
 
 @ExperimentalCoroutinesApi
 @FlowPreview
-suspend fun main(args: Array<String>){
-    PLUGIN_TOPIC.defaultConfig = Kafka(
-            "plugin-consumer",
-            Config.get().bootstraps,
-            autocommit = false
-    )
-
-    jobProcessorFlow.collect()
-}
+suspend fun main(args: Array<String>) = jobProcessorFlow.collect()

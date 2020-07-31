@@ -11,7 +11,7 @@ version ''
 repositories {
     mavenCentral()
     flatDir {
-        dirs '../../clientlib/build/libs'
+        dirs '../clientlib/build/libs'
     }
 }
 
@@ -39,5 +39,4 @@ shadowJar {
     manifest {
         attributes "Main-Class":"MainKt"
     }
-
 }

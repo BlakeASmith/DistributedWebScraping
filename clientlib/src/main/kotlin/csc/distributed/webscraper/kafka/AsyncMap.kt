@@ -1,4 +1,4 @@
-package services
+package csc.distributed.webscraper.kafka
 
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.ReceiveChannel

@@ -6,6 +6,7 @@ name=$(sudo docker run -d --network host spotify/kafka)
 trap "sudo docker kill $name" SIGINT
 
 sudo docker ps
+
 $@ # exec command given
 sudo docker kill $name
 

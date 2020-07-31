@@ -11,21 +11,17 @@ import org.apache.kafka.clients.producer.*
     /**
      * Produce to csc.distributed.webscraper.kafka.Kafka topic via a channel
      */
-    class TopicProduction<K, V>(
-            topic: Topic<K, V>,
-            producerConfig: ProducerConfig,
+    class Production<K, V>(
+            topic: String,
+            val producer: KafkaProducer<K, V>,
             context: CoroutineScope = GlobalScope,
-            private val channel: BroadcastChannel<Pair<K, V>> = BroadcastChannel(Channel.BUFFERED),
-            private val producer: Producer<K, V> = KafkaProducer(producerConfig.originals().apply {
-                put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, topic.keySerde.serializer()::class.java)
-                put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, topic.valueSerde.serializer()::class.java)
-            })
+            private val channel: BroadcastChannel<Pair<K, V>> = BroadcastChannel(Channel.BUFFERED)
     ): SendChannel<Pair<K, V>> by channel{
 
         val metadata: Channel<RecordMetadata> = Channel(Channel.BUFFERED)
 
         private val job = channel.asFlow()
-                .onEach { producer.send(ProducerRecord(topic.name, it.first, it.second)) { record, exception ->
+                .onEach { producer.send(ProducerRecord(topic, it.first, it.second)) { record, exception ->
                     metadata.sendBlocking(record)
                 } }
                 .onCompletion { producer.close() }
