@@ -17,7 +17,9 @@ a library for defining plugins & services (how to scrape urls, and which urls to
 - create new plugins which define how to scrape data from the pages
 - define services to run over the cluster (start urls, illegal urls, etc)
 - collect results of a running service (via a Kafka topic)
-- see the ![README](clientlib/README.md "clientlib README")
+
+see the ![README](clientlib/README.md "clientlib README") which describes how to use the client library to 
+define new plugins and services, as well as how to submit serivices and receive the results.
 
 
 ### Crawling "Producer" Nodes
