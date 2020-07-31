@@ -93,14 +93,42 @@ val serviceChannel = serviceProduction(kafka) // exposes a Kafka producer as a C
 suspend fun main() {
 	serviceChannel.sendComplete(myService.name to myService) // sendComplete blocks until kafka has received the message
 }
-
 ```
 
+Assuming all of the specified plugins have been submitted, your service is be up and running!
+
+## Receiving Results
+
+For the sake of this example we will assume we are going to recieve the results in the same process 
+which we submitted the service, but this doesn't at all need to be the case.
+
+The results are best consumed as a *Flow*. Here I use Gson to read the json data.
+
+```kotlin
+import csc.distributed.webscraper.plugins.webscraper
+...
+
+val kafka = Kafka(
+	bootstraps = listOf("kafka1:9092", "kafka2:9092") // kafka servers to try connecting to
+)
+
+val serviceChannel = serviceProduction(kafka) // exposes a Kafka producer as a Channel
+
+data class MyProducedData(val field1, val field2)
+
+suspend fun main() {
+	serviceChannel.sendComplete(myService.name to myService) // sendComplete blocks until kafka has received the message
+	val gson = Gson()
+	outputConsumer(myService.name).asFlow()
+		.map { ((url, plugin), json) ->
+			gson.fromJson(json, MyProducedData::class.java)
+		}.onEach { 
+			println(it)
+		}.collect()
+}
 
 
-
-
-
+```
 
 
 
