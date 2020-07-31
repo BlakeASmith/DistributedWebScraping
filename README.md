@@ -14,10 +14,10 @@ A diagram showing the basic architecture ![here](docs/kafka_archetecture.pdf "Ar
 
 a library for defining plugins & services (how to scrape urls, and which urls to scrape)
 
-	- create new plugins which define how to scrape data from the pages
-	- define services to run over the cluster (start urls, illegal urls, etc)
-	- collect results of a running service (via a Kafka topic)
-	- see the ![README](clientlib/README.md "clientlib README")
+- create new plugins which define how to scrape data from the pages
+- define services to run over the cluster (start urls, illegal urls, etc)
+- collect results of a running service (via a Kafka topic)
+- see the ![README](clientlib/README.md "clientlib README")
 
 
 ### Crawling "Producer" Nodes
@@ -40,7 +40,9 @@ Client "scraper" nodes which take the URLs provided by the producer nodes and ru
 - dynamically load plugins (which define scraping tasks) 
 - produce JSON data to a different kafka topic (with the same name as the service) for each service
 	- this is how the clients will receive the results
-- see the ![README](client/README.md "client README")
+
+see the ![README](client/README.md "client README") which shows how to use the client library to 
+add new plugins & services, as well as how to receive the results from those services.
 
 
 ### Logger (for Testing)
@@ -49,7 +51,7 @@ The ![logger](ResultLogger "logger README") reads from the output topics for all
 
 ### Provider
 
-The ![provider](provider "provider README")/uploader service
+The ![provider](provider "provider README")/uploader is used to initialize a set of plugins and services at startup time.
 
 - Reads plugin JARs from a directory and sends them to Kafka 
 - Reads service definitions from a services.json file and sends them to Kafka
