@@ -8,16 +8,22 @@ on the cluster without going offline.
 
 A diagram showing the basic architecture ![here](docs/kafka_archetecture.pdf "Architecture Diagram")
 
-The project is made up of several components:
+## Components
 
-1. A client library for defining plugins & services (how to scrape urls, and which urls to scrape)
+### Client Library
+
+a library for defining plugins & services (how to scrape urls, and which urls to scrape)
+
 	- create new plugins which define how to scrape data from the pages
 	- define services to run over the cluster (start urls, illegal urls, etc)
 	- collect results of a running service (via a Kafka topic)
 	- see the ![README](clientlib/README.md "clientlib README")
 
 
-2. Producer nodes which crawl pages and produce URLs to be scraped
+### Crawling "Producer" Nodes
+
+nodes which crawl pages and produce URLs to be scraped
+
 	- written in *Golang*
 	- receive service definitions at runtime via a Kafka topic 
 	- crawl the internet starting from the base domains specified for the service
@@ -26,7 +32,10 @@ The project is made up of several components:
 	- produce jobs (groups of urls) to a kafka topic
 	- see the ![README](go/README.md "go README")
 
-3. Client "scraper" nodes which take the URLs provided by the producer nodes and run scraping tasks over them
+### Scraping "Client" Nodes
+
+Client "scraper" nodes which take the URLs provided by the producer nodes and run scraping tasks over them
+
 	- written in Kotlin, desktop & *Android* clients available
    	- dynamically load plugins (which define scraping tasks) 
 	- produce JSON data to a different kafka topic (with the same name as the service) for each service
@@ -34,10 +43,14 @@ The project is made up of several components:
 	- see the ![README](client/README.md "client README")
 
 
-There are also the following components for testing purposes:
+### Logger (for Testing)
 
-4. A ![logger](ResultLogger "logger README") which reads from the output topics for all running services and logs the output for each to it's own file
-5. A ![provider](provider "provider README")/uploader service
+The ![logger](ResultLogger "logger README") reads from the output topics for all running services and logs the output for each to it's own file
+
+### Provider
+
+The ![provider](provider "provider README")/uploader service
+
 	- Reads plugin JARs from a directory and sends them to Kafka 
 	- Reads service definitions from a services.json file and sends them to Kafka
 
