@@ -1,7 +1,34 @@
 # Client Library 
 
-This library is used to run services over the infrastructure provided.
-It allows the user to define a set of domains to be scraped as well as how 
-to scrape them.
+Define new plugins & services for the Distributed Web Scraper!
 
-It also allows the user to access the data produced as a stream, or direct it to an external service
+# Installation
+
+As of now the library needs to be included manually using the output jar file in ![clientlib/build/libs](/build/libs "libs").
+In future we would like to have the library available via *Maven*
+
+In intellij you can add it by selecting `File > Project Structure > Modules > Dependencies` and clicking the `+` icon.
+
+Or add this to the build.gradle for your project
+
+```gradle
+repositories {
+    ...
+    flatDir {
+        dirs "path/to/dir/containing/library"
+    }
+    ...
+}
+
+dependencies {
+    ...
+    compile(name:"clientlib", ext:"jar")
+    ...
+}
+
+```
+
+
+# Plugin Development
+
+Currently the plugin
