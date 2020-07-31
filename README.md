@@ -24,23 +24,23 @@ a library for defining plugins & services (how to scrape urls, and which urls to
 
 nodes which crawl pages and produce URLs to be scraped
 
-	- written in *Golang*
-	- receive service definitions at runtime via a Kafka topic 
-	- crawl the internet starting from the base domains specified for the service
-	- ensure **at most once** processing via a distributed hash table of discovered domains
-		- separate hash table per service, shared between all nodes responsible for a given service
-	- produce jobs (groups of urls) to a kafka topic
-	- see the ![README](go/README.md "go README")
+- written in *Golang*
+- receive service definitions at runtime via a Kafka topic 
+- crawl the internet starting from the base domains specified for the service
+- ensure **at most once** processing via a distributed hash table of discovered domains
+	- separate hash table per service, shared between all nodes responsible for a given service
+- produce jobs (groups of urls) to a kafka topic
+- see the ![README](go/README.md "go README")
 
 ### Scraping "Client" Nodes
 
 Client "scraper" nodes which take the URLs provided by the producer nodes and run scraping tasks over them
 
-	- written in Kotlin, desktop & *Android* clients available
-   	- dynamically load plugins (which define scraping tasks) 
-	- produce JSON data to a different kafka topic (with the same name as the service) for each service
-		- this is how the clients will receive the results
-	- see the ![README](client/README.md "client README")
+- written in Kotlin, desktop & *Android* clients available
+- dynamically load plugins (which define scraping tasks) 
+- produce JSON data to a different kafka topic (with the same name as the service) for each service
+	- this is how the clients will receive the results
+- see the ![README](client/README.md "client README")
 
 
 ### Logger (for Testing)
@@ -51,8 +51,8 @@ The ![logger](ResultLogger "logger README") reads from the output topics for all
 
 The ![provider](provider "provider README")/uploader service
 
-	- Reads plugin JARs from a directory and sends them to Kafka 
-	- Reads service definitions from a services.json file and sends them to Kafka
+- Reads plugin JARs from a directory and sends them to Kafka 
+- Reads service definitions from a services.json file and sends them to Kafka
 
 All components are containerized (via Docker) which will enable easy scaling. Test cases are run using **docker-compose**.
 
