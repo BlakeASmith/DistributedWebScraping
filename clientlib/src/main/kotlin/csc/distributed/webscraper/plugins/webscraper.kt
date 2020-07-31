@@ -50,8 +50,10 @@ class ServiceConsumer(kafka: Kafka): Consumer<String, Service>(
         listOf("services"),
         StringDeserializer::class.java,
         ServiceDeserializer::class.java,
-        kafka
+        kafka,
+        groupId = "logger"
 )
+
 
 @FlowPreview
 @ExperimentalCoroutinesApi

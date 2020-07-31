@@ -6,6 +6,8 @@
 
 .attach*
 
+.gradle
+
 # Java gitignores
 # Compiled class file
 *.class

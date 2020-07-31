@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "/home/larbs/projects/DistributedWebScraping/DistributedWebScraping-Android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-watch-v20/values-watch-v20.xml",
+            "outputFile": "/home/larbs/projects/DistributedWebScraping/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-watch-v20/values-watch-v20.xml",
             "map": [
                 {
                     "source": "/home/larbs/.gradle/caches/transforms-2/files-2.1/e46f3e16fd8948e8e4c48c913cb404d3/appcompat-1.1.0/res/values-watch-v20/values-watch-v20.xml",

@@ -24,7 +24,6 @@ import org.apache.kafka.clients.producer.*
                 .onEach { producer.send(ProducerRecord(topic, it.first, it.second)) { record, exception ->
                     metadata.sendBlocking(record)
                 } }
-                .onCompletion { producer.close() }
                 .launchIn(context)
 
         suspend fun sendConfirm(element: Pair<K,V>): RecordMetadata {

@@ -15,7 +15,7 @@ services:
     environment:
       KAFKA_ADVERTISED_HOST_NAME: 192.168.1.147
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_CREATE_TOPICS: "services:1:1, jobs:4:1, allocated:1:1, complete:1:1, plugins:1:1"
+      KAFKA_CREATE_TOPICS: "services:1:1, jobs:6:1, allocated:1:1, complete:1:1, plugins:1:1"
 
     logging:
       driver: none
@@ -52,25 +52,17 @@ services:
     image: blakeasmith/kafka_webscraper_client
     environment:
       WEBSCRAPER_CONFIG: "/config/config.json"
-      WAIT_AFTER_HOSTS: 500
-      WAIT_HOSTS: "kafka:9092"
     command: sh -c "/wait"
     volumes: 
       - ./config:/config
 
-  #logger: 
-    #image: blakeasmith/kafka_webscraper_logger
-    #environment:
-      #WEBSCRAPER_CONFIG: "/config/config.json"
-    #volumes: 
-      #- ./config:/config
-
-
-volumes:
-  zookeeper_data:
-    driver: local
-  kafka_data:
-    driver: local
-
+  logger: 
+    image: blakeasmith/kafka_webscraper_logger
+    environment:
+      WEBSCRAPER_CONFIG: "/config/config.json"
+    logging:
+      driver: none
+    volumes: 
+      - ./config:/config
 
 

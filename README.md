@@ -3,7 +3,7 @@
 A distributed web scraping framework which allows for multiple tasks to be 
 run in parallel over an automatically scalable cluster of nodes, including android devices.
 
-![archetecture diagram text](docs/kafka_archetecture.pdf "Archetecture Diagram")
+A diagram showing the basic architecture ![here](docs/kafka_archetecture.pdf "Architecture Diagram")
 
 The project is made up of serveral components:
 

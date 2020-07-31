@@ -65,7 +65,7 @@ val jobProcessorFlow = jobs.map { job ->
         entries.map { it.first to gson.toJson(it.second) }
                 .produceTo(outputProducer.produceTo(topic))
                 .launchIn(GlobalScope)
-    }
+    }.onCompletion{ outputProducer.close() }
 
 @ExperimentalCoroutinesApi
 @FlowPreview
