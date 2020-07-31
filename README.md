@@ -14,6 +14,8 @@ The project is made up of several components:
 	- create new plugins which define how to scrape data from the pages
 	- define services to run over the cluster (start urls, illegal urls, etc)
 	- collect results of a running service (via a Kafka topic)
+	- the full README for this component is ![here](clientlib/README.md "clientlib README")
+
 
 2. Producer nodes which crawl pages and produce URLs to be scraped
 	- written in *Golang*
@@ -36,4 +38,7 @@ There are also the following components for testing purposes:
 5. A provider/uploader service
 	- Reads plugin JARs from a directory and sends them to Kafka 
 	- Reads service definitions from a services.json file and sends them to Kafka
+
+
+All components are containerized (via Docker) which will enable easy scaling. Test cases are run using **docker-compose**.
 
