@@ -1,10 +1,8 @@
 import com.google.gson.Gson
 import csc.distributed.webscraper.kafka.*
 import csc.distributed.webscraper.plugins.*
-import csc.distributed.webscraper.services.ServiceDeserializer
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.kafka.common.serialization.StringSerializer
 import org.jsoup.Jsoup
