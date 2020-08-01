@@ -1,0 +1,173 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>Consumer - clientlib</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">clientlib</a>&nbsp;/&nbsp;<a href="../index.html">csc.distributed.webscraper.kafka</a>&nbsp;/&nbsp;<a href="./index.html">Consumer</a><br/>
+<br/>
+<h1>Consumer</h1>
+<code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">Consumer</span><span class="symbol">&lt;</span><span class="identifier">K</span><span class="symbol">, </span><span class="identifier">V</span><span class="symbol">&gt;</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">KafkaConsumer</span><span class="symbol">&lt;</span><span class="identifier">K</span><span class="symbol">,</span>&nbsp;<span class="identifier">V</span><span class="symbol">&gt;</span></code>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<code><span class="identifier">Consumer</span><span class="symbol">(</span><span class="identifier" id="csc.distributed.webscraper.kafka.Consumer$<init>(kotlin.collections.List((kotlin.String)), java.lang.Class((org.apache.kafka.common.serialization.Deserializer((csc.distributed.webscraper.kafka.Consumer.K)))), java.lang.Class((org.apache.kafka.common.serialization.Deserializer((csc.distributed.webscraper.kafka.Consumer.V)))), csc.distributed.webscraper.kafka.Kafka, kotlin.String, kotlin.String, kotlin.Boolean, csc.distributed.webscraper.kafka.AutoOffsetConfig, kotlin.ranges.IntRange, kotlin.Int, java.time.Duration, java.time.Duration)/topics">topics</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">&gt;</span><span class="symbol">, </span><span class="identifier" id="csc.distributed.webscraper.kafka.Consumer$<init>(kotlin.collections.List((kotlin.String)), java.lang.Class((org.apache.kafka.common.serialization.Deserializer((csc.distributed.webscraper.kafka.Consumer.K)))), java.lang.Class((org.apache.kafka.common.serialization.Deserializer((csc.distributed.webscraper.kafka.Consumer.V)))), csc.distributed.webscraper.kafka.Kafka, kotlin.String, kotlin.String, kotlin.Boolean, csc.distributed.webscraper.kafka.AutoOffsetConfig, kotlin.ranges.IntRange, kotlin.Int, java.time.Duration, java.time.Duration)/keyDeserializer">keyDeserializer</span><span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/lang/Class.html"><span class="identifier">Class</span></a><span class="symbol">&lt;</span><span class="keyword">out</span>&nbsp;<span class="identifier">Deserializer</span><span class="symbol">&lt;</span><span class="identifier">K</span><span class="symbol">&gt;</span><span class="symbol">&gt;</span><span class="symbol">, </span><span class="identifier" id="csc.distributed.webscraper.kafka.Consumer$<init>(kotlin.collections.List((kotlin.String)), java.lang.Class((org.apache.kafka.common.serialization.Deserializer((csc.distributed.webscraper.kafka.Consumer.K)))), java.lang.Class((org.apache.kafka.common.serialization.Deserializer((csc.distributed.webscraper.kafka.Consumer.V)))), csc.distributed.webscraper.kafka.Kafka, kotlin.String, kotlin.String, kotlin.Boolean, csc.distributed.webscraper.kafka.AutoOffsetConfig, kotlin.ranges.IntRange, kotlin.Int, java.time.Duration, java.time.Duration)/valueDeserializer">valueDeserializer</span><span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/lang/Class.html"><span class="identifier">Class</span></a><span class="symbol">&lt;</span><span class="keyword">out</span>&nbsp;<span class="identifier">Deserializer</span><span class="symbol">&lt;</span><span class="identifier">V</span><span class="symbol">&gt;</span><span class="symbol">&gt;</span><span class="symbol">, </span><span class="identifier" id="csc.distributed.webscraper.kafka.Consumer$<init>(kotlin.collections.List((kotlin.String)), java.lang.Class((org.apache.kafka.common.serialization.Deserializer((csc.distributed.webscraper.kafka.Consumer.K)))), java.lang.Class((org.apache.kafka.common.serialization.Deserializer((csc.distributed.webscraper.kafka.Consumer.V)))), csc.distributed.webscraper.kafka.Kafka, kotlin.String, kotlin.String, kotlin.Boolean, csc.distributed.webscraper.kafka.AutoOffsetConfig, kotlin.ranges.IntRange, kotlin.Int, java.time.Duration, java.time.Duration)/kafka">kafka</span><span class="symbol">:</span>&nbsp;<a href="../-kafka/index.html"><span class="identifier">Kafka</span></a><span class="symbol">, </span><span class="identifier" id="csc.distributed.webscraper.kafka.Consumer$<init>(kotlin.collections.List((kotlin.String)), java.lang.Class((org.apache.kafka.common.serialization.Deserializer((csc.distributed.webscraper.kafka.Consumer.K)))), java.lang.Class((org.apache.kafka.common.serialization.Deserializer((csc.distributed.webscraper.kafka.Consumer.V)))), csc.distributed.webscraper.kafka.Kafka, kotlin.String, kotlin.String, kotlin.Boolean, csc.distributed.webscraper.kafka.AutoOffsetConfig, kotlin.ranges.IntRange, kotlin.Int, java.time.Duration, java.time.Duration)/groupId">groupId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">, </span><span class="identifier" id="csc.distributed.webscraper.kafka.Consumer$<init>(kotlin.collections.List((kotlin.String)), java.lang.Class((org.apache.kafka.common.serialization.Deserializer((csc.distributed.webscraper.kafka.Consumer.K)))), java.lang.Class((org.apache.kafka.common.serialization.Deserializer((csc.distributed.webscraper.kafka.Consumer.V)))), csc.distributed.webscraper.kafka.Kafka, kotlin.String, kotlin.String, kotlin.Boolean, csc.distributed.webscraper.kafka.AutoOffsetConfig, kotlin.ranges.IntRange, kotlin.Int, java.time.Duration, java.time.Duration)/clientId">clientId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">, </span><span class="identifier" id="csc.distributed.webscraper.kafka.Consumer$<init>(kotlin.collections.List((kotlin.String)), java.lang.Class((org.apache.kafka.common.serialization.Deserializer((csc.distributed.webscraper.kafka.Consumer.K)))), java.lang.Class((org.apache.kafka.common.serialization.Deserializer((csc.distributed.webscraper.kafka.Consumer.V)))), csc.distributed.webscraper.kafka.Kafka, kotlin.String, kotlin.String, kotlin.Boolean, csc.distributed.webscraper.kafka.AutoOffsetConfig, kotlin.ranges.IntRange, kotlin.Int, java.time.Duration, java.time.Duration)/autocommit">autocommit</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a>&nbsp;<span class="symbol">=</span>&nbsp;false<span class="symbol">, </span><span class="identifier" id="csc.distributed.webscraper.kafka.Consumer$<init>(kotlin.collections.List((kotlin.String)), java.lang.Class((org.apache.kafka.common.serialization.Deserializer((csc.distributed.webscraper.kafka.Consumer.K)))), java.lang.Class((org.apache.kafka.common.serialization.Deserializer((csc.distributed.webscraper.kafka.Consumer.V)))), csc.distributed.webscraper.kafka.Kafka, kotlin.String, kotlin.String, kotlin.Boolean, csc.distributed.webscraper.kafka.AutoOffsetConfig, kotlin.ranges.IntRange, kotlin.Int, java.time.Duration, java.time.Duration)/autoOffsetReset">autoOffsetReset</span><span class="symbol">:</span>&nbsp;<a href="../-auto-offset-config/index.html"><span class="identifier">AutoOffsetConfig</span></a>&nbsp;<span class="symbol">=</span>&nbsp;AutoOffsetConfig.earliest<span class="symbol">, </span><span class="identifier" id="csc.distributed.webscraper.kafka.Consumer$<init>(kotlin.collections.List((kotlin.String)), java.lang.Class((org.apache.kafka.common.serialization.Deserializer((csc.distributed.webscraper.kafka.Consumer.K)))), java.lang.Class((org.apache.kafka.common.serialization.Deserializer((csc.distributed.webscraper.kafka.Consumer.V)))), csc.distributed.webscraper.kafka.Kafka, kotlin.String, kotlin.String, kotlin.Boolean, csc.distributed.webscraper.kafka.AutoOffsetConfig, kotlin.ranges.IntRange, kotlin.Int, java.time.Duration, java.time.Duration)/fetchBytesRange">fetchBytesRange</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.ranges/-int-range/index.html"><span class="identifier">IntRange</span></a>&nbsp;<span class="symbol">=</span>&nbsp;1..Int.MAX_VALUE<span class="symbol">, </span><span class="identifier" id="csc.distributed.webscraper.kafka.Consumer$<init>(kotlin.collections.List((kotlin.String)), java.lang.Class((org.apache.kafka.common.serialization.Deserializer((csc.distributed.webscraper.kafka.Consumer.K)))), java.lang.Class((org.apache.kafka.common.serialization.Deserializer((csc.distributed.webscraper.kafka.Consumer.V)))), csc.distributed.webscraper.kafka.Kafka, kotlin.String, kotlin.String, kotlin.Boolean, csc.distributed.webscraper.kafka.AutoOffsetConfig, kotlin.ranges.IntRange, kotlin.Int, java.time.Duration, java.time.Duration)/maxPollRecords">maxPollRecords</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a>&nbsp;<span class="symbol">=</span>&nbsp;20<span class="symbol">, </span><span class="identifier" id="csc.distributed.webscraper.kafka.Consumer$<init>(kotlin.collections.List((kotlin.String)), java.lang.Class((org.apache.kafka.common.serialization.Deserializer((csc.distributed.webscraper.kafka.Consumer.K)))), java.lang.Class((org.apache.kafka.common.serialization.Deserializer((csc.distributed.webscraper.kafka.Consumer.V)))), csc.distributed.webscraper.kafka.Kafka, kotlin.String, kotlin.String, kotlin.Boolean, csc.distributed.webscraper.kafka.AutoOffsetConfig, kotlin.ranges.IntRange, kotlin.Int, java.time.Duration, java.time.Duration)/maxPollInterval">maxPollInterval</span><span class="symbol">:</span>&nbsp;<span class="identifier">Duration</span>&nbsp;<span class="symbol">=</span>&nbsp;Duration.ofSeconds(5)<span class="symbol">, </span><span class="identifier" id="csc.distributed.webscraper.kafka.Consumer$<init>(kotlin.collections.List((kotlin.String)), java.lang.Class((org.apache.kafka.common.serialization.Deserializer((csc.distributed.webscraper.kafka.Consumer.K)))), java.lang.Class((org.apache.kafka.common.serialization.Deserializer((csc.distributed.webscraper.kafka.Consumer.V)))), csc.distributed.webscraper.kafka.Kafka, kotlin.String, kotlin.String, kotlin.Boolean, csc.distributed.webscraper.kafka.AutoOffsetConfig, kotlin.ranges.IntRange, kotlin.Int, java.time.Duration, java.time.Duration)/pollTimeout">pollTimeout</span><span class="symbol">:</span>&nbsp;<span class="identifier">Duration</span>&nbsp;<span class="symbol">=</span>&nbsp;Duration.ofSeconds(1)<span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="autocommit.html">autocommit</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">autocommit</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="auto-offset-reset.html">autoOffsetReset</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">autoOffsetReset</span><span class="symbol">: </span><a href="../-auto-offset-config/index.html"><span class="identifier">AutoOffsetConfig</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="client-id.html">clientId</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">clientId</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="fetch-bytes-range.html">fetchBytesRange</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">fetchBytesRange</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.ranges/-int-range/index.html"><span class="identifier">IntRange</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="group-id.html">groupId</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">groupId</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="kafka.html">kafka</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">kafka</span><span class="symbol">: </span><a href="../-kafka/index.html"><span class="identifier">Kafka</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="key-deserializer.html">keyDeserializer</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">keyDeserializer</span><span class="symbol">: </span><a href="https://docs.oracle.com/javase/6/docs/api/java/lang/Class.html"><span class="identifier">Class</span></a><span class="symbol">&lt;</span><span class="keyword">out</span>&nbsp;<span class="identifier">Deserializer</span><span class="symbol">&lt;</span><span class="identifier">K</span><span class="symbol">&gt;</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="max-poll-interval.html">maxPollInterval</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">maxPollInterval</span><span class="symbol">: </span><span class="identifier">Duration</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="max-poll-records.html">maxPollRecords</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">maxPollRecords</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="poll-timeout.html">pollTimeout</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">pollTimeout</span><span class="symbol">: </span><span class="identifier">Duration</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="topics.html">topics</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">topics</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="value-deserializer.html">valueDeserializer</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">valueDeserializer</span><span class="symbol">: </span><a href="https://docs.oracle.com/javase/6/docs/api/java/lang/Class.html"><span class="identifier">Class</span></a><span class="symbol">&lt;</span><span class="keyword">out</span>&nbsp;<span class="identifier">Deserializer</span><span class="symbol">&lt;</span><span class="identifier">V</span><span class="symbol">&gt;</span><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="as-broadcast.html">asBroadcast</a></h4>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">asBroadcast</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">BroadcastChannel</span><span class="symbol">&lt;</span><a href="../-topic-entry/index.html"><span class="identifier">TopicEntry</span></a><span class="symbol">&lt;</span><span class="identifier">K</span><span class="symbol">,</span>&nbsp;<span class="identifier">V</span><span class="symbol">&gt;</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="as-channel.html">asChannel</a></h4>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">asChannel</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">ReceiveChannel</span><span class="symbol">&lt;</span><a href="../-topic-entry/index.html"><span class="identifier">TopicEntry</span></a><span class="symbol">&lt;</span><span class="identifier">K</span><span class="symbol">,</span>&nbsp;<span class="identifier">V</span><span class="symbol">&gt;</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="as-flow.html">asFlow</a></h4>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">asFlow</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Flow</span><span class="symbol">&lt;</span><a href="../-topic-entry/index.html"><span class="identifier">TopicEntry</span></a><span class="symbol">&lt;</span><span class="identifier">K</span><span class="symbol">,</span>&nbsp;<span class="identifier">V</span><span class="symbol">&gt;</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="as-resolver.html">asResolver</a></h4>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">asResolver</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="../-flow-resolver/index.html"><span class="identifier">FlowResolver</span></a><span class="symbol">&lt;</span><span class="identifier">K</span><span class="symbol">,</span>&nbsp;<span class="identifier">V</span><span class="symbol">,</span>&nbsp;<a href="../-topic-entry/index.html"><span class="identifier">TopicEntry</span></a><span class="symbol">&lt;</span><span class="identifier">K</span><span class="symbol">,</span>&nbsp;<span class="identifier">V</span><span class="symbol">&gt;</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="partition-flow.html">partitionFlow</a></h4>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">partitionFlow</span><span class="symbol">(</span><span class="identifier" id="csc.distributed.webscraper.kafka.Consumer$partitionFlow(kotlin.collections.List((org.apache.kafka.common.TopicPartition)))/partitions">partitions</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><span class="identifier">TopicPartition</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Flow</span><span class="symbol">&lt;</span><a href="../-topic-entry/index.html"><span class="identifier">TopicEntry</span></a><span class="symbol">&lt;</span><span class="identifier">K</span><span class="symbol">,</span>&nbsp;<span class="identifier">V</span><span class="symbol">&gt;</span><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inheritors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="../../csc.distributed.webscraper.plugins/-plugin-consumer/index.html">PluginConsumer</a></h4>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">PluginConsumer</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">Consumer</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../../csc.distributed.webscraper.plugins/-service-consumer/index.html">ServiceConsumer</a></h4>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">ServiceConsumer</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">Consumer</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">,</span>&nbsp;<a href="../../csc.distributed.webscraper.services/-service/index.html"><span class="identifier">Service</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

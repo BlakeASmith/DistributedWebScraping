@@ -1,0 +1,146 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>csc.distributed.webscraper.plugins - clientlib</title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">clientlib</a>&nbsp;/&nbsp;<a href="./index.html">csc.distributed.webscraper.plugins</a><br/>
+<br/>
+<h2>Package csc.distributed.webscraper.plugins</h2>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-config/index.html">Config</a></h4>
+</td>
+<td>
+<code><span class="keyword">data</span> <span class="keyword">class </span><span class="identifier">Config</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-loaded-plugin/index.html">LoadedPlugin</a></h4>
+</td>
+<td>
+<p>Implements Plugin by reflection into the given Class,
+It is difficult to cast a Class&lt;*&gt; instance to an interface so this is my workaround.</p>
+<code><span class="keyword">class </span><span class="identifier">LoadedPlugin</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-plugin/index.html"><span class="identifier">Plugin</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-plugin/index.html">Plugin</a></h4>
+</td>
+<td>
+<code><span class="keyword">interface </span><span class="identifier">Plugin</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-plugin-consumer/index.html">PluginConsumer</a></h4>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">PluginConsumer</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../csc.distributed.webscraper.kafka/-consumer/index.html"><span class="identifier">Consumer</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-plugin-producer/index.html">PluginProducer</a></h4>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">PluginProducer</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../csc.distributed.webscraper.kafka/-producer/index.html"><span class="identifier">Producer</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-service-consumer/index.html">ServiceConsumer</a></h4>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">ServiceConsumer</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../csc.distributed.webscraper.kafka/-consumer/index.html"><span class="identifier">Consumer</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">,</span>&nbsp;<a href="../csc.distributed.webscraper.services/-service/index.html"><span class="identifier">Service</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-c-o-n-f-i-g_-d-e-f-a-u-l-t_-l-o-c-a-t-i-o-n.html">CONFIG_DEFAULT_LOCATION</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">CONFIG_DEFAULT_LOCATION</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-c-o-n-f-i-g_-e-n-v_-v-a-r-i-a-b-l-e.html">CONFIG_ENV_VARIABLE</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">CONFIG_ENV_VARIABLE</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="jar-to-plugin.html">jarToPlugin</a></h4>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">jarToPlugin</span><span class="symbol">(</span><span class="identifier" id="csc.distributed.webscraper.plugins$jarToPlugin(kotlin.String, kotlin.ByteArray)/name">name</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="csc.distributed.webscraper.plugins$jarToPlugin(kotlin.String, kotlin.ByteArray)/bytes">bytes</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-pair/index.html"><span class="identifier">Pair</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">,</span>&nbsp;<a href="-loaded-plugin/index.html"><span class="identifier">LoadedPlugin</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="load-all-from-dir.html">loadAllFromDir</a></h4>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">loadAllFromDir</span><span class="symbol">(</span><span class="identifier" id="csc.distributed.webscraper.plugins$loadAllFromDir(kotlin.String)/path">path</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-map/index.html"><span class="identifier">MutableMap</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">!</span><span class="symbol">,</span>&nbsp;<a href="-loaded-plugin/index.html"><span class="identifier">LoadedPlugin</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="load-classes-from-jar.html">loadClassesFromJar</a></h4>
+</td>
+<td>
+<p>load all the classes from the given JarFile which contain the
+given nameFilter string.</p>
+<code><span class="keyword">fun </span><span class="identifier">loadClassesFromJar</span><span class="symbol">(</span><span class="identifier" id="csc.distributed.webscraper.plugins$loadClassesFromJar(java.util.jar.JarFile, kotlin.String)/jar">jar</span><span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/util/jar/JarFile.html"><span class="identifier">JarFile</span></a><span class="symbol">, </span><span class="identifier" id="csc.distributed.webscraper.plugins$loadClassesFromJar(java.util.jar.JarFile, kotlin.String)/nameFilter">nameFilter</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a>&nbsp;<span class="symbol">=</span>&nbsp;"Plugin"<span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="https://docs.oracle.com/javase/6/docs/api/java/lang/Class.html"><span class="identifier">Class</span></a><span class="symbol">&lt;</span><span class="identifier">*</span><span class="symbol">&gt;</span><span class="symbol">!</span><span class="symbol">&gt;</span></code><code><span class="keyword">fun </span><span class="identifier">loadClassesFromJar</span><span class="symbol">(</span><span class="identifier" id="csc.distributed.webscraper.plugins$loadClassesFromJar(kotlin.String, kotlin.String)/path">path</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="csc.distributed.webscraper.plugins$loadClassesFromJar(kotlin.String, kotlin.String)/nameFilter">nameFilter</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a>&nbsp;<span class="symbol">=</span>&nbsp;"Plugin"<span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="https://docs.oracle.com/javase/6/docs/api/java/lang/Class.html"><span class="identifier">Class</span></a><span class="symbol">&lt;</span><span class="identifier">*</span><span class="symbol">&gt;</span><span class="symbol">!</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="load-plugin.html">loadPlugin</a></h4>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">loadPlugin</span><span class="symbol">(</span><span class="identifier" id="csc.distributed.webscraper.plugins$loadPlugin(kotlin.String, kotlin.String)/path">path</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="csc.distributed.webscraper.plugins$loadPlugin(kotlin.String, kotlin.String)/nameFilter">nameFilter</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a>&nbsp;<span class="symbol">=</span>&nbsp;"Plugin"<span class="symbol">)</span><span class="symbol">: </span><a href="-plugin/index.html"><span class="identifier">Plugin</span></a></code>
+<p>loads a Plugin out of the given JarFile
+the Jar must contain a class which implements the 'RoverPlugin' interface</p>
+<code><span class="keyword">fun </span><span class="identifier">loadPlugin</span><span class="symbol">(</span><span class="identifier" id="csc.distributed.webscraper.plugins$loadPlugin(java.util.jar.JarFile, kotlin.String)/jar">jar</span><span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/util/jar/JarFile.html"><span class="identifier">JarFile</span></a><span class="symbol">, </span><span class="identifier" id="csc.distributed.webscraper.plugins$loadPlugin(java.util.jar.JarFile, kotlin.String)/nameFilter">nameFilter</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a>&nbsp;<span class="symbol">=</span>&nbsp;"Plugin"<span class="symbol">)</span><span class="symbol">: </span><a href="-loaded-plugin/index.html"><span class="identifier">LoadedPlugin</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="plugin-production.html">pluginProduction</a></h4>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">pluginProduction</span><span class="symbol">(</span><span class="identifier" id="csc.distributed.webscraper.plugins$pluginProduction(csc.distributed.webscraper.kafka.Kafka)/kafka">kafka</span><span class="symbol">:</span>&nbsp;<a href="../csc.distributed.webscraper.kafka/-kafka/index.html"><span class="identifier">Kafka</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../csc.distributed.webscraper.kafka/-production/index.html"><span class="identifier">Production</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="plugins.html">plugins</a></h4>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">plugins</span><span class="symbol">(</span><span class="identifier" id="csc.distributed.webscraper.plugins$plugins(csc.distributed.webscraper.kafka.Kafka)/kafka">kafka</span><span class="symbol">:</span>&nbsp;<a href="../csc.distributed.webscraper.kafka/-kafka/index.html"><span class="identifier">Kafka</span></a><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Flow</span><span class="symbol">&lt;</span><a href="../csc.distributed.webscraper.kafka/-topic-entry/index.html"><span class="identifier">TopicEntry</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">!</span><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a><span class="symbol">!</span><span class="symbol">&gt;</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="service-production.html">serviceProduction</a></h4>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">serviceProduction</span><span class="symbol">(</span><span class="identifier" id="csc.distributed.webscraper.plugins$serviceProduction(csc.distributed.webscraper.kafka.Kafka)/kafka">kafka</span><span class="symbol">:</span>&nbsp;<a href="../csc.distributed.webscraper.kafka/-kafka/index.html"><span class="identifier">Kafka</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../csc.distributed.webscraper.kafka/-production/index.html"><span class="identifier">Production</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">!</span><span class="symbol">,</span>&nbsp;<a href="../csc.distributed.webscraper.services/-service/index.html"><span class="identifier">Service</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="write-default-config.html">writeDefaultConfig</a></h4>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">writeDefaultConfig</span><span class="symbol">(</span><span class="identifier" id="csc.distributed.webscraper.plugins$writeDefaultConfig(kotlin.String)/path">path</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a>&nbsp;<span class="symbol">=</span>&nbsp;System.getenv(CONFIG_ENV_VARIABLE) ?: CONFIG_DEFAULT_LOCATION<span class="symbol">)</span><span class="symbol">: </span><a href="https://docs.oracle.com/javase/6/docs/api/java/io/File.html"><span class="identifier">File</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>
