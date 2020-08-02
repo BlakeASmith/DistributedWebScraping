@@ -13,9 +13,12 @@ import java.io.File
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import java.util.jar.JarFile
+
 const val CONFIG_ENV_VARIABLE = "WEBSCRAPER_CONFIG"
 const val CONFIG_DEFAULT_LOCATION = "config.json"
+const val CONFIG_BOOTSTRAPS = "WEBSCRAPER_BOOTSTRAPS"
 
+@FlowPreview
 @ExperimentalCoroutinesApi
 fun pluginProduction(kafka: Kafka) = PluginProducer(kafka).produceTo("plugins")
 
@@ -63,19 +66,31 @@ fun serviceProduction(kafka: Kafka) = Producer(kafka, StringSerializer::class.ja
 
 data class Config(
         val bootstraps: List<String>
-){
-    companion object{
-        fun get(): Config = (System.getenv(CONFIG_ENV_VARIABLE) ?: CONFIG_DEFAULT_LOCATION)
-                .let { File(it) }
-                .let { Gson().fromJson(it.readText(), Config::class.java) }
+) {
+    companion object {
+        fun get(): Config = (System.getenv(CONFIG_ENV_VARIABLE) ?: CONFIG_DEFAULT_LOCATION).runCatching {
+            File(this)
+                    .let { Gson().fromJson(it.readText(), Config::class.java) }
+        }.getOrElse { Config(System.getenv(CONFIG_BOOTSTRAPS).split(',')) }
     }
 
-    fun writeTo(file: File) = Gson().toJson(this)
-            .let { file.writeText(it) }
+        fun writeTo(file: File) = Gson().toJson(this)
+                .let { file.writeText(it) }
 }
+    fun writeDefaultConfig(path: String = System.getenv(CONFIG_ENV_VARIABLE)
+            ?: CONFIG_DEFAULT_LOCATION) = File(path).apply {
+        if (!exists()) createNewFile()
+        Config(listOf("127.0.0.1:9092")).writeTo(this)
+    }
 
-fun writeDefaultConfig(path: String = System.getenv(CONFIG_ENV_VARIABLE) ?: CONFIG_DEFAULT_LOCATION) = File(path).apply {
-    if(!exists()) createNewFile()
-    Config(listOf("127.0.0.1:9092")).writeTo(this)
-}
+    fun outputConsumer(kafka: Kafka, topic: String, groupId: String, clientId: String? = null, autocommit: Boolean = true) = Consumer(
+            listOf(topic),
+            StringDeserializer::class.java,
+            StringDeserializer::class.java,
+            kafka,
+            groupId,
+            clientId,
+            autocommit
+    )
+
 

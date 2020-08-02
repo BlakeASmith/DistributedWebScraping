@@ -28,8 +28,18 @@ android {
 
 }
 
+
+repositories {
+    jcenter()
+    flatDir {
+        dirs "../../clientlib/build/libs"
+        dirs "../../client/build/libs"
+    }
+}
+
 dependencies {
     implementation(name:"clientlib-1.0", ext:"jar")
+
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.3"
     implementation 'org.apache.kafka:kafka-clients:2.0.0'
     implementation group: 'org.jsoup', name: 'jsoup', version: '1.11.3'

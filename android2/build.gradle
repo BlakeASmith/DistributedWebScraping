@@ -24,12 +24,6 @@ allprojects {
     }
 }
 
-repositories {
-    jcenter()
-    flatDir {
-        dirs "../../clientlib/build/libs"
-    }
-}
 
 task clean(type: Delete) {
     delete rootProject.buildDir
