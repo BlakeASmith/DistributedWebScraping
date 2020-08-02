@@ -4,6 +4,7 @@ import "os"
 import "encoding/json"
 import "io/ioutil"
 import "log"
+import "strings"
 
 
 type Config struct {
@@ -19,7 +20,9 @@ func getConfig() *Config {
 		bytes, _ := ioutil.ReadAll(jsonfile)
 		json.Unmarshal(bytes, &config)
 	}else {
-		log.Fatal("environment varliable WEBSCRAPER_CONFIG is not set")
+		if boots, exists := os.LookupEnv("WEBSCRAPER_BOOTSTRAPS"); exists {
+			config = Config{Bootstraps: strings.Split(boots, ",")}
+		}
 	}
 
 	return &config

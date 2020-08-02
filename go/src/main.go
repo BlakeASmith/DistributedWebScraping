@@ -3,11 +3,7 @@ package main
 import "log"
 import "encoding/json"
 import "strconv"
-
-type KeyValueSerializer interface {
-	Key() []byte
-	Value() []byte
-}
+import "time"
 
 type Job struct {
 	Id int
@@ -16,10 +12,12 @@ type Job struct {
 	Service string
 }
 
+// serialize job Id to a byte array
 func (j Job) Key() []byte {
 	return []byte(strconv.Itoa(j.Id))
 }
 
+// serialize Job to a byte array (JSON)
 func (j Job) Value() []byte {
 	json, err := json.Marshal(j)
 	if err != nil {
@@ -28,38 +26,34 @@ func (j Job) Value() []byte {
 	return json
 }
 
+func DeserializeJob(job []byte) *Job {
+	var djob Job
+	json.Unmarshal(job, &djob)
+	return &djob
+}
+
 func main() {
 	config := getConfig()
 	log.Println("using config ", config)
 
-
 	kaf := Kafka{ Bootstraps:config.Bootstraps }
-	consumer := kaf.Consumer("golang", "earliest", false)
-	serviceChannel := ConsumeTopicAsChannel("services", consumer)
+
 	producer := kaf.Producer()
 
-	for message := range serviceChannel{
-		log.Println("received service " + string(message.Key))
-		service := DeserializeService(message.Value)
-		go PushToTopic(producer, "jobs" , JobChannelFor(service))
+	for service := range ServicesChannel(&kaf){
+		log.Println("received service " + service.Name)
+		go PushJobsToKafka(producer, JobChannelFor(&service), 200 * time.Millisecond)
 	}
 }
 
-func JobChannelFor(service *Service) chan KeyValueSerializer {
+func JobChannelFor(service *Service) chan Job {
 	urls := make(chan string)
 	seen := make(map[string] bool)
 	for _, domain := range service.RootDomains{
 		log.Println("starting crawl on", domain)
 		go crawl(domain, "", urls, -1, seen, service.Filters)
 	}
-	serializerChannel := make(chan KeyValueSerializer)
 	jobs := makeJobChannel(urls, 10, service.Plugins, service.Name)
-
-	go func () {
-		for job := range jobs {
-			serializerChannel <- interface{}(job).(KeyValueSerializer)
-		}
-	}()
-	return serializerChannel
+	return jobs
 }
 

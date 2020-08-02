@@ -16,7 +16,7 @@ RUN go mod download
 
 COPY . .
 
-ENV WEBSCRAPER_CONFIG="config.json"
+ENV WEBSCRAPER_BOOTSTRAPS="localhost:9092"
 RUN export 
 RUN (cd src; go build -o $GOPATH/bin/webscraper)
 

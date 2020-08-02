@@ -1,4 +1,4 @@
-module github.com/BlakeASmith/DistributedWebScraping/src
+module github.com/BlakeASmith/DistributedWebScraping/go/src
 
 go 1.14
 
