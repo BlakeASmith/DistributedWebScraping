@@ -1,3 +1,5 @@
+.idea
+
 # Ignore everything but go, docker and sh files in src
 ./src/**
 !**/src/*.go
