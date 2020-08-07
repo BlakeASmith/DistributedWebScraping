@@ -1,3 +1,3 @@
 #!/bin/sh
-./gradlew shadowJar
+./gradlew jar
 sudo docker build -t blakeasmith/kafka_webscraper_provider .

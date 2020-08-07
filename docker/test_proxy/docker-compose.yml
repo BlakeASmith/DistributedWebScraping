@@ -1,0 +1,59 @@
+version: '3.4'
+
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+      - "2181:2181"
+    logging:
+      driver: none
+
+  kafka:
+    image: wurstmeister/kafka
+    ports:
+      - "9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: 192.168.1.147
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CREATE_TOPICS: "services:1:1, jobs:6:1, allocated:1:1, complete:1:1, plugins:1:1"
+
+    logging:
+      driver: none
+
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      
+  provider: 
+    image: blakeasmith/kafka_webscraper_provider
+    environment:
+      WEBSCRAPER_BOOTSTRAPS: "kafka:9092"
+    command: "--jars plugins --services services/services.json"
+    volumes: 
+      - ./plugins:/plugins
+      - ./services:/services
+
+
+  producer:
+    image: blakeasmith/kafka_webscraper_producer
+    environment:
+      WEBSCRAPER_BOOTSTRAPS: "kafka:9092"
+    logging:
+      driver: none
+    depends_on: 
+      - provider
+
+  old_client:
+    image: blakeasmith/kafka_webscraper_client
+    environment:
+      WEBSCRAPER_BOOTSTRAPS: "kafka:9092"
+  #proxy:
+    #image: blakeasmith/webscraper_proxy_server
+    #ports:
+      #- "8080"
+    #environment:
+      #WEBSCRAPER_BOOTSTRAPS: "kafka:9092"
+
+  #client:
+    #image: blakeasmith/webscraper_proxy_client
+    #environment:
+      #PROXY_SERVER: "proxy:8080"

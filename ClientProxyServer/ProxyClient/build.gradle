@@ -1,0 +1,54 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+apply plugin: 'kotlin'
+
+group 'csc.distributed.webscraper.proxy'
+version '0.0.1'
+
+repositories {
+    mavenLocal()
+    jcenter()
+    maven { url 'https://kotlin.bintray.com/ktor' }
+    maven { url 'https://kotlin.bintray.com/kotlinx' }
+    flatDir {
+        dirs "../../client/build/libs"
+        dirs "../../clientlib/build/libs"
+    }
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation "io.ktor:ktor-client-jetty:$ktor_version"
+    implementation "io.ktor:ktor-client-core:$ktor_version"
+    implementation "io.ktor:ktor-client-core-jvm:$ktor_version"
+    implementation "io.ktor:ktor-client-json-jvm:$ktor_version"
+    implementation "io.ktor:ktor-client-gson:$ktor_version"
+
+
+    compile group: 'org.jsoup', name: 'jsoup', version: '1.11.3'
+    implementation(name:"client-1.0-SNAPSHOT", ext:"jar")
+    compile(name:"clientlib-1.0", ext:"jar")
+
+    testCompile group: 'org.jetbrains.kotlin', name: 'kotlin-test-junit', version: '1.4.0-rc'
+    api "io.ktor:ktor-client-mock-jvm:$ktor_version"
+}
+
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'csc.distributed.webscraper.proxy.ApplicationKt'
+        )
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}

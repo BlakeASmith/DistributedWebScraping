@@ -1,0 +1,14 @@
+[
+  {
+    "name": "test",
+    "rootDomains": [
+      "https://www.usedvictoria.com"
+    ],
+    "filters": [
+      "#"
+    ],
+    "plugins": [
+      "wordcount"
+    ]
+  }
+]

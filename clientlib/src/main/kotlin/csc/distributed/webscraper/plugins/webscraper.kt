@@ -1,96 +1,117 @@
 package csc.distributed.webscraper.plugins
 
-import com.google.gson.Gson
-import csc.distributed.webscraper.kafka.*
+import ca.blakeasmith.kkafka.jvm.*
+import ca.blakeasmith.kkafka.jvm.serialization.JsonSerde
+import ca.blakeasmith.kkafka.jvm.serialization.KeyValueSerde
 import csc.distributed.webscraper.services.Service
-import csc.distributed.webscraper.services.ServiceDeserializer
-import csc.distributed.webscraper.services.ServiceSerializer
+import csc.distributed.webscraper.utils.withDeferred
 import kotlinx.coroutines.*
-import org.apache.kafka.common.TopicPartition
+import kotlinx.coroutines.flow.map
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.serializer
+import kotlinx.serialization.json.JsonConfiguration
+import org.apache.kafka.clients.consumer.OffsetResetStrategy
 import org.apache.kafka.common.serialization.*
-import java.io.ByteArrayInputStream
-import java.io.File
-import java.nio.file.Files
-import java.nio.file.StandardCopyOption
-import java.util.jar.JarFile
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 
-const val CONFIG_ENV_VARIABLE = "WEBSCRAPER_CONFIG"
-const val CONFIG_DEFAULT_LOCATION = "config.json"
+@Serializable
+data class Job(val Id: Int, val Urls: List<String>, val Plugins: List<String>, val Service: String)
+
+data class JobResult(val job: Job, val results: Map<UrlWithPlugin, String>)
+
+@Serializable
+data class UrlWithPlugin(val url: String, val plugin: String)
+
 const val CONFIG_BOOTSTRAPS = "WEBSCRAPER_BOOTSTRAPS"
-
-@FlowPreview
-@ExperimentalCoroutinesApi
-fun pluginProduction(kafka: Kafka) = PluginProducer(kafka).produceTo("plugins")
-
-class PluginProducer(kafka: Kafka): Producer<String, ByteArray>(
-        kafka,
-        StringSerializer::class.java,
-        ByteArraySerializer::class.java
-)
-
-fun jarToPlugin(name: String, bytes: ByteArray) = run {
-    val tmp = createTempFile(name, ".jar").apply {
-        deleteOnExit()
-    }
-    Files.copy(ByteArrayInputStream(bytes), tmp.toPath(), StandardCopyOption.REPLACE_EXISTING)
-    name to loadPlugin(JarFile(tmp), "Plugin")
-}
-
-class PluginConsumer(kafka: Kafka): Consumer<String, ByteArray>(
-        listOf("plugins"),
-        StringDeserializer::class.java,
-        ByteArrayDeserializer::class.java,
-        kafka,
-        groupId = "***" // group id will never be seen by kafka as we are not committing any offsets and assigning the partition manually
-                        // but it is required by the API
-)
-
-@ExperimentalCoroutinesApi
-fun plugins(kafka: Kafka) = PluginConsumer(kafka)
-        .partitionFlow(listOf(TopicPartition("plugins", 0)))
-
-class ServiceConsumer(kafka: Kafka): Consumer<String, Service>(
-        listOf("services"),
-        StringDeserializer::class.java,
-        ServiceDeserializer::class.java,
-        kafka,
-        groupId = "logger"
-)
-
-
-@FlowPreview
-@ExperimentalCoroutinesApi
-fun serviceProduction(kafka: Kafka) = Producer(kafka, StringSerializer::class.java, ServiceSerializer::class.java)
-        .produceTo("service")
-
 
 data class Config(
         val bootstraps: List<String>
 ) {
     companion object {
-        fun get(): Config = (System.getenv(CONFIG_ENV_VARIABLE) ?: CONFIG_DEFAULT_LOCATION).runCatching {
-            File(this)
-                    .let { Gson().fromJson(it.readText(), Config::class.java) }
-        }.getOrElse { Config(System.getenv(CONFIG_BOOTSTRAPS).split(',')) }
+        fun get() = Config(System.getenv(CONFIG_BOOTSTRAPS).split(','))
     }
-
-        fun writeTo(file: File) = Gson().toJson(this)
-                .let { file.writeText(it) }
 }
-    fun writeDefaultConfig(path: String = System.getenv(CONFIG_ENV_VARIABLE)
-            ?: CONFIG_DEFAULT_LOCATION) = File(path).apply {
-        if (!exists()) createNewFile()
-        Config(listOf("127.0.0.1:9092")).writeTo(this)
+
+interface PageLoader{
+    fun load(url: String): Document
+}
+
+object JsoupPageLoader: PageLoader{
+    override fun load(url: String): Document = Jsoup.connect(url).get()
+}
+
+class ServiceSerde: JsonSerde<Service>(Service.serializer(), JsonConfiguration.Stable)
+class JobSerde: JsonSerde<Job>(Job.serializer(), JsonConfiguration.Stable)
+class JsonIntSerde: JsonSerde<Int>(Int.serializer(), JsonConfiguration.Stable)
+class UrlWithPluginSerde: JsonSerde<UrlWithPlugin>(UrlWithPlugin.serializer(), JsonConfiguration.Stable)
+
+class ServiceSerialization: KeyValueSerde<String, Service>(Serdes.String(), ServiceSerde())
+class JobSerialization: KeyValueSerde<Int, Job>(JsonIntSerde(), JobSerde())
+class PluginSerialation: KeyValueSerde<String, ByteArray>(Serdes.String(), Serdes.ByteArray())
+class OutputSerialization: KeyValueSerde<UrlWithPlugin, String>(UrlWithPluginSerde(), Serdes.String())
+
+@ExperimentalCoroutinesApi
+class ScrapingApplication(
+        val groupId: String,
+        val kafkaConfig: KafkaConfig,
+        scope: CoroutineScope = GlobalScope,
+        private val pageLoader: PageLoader = JsoupPageLoader
+){
+    val servicesTopic = Topic("services", ServiceSerialization())
+    val pluginsTopic = Topic("plugins", PluginSerialation())
+    val jobsTopic = Topic("jobs", JobSerialization())
+    val completedJobsTopic = Topic("completed", JobSerialization())
+
+    val services by lazy {
+        scope.async {
+            Consumer.nonCommitting("$groupId-services", kafkaConfig)
+                    .readAll(servicesTopic)
+        }
     }
 
-    fun outputConsumer(kafka: Kafka, topic: String, groupId: String, clientId: String? = null, autocommit: Boolean = true) = Consumer(
-            listOf(topic),
-            StringDeserializer::class.java,
-            StringDeserializer::class.java,
-            kafka,
-            groupId,
-            clientId,
-            autocommit
-    )
+    @FlowPreview
+    val plugins by lazy {
+            Consumer.UUID(kafkaConfig, false)
+                    .open(pluginsTopic)
+                    .map { it.key() to loadPluginFromByteArray(it.value()) }
+                    .resolver()
+    }
+
+    val jobs by lazy {
+        consumer("$groupId-jobs", kafkaConfig){
+            autocommit(true)
+            offsetResetStrategy(OffsetResetStrategy.EARLIEST)
+            maxRecordsPerPoll(1)
+        }.open(jobsTopic)
+    }
+
+
+    @FlowPreview
+    suspend fun process(job: Job, onLoadError: (Throwable) -> Document? = {null}) = plugins.run {
+        job.Urls.map {
+            pageLoader.runCatching { load(it) }
+                    .getOrElse { err -> onLoadError(err) }
+        }.filterNotNull()
+                .flatMap { doc ->
+                    job.Plugins.map {
+                        (doc.location() to it) to withAsync(it) { scrape(doc) }
+                    }
+                }.toMap()
+                .mapValues { it.value.await() } }
+                .mapKeys { UrlWithPlugin(it.key.first, it.key.second) }
+                .let { JobResult(job, it) }
+}
+
+fun outputTopicFor(service: Service) = Topic(service.name, OutputSerialization())
+fun <V> outputTopicFor(service: Service, serializer: KSerializer<V>) =
+        Topic(service.name, OutputSerialization())
+
+fun outputTopicFor(service: String) = Topic(service, OutputSerialization())
+fun <V> outputTopicFor(service: String, serializer: KSerializer<V>) =
+        Topic(service, OutputSerialization())
+
+
 
 

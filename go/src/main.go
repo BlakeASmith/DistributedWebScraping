@@ -42,7 +42,7 @@ func main() {
 
 	for service := range ServicesChannel(&kaf){
 		log.Println("received service " + service.Name)
-		go PushJobsToKafka(producer, JobChannelFor(&service), 200 * time.Millisecond)
+		go PushJobsToKafka(producer, JobChannelFor(&service), 400 * time.Millisecond)
 	}
 }
 

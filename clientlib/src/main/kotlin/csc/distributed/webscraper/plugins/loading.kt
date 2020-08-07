@@ -1,11 +1,24 @@
 package csc.distributed.webscraper.plugins
 
+import kotlinx.serialization.KSerializer
 import org.jsoup.nodes.Document
+import java.io.ByteArrayInputStream
 import java.io.File
 import java.lang.reflect.Method
 import java.net.URL
 import java.net.URLClassLoader
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 import java.util.jar.JarFile
+
+
+fun loadPluginFromByteArray(bytes: ByteArray) = run {
+    val tmp = createTempFile().apply {
+        deleteOnExit()
+    }
+    Files.copy(ByteArrayInputStream(bytes), tmp.toPath(), StandardCopyOption.REPLACE_EXISTING)
+    loadPlugin(JarFile(tmp), "Plugin")
+}
 
 /**
  * Implements Plugin by reflection into the given Class,
@@ -52,7 +65,7 @@ fun loadPlugin(path: String, nameFilter: String = "Plugin"): Plugin = loadPlugin
 fun loadPlugin(jar: JarFile, nameFilter: String = "Plugin") = loadClassesFromJar(jar, nameFilter)
         .find { cls -> cls.annotatedInterfaces.find { it.type.typeName == "Plugin" } != null }!!
         .also { println("loaded ${it.name}") }
-        .let { LoadedPlugin(it) }
+        .let { LoadedPlugin(it) as Plugin }
 
 fun loadAllFromDir(path: String) = File(path).apply {
     if (!exists()) {

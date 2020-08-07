@@ -5,6 +5,7 @@ import (
 	"os"
 	"github.com/confluentinc/confluent-kafka-go/kafka"
 	"time"
+	"hash/fnv"
 )
 
 type Kafka struct {
@@ -95,16 +96,21 @@ func CompletedJobsChannel(kafka *Kafka) chan Job{
 	return deserialized
 }
 
+func SelectPartition(job *Job, nPartitions uint32) int32 {
+	h := fnv.New32a()
+	h.Write([]byte(strings.Join(job.Urls, "")))
+	return int32(h.Sum32() % nPartitions)
+}
+
 // send urls from the given channel to kafka, then output them into the returned channel
 func PushJobsToKafka(producer *kafka.Producer, channel chan Job, delay time.Duration) {
 	delivery := make(chan kafka.Event)
+	jobtopic := "jobs"
 	go func () {
 		for it := range channel {
-			jobtopic := "jobs"
 			producer.Produce(
 				&kafka.Message{
 					TopicPartition: kafka.TopicPartition{Topic: &jobtopic, Partition: kafka.PartitionAny},
-					Key: it.Key(),
 					Value: it.Value(),
 				},
 				delivery,
