@@ -115,7 +115,26 @@ func PushJobsToKafka(producer *kafka.Producer, channel chan Job, delay time.Dura
 				},
 				delivery,
 			)
-			fmt.Println("sent ", string(it.Key()), " to ", jobtopic)
+			fmt.Println("sent to ", string(jobtopic))
+			time.Sleep(delay)
+		}
+	}()
+}
+
+//Qfunc
+func PushServicesToKafka(producer *kafka.Producer, channel chan Service, delay time.Duration) {
+	delivery := make(chan kafka.Event)
+	go func () {
+		for it := range channel {
+			jobtopic := "services"
+			producer.Produce(
+				&kafka.Message{
+					TopicPartition: kafka.TopicPartition{Topic: &jobtopic, Partition: kafka.PartitionAny},
+					Value: it.Value(),		//serialized to json
+					},
+				delivery,
+			)
+			fmt.Println("sent to ", jobtopic)
 			time.Sleep(delay)
 		}
 	}()
