@@ -122,7 +122,7 @@ func PushJobsToKafka(producer *kafka.Producer, channel chan Job, delay time.Dura
 }
 
 //Qfunc
-func PushServicesToKafka(producer *kafka.Producer, channel chan Service, delay time.Duration) {
+func PushServicesToKafka(producer *kafka.Producer, channel chan Service) {
 	delivery := make(chan kafka.Event)
 	go func () {
 		for it := range channel {
@@ -135,7 +135,6 @@ func PushServicesToKafka(producer *kafka.Producer, channel chan Service, delay t
 				delivery,
 			)
 			fmt.Println("sent to ", jobtopic)
-			time.Sleep(delay)
 		}
 	}()
 }

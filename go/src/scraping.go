@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"strings"
 	"sync"
-	"time"
 
 	"github.com/PuerkitoBio/goquery"
 )
@@ -148,5 +147,5 @@ func sendNewService(serviceChan chan Service){
 	config := getConfig()
 	kaf := Kafka{ Bootstraps:config.Bootstraps }
 	producer := kaf.Producer()
-	PushServicesToKafka(producer, serviceChan, delay*time.Millisecond)
+	PushServicesToKafka(producer, serviceChan)
 }

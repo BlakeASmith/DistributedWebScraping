@@ -3,7 +3,6 @@ package main
 import "log"
 import "encoding/json"
 import "strconv"
-import "time"
 
 type Job struct {
 	Id int
@@ -11,8 +10,6 @@ type Job struct {
 	Plugins []string
 	Service string
 }
-
-int delay = 500
 
 // serialize job Id to a byte array
 func (j Job) Key() []byte {
@@ -43,24 +40,28 @@ func DeserializeJob(job []byte) *Job {
 }
 
 func main() {
+
 	config := getConfig()
 	log.Println("using config ", config)
 
 	kaf := Kafka{ Bootstraps:config.Bootstraps }
-
 	producer := kaf.Producer()
-	test := make(chan string)
-	test2 := make (map[string] bool)
-	log.Println("Sanity")
-	go crawl("http://usedvictoria.com", "", test, -1, test2, []string{""}, []string{""}, "usedvic")
-	for val := range(test){
-		log.Println(val)
+
+	if (config.Debug){
+		test := make(chan string)
+		test2 := make (map[string] bool)
+		log.Println("Sanity")
+		go crawl("http://usedvictoria.com", "", test, -1, test2, []string{""}, []string{""}, "usedvic")
+		for val := range(test){
+			log.Println(val)
+		}
+	} else {
+		for service := range ServicesChannel(&kaf){
+			log.Println("received service " + service.Name)
+			go PushJobsToKafka(producer, JobChannelFor(&service), config.Delay)
+		}
 	}
 
-	for service := range ServicesChannel(&kaf){
-		log.Println("received service " + service.Name)
-		go PushJobsToKafka(producer, JobChannelFor(&service), delay * time.Millisecond)
-	}
 }
 
 func JobChannelFor(service *Service) chan Job {
