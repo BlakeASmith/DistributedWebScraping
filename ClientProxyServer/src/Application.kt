@@ -1,10 +1,11 @@
 package csc.distributed
 
-import csc.distributed.webscraper.clients.*
-import csc.distributed.webscraper.kafka.Kafka
-import csc.distributed.webscraper.kafka.produceTo
+import ca.blakeasmith.kkafka.jvm.BootstrapServer
+import ca.blakeasmith.kkafka.jvm.KafkaConfig
 import csc.distributed.webscraper.plugins.Config
-import csc.distributed.webscraper.plugins.PluginConsumer
+import csc.distributed.webscraper.plugins.Job
+import csc.distributed.webscraper.plugins.JobResult
+import csc.distributed.webscraper.plugins.ScrapingApplication
 import io.ktor.application.*
 import io.ktor.response.*
 import io.ktor.routing.*
@@ -12,48 +13,9 @@ import io.ktor.gson.*
 import io.ktor.features.*
 import io.ktor.request.receive
 import kotlinx.coroutines.*
-
-val kafka = Kafka(Config.get().bootstraps, CoroutineScope(newFixedThreadPoolContext(5, "jobs"))).also {
-    println("initialized Kafka Config $it")
-}
-
-
-@FlowPreview
-@ExperimentalCoroutinesApi
-val plugins by lazy {
-    PluginConsumer(kafka).asResolver().also {
-        println("initialized plugin resolver")
-    }
-}
-
-@FlowPreview
-@ExperimentalCoroutinesApi
-val jobs by lazy {
-    jobConsumer(kafka)
-            .asChannel().also {
-                println("initialized jobs channel")
-            }
-
-}
-val completeJobsChannel by lazy {
-    completeJobProduction(kafka).also {
-        println("initialized complete jobs production")
-    }
-}
-
-/*
-@FlowPreview
-@ExperimentalCoroutinesApi
-suspend fun sendResult(result: JobResult){
-    println("sent completed result for ${result.job.Id}")
-    result.results.flatMap { it.value.asIterable() }.map { it.key to it.value }
-        .asFlow()
-        .produceTo(outputProducer.produceTo(result.job.Service))
-        .collect()
-    completeJobsChannel.sendConfirm(result.job.Id.toString() to result.job)
-}
-
- */
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.produceIn
 
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
@@ -67,13 +29,25 @@ fun Application.module(testing: Boolean = false) {
         gson {}
     }
 
+    val consumerContext = CoroutineScope(newFixedThreadPoolContext(1, "jobs"))
+
+    val kafka = KafkaConfig(Config.get().bootstraps.map { BootstrapServer.fromString(it) }).also {
+        println("initialized Kafka Config $it")
+    }
+
+    @ExperimentalCoroutinesApi
+    val webscraper = ScrapingApplication("clients", kafka, consumerContext)
+
+    val jobs = webscraper.jobs
+            .map { it.value() }
+            .onEach { println("collected Job ${it.Id}") }
+            .produceIn(consumerContext)
+
+
     routing {
         get("/jobs") {
-            println("received job request")
-            val job = jobs.receive()
-            println("serving job ${job.key}")
-            call.respond(job.value)
-
+            call.application.log.debug("received job request")
+            call.respond(jobs.receive())
         }
 
         post("/complete") {
@@ -85,7 +59,6 @@ fun Application.module(testing: Boolean = false) {
         get("/plugin/{name}"){
             val name = call.parameters["name"]
             println("fetching plugin $name")
-            call.respond(plugins.get(name!!))
         }
     }
 

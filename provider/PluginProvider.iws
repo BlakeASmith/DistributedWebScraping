@@ -2,34 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="081b00ed-8b7b-4e23-8741-a5b4fabdff4b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/csc.distributed.webscraper.PluginProvider.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/csc.distributed.webscraper.PluginProvider.main.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/csc.distributed.webscraper.PluginProvider.test.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ClientProxyServer/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../ClientProxyServer/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ClientProxyServer/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../ClientProxyServer/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ClientProxyServer/src/Application.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../ClientProxyServer/src/Application.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ResultLogger/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ResultLogger/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../builddocker.sh" beforeDir="false" afterPath="$PROJECT_DIR$/../builddocker.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../client/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../client/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../client/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/../client/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../client/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../client/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../client/build.sh" beforeDir="false" afterPath="$PROJECT_DIR$/../client/build.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../client/desktop/build.gradle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../client/desktop/src/main/kotlin/Main.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../client/entrypoint.sh" beforeDir="false" afterPath="$PROJECT_DIR$/../client/entrypoint.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../client/src/main/kotlin/client.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../clientlib/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../clientlib/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../clientlib/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../clientlib/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../clientlib/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../clientlib/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../clientlib/src/main/kotlin/csc/distributed/webscraper/kafka/AsyncMap.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../clientlib/src/main/kotlin/csc/distributed/webscraper/kafka/AutoOffsetConfig.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../clientlib/src/main/kotlin/csc/distributed/webscraper/kafka/FlowExtensions.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../clientlib/src/main/kotlin/csc/distributed/webscraper/kafka/Kafka.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../clientlib/src/main/kotlin/csc/distributed/webscraper/kafka/Production.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../clientlib/src/main/kotlin/csc/distributed/webscraper/plugins/loading.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../clientlib/src/main/kotlin/csc/distributed/webscraper/plugins/loading.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../clientlib/src/main/kotlin/csc/distributed/webscraper/plugins/webscraper.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../clientlib/src/main/kotlin/csc/distributed/webscraper/plugins/webscraper.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../clientlib/src/main/kotlin/csc/distributed/webscraper/services/Serialization.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../clientlib/src/main/kotlin/csc/distributed/webscraper/services/Service.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../clientlib/src/main/kotlin/csc/distributed/webscraper/services/Service.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../clientproxy/.idea/.gitignore" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../clientproxy/.idea/compiler.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../clientproxy/.idea/gradle.xml" beforeDir="false" />
@@ -43,19 +15,7 @@
       <change beforePath="$PROJECT_DIR$/../clientproxy/gradlew.bat" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../clientproxy/settings.gradle" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../clientproxy/src/main/kotlin/Main.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../go/config.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../go/src/kafka.go" beforeDir="false" afterPath="$PROJECT_DIR$/../go/src/kafka.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../go/src/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/../go/src/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PluginProvider.ipr" beforeDir="false" afterPath="$PROJECT_DIR$/PluginProvider.ipr" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.sh" beforeDir="false" afterPath="$PROJECT_DIR$/build.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/main.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../testscripts/docker/usedvic_wordcount/config/config.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../testscripts/docker/usedvic_wordcount/docker-compose.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../testscripts/docker/usedvic_wordcount/services/services.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PluginProvider.iws" beforeDir="false" afterPath="$PROJECT_DIR$/PluginProvider.iws" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,6 +55,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../ClientProxyServer" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.17" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -140,22 +101,26 @@
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
     <state x="769" y="173" key="#Project_Structure/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1596777988306" />
-    <state width="2518" height="285" key="GridCell.Tab.0.bottom" timestamp="1596780116840">
+    <state x="1069" y="354" key="FileChooserDialogImpl" timestamp="1596782455426">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state width="2518" height="285" key="GridCell.Tab.0.bottom/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1596780116840" />
-    <state width="2518" height="285" key="GridCell.Tab.0.center" timestamp="1596780116840">
+    <state x="1069" y="354" key="FileChooserDialogImpl/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1596782455426" />
+    <state width="2518" height="285" key="GridCell.Tab.0.bottom" timestamp="1596782456446">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state width="2518" height="285" key="GridCell.Tab.0.center/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1596780116840" />
-    <state width="2518" height="285" key="GridCell.Tab.0.left" timestamp="1596780116840">
+    <state width="2518" height="285" key="GridCell.Tab.0.bottom/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1596782456446" />
+    <state width="2518" height="285" key="GridCell.Tab.0.center" timestamp="1596782456445">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state width="2518" height="285" key="GridCell.Tab.0.left/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1596780116840" />
-    <state width="2518" height="285" key="GridCell.Tab.0.right" timestamp="1596780116840">
+    <state width="2518" height="285" key="GridCell.Tab.0.center/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1596782456445" />
+    <state width="2518" height="285" key="GridCell.Tab.0.left" timestamp="1596782456445">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state width="2518" height="285" key="GridCell.Tab.0.right/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1596780116840" />
+    <state width="2518" height="285" key="GridCell.Tab.0.left/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1596782456445" />
+    <state width="2518" height="285" key="GridCell.Tab.0.right" timestamp="1596782456446">
+      <screen x="0" y="0" width="2560" height="1080" />
+    </state>
+    <state width="2518" height="285" key="GridCell.Tab.0.right/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1596782456446" />
     <state x="769" y="173" key="SettingsEditor" timestamp="1596777588415">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>

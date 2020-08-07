@@ -9,10 +9,6 @@
     ],
     "plugins": [
       "wordcount"
-    ],
-    "maxDepth": 3,
-    "timeBetweenRepeats": 40,
-    "jobSize": 5,
-    "numberOfConcurrentRequests": 5
+    ]
   }
 ]

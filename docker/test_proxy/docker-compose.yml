@@ -15,7 +15,8 @@ services:
     environment:
       KAFKA_ADVERTISED_HOST_NAME: 192.168.1.147
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_CREATE_TOPICS: "services:1:1, jobs:6:1, allocated:1:1, complete:1:1, plugins:1:1"
+      KAFKA_NUM_PARTITIONS: 5
+      #KAFKA_CREATE_TOPICS: "services:1:1, jobs:20:1, allocated:1:1, complete:1:1, plugins:1:1"
 
     logging:
       driver: none
@@ -23,6 +24,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       
+
   provider: 
     image: blakeasmith/kafka_webscraper_provider
     environment:
@@ -36,24 +38,21 @@ services:
   producer:
     image: blakeasmith/kafka_webscraper_producer
     environment:
-      WEBSCRAPER_BOOTSTRAPS: "kafka:9092"
+            WEBSCRAPER_BOOTSTRAPS: "kafka:9092"
+            DELAY_BETWEEN_JOBS: "500"
+            WEBSCRAPER_DEBUG: "false"
     logging:
       driver: none
-    depends_on: 
-      - provider
 
-  old_client:
-    image: blakeasmith/kafka_webscraper_client
+  proxy:
+    image: blakeasmith/webscraper_proxy_server
+    ports:
+        - "8080:8080"
     environment:
       WEBSCRAPER_BOOTSTRAPS: "kafka:9092"
-  #proxy:
-    #image: blakeasmith/webscraper_proxy_server
-    #ports:
-      #- "8080"
-    #environment:
-      #WEBSCRAPER_BOOTSTRAPS: "kafka:9092"
 
-  #client:
-    #image: blakeasmith/webscraper_proxy_client
-    #environment:
-      #PROXY_SERVER: "proxy:8080"
+  proxyclient:
+    image: blakeasmith/webscraper_proxy_client
+    environment:
+        PROXY_SERVER: "http://proxy:8080"
+
