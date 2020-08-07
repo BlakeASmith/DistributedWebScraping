@@ -12,6 +12,8 @@ type Job struct {
 	Service string
 }
 
+int delay = 500
+
 // serialize job Id to a byte array
 func (j Job) Key() []byte {
 	return []byte(strconv.Itoa(j.Id))
@@ -20,6 +22,14 @@ func (j Job) Key() []byte {
 // serialize Job to a byte array (JSON)
 func (j Job) Value() []byte {
 	json, err := json.Marshal(j)
+	if err != nil {
+		panic(err)
+	}
+	return json
+}
+
+func (s Service) Value() []byte{
+	json, err := json.Marshal(s)
 	if err != nil {
 		panic(err)
 	}
@@ -39,10 +49,17 @@ func main() {
 	kaf := Kafka{ Bootstraps:config.Bootstraps }
 
 	producer := kaf.Producer()
+	test := make(chan string)
+	test2 := make (map[string] bool)
+	log.Println("Sanity")
+	go crawl("http://usedvictoria.com", "", test, -1, test2, []string{""}, []string{""}, "usedvic")
+	for val := range(test){
+		log.Println(val)
+	}
 
 	for service := range ServicesChannel(&kaf){
 		log.Println("received service " + service.Name)
-		go PushJobsToKafka(producer, JobChannelFor(&service), 200 * time.Millisecond)
+		go PushJobsToKafka(producer, JobChannelFor(&service), delay * time.Millisecond)
 	}
 }
 
@@ -51,7 +68,7 @@ func JobChannelFor(service *Service) chan Job {
 	seen := make(map[string] bool)
 	for _, domain := range service.RootDomains{
 		log.Println("starting crawl on", domain)
-		go crawl(domain, "", urls, -1, seen, service.Filters)
+		go crawl(domain, "", urls, -1, seen, service.Filters, service.Plugins, service.Name)
 	}
 	jobs := makeJobChannel(urls, 10, service.Plugins, service.Name)
 	return jobs
