@@ -10,7 +10,7 @@ import org.apache.kafka.clients.producer.RecordMetadata
 
 class Producer<K, V>(
     val kafka: KafkaConfig,
-    val topics: Collection<Topic<K, V>>,
+    val topics: Collection<KafkaTopic<K, V>>,
     private val props: MutableMap<String, Any?>
 ){
     private val config: ProducerConfig = props.apply {
@@ -22,7 +22,7 @@ class Producer<K, V>(
         KafkaProducer<K, V>(config.originals())
     }
 
-    class Builder<K, V>(private val kafka: KafkaConfig, private val topics: Collection<Topic<K, V>>){
+    class Builder<K, V>(private val kafka: KafkaConfig, private val topics: Collection<KafkaTopic<K, V>>){
         private val props = mutableMapOf<String, Any?>().apply {
             put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafka.bootstraps.map { it.toString() })
         }
@@ -79,6 +79,11 @@ class Producer<K, V>(
         }
     }
 
+    suspend fun join() {
+        jobs.forEach { it.join() }
+        producer.close()
+    }
+
     suspend fun close(){
         for (job in jobs) {
             job.cancelAndJoin()
@@ -87,14 +92,14 @@ class Producer<K, V>(
     }
 }
 
-fun <K, V> producer(kafka: KafkaConfig, vararg topics: Topic<K, V>, init: Producer.Builder<K, V>.() -> Unit = {})
+fun <K, V> producer(kafka: KafkaConfig, vararg topics: KafkaTopic<K, V>, init: Producer.Builder<K, V>.() -> Unit = {})
         = Producer.Builder(kafka, topics.toList())
     .apply(init).build()
 
 @ExperimentalCoroutinesApi
 fun <K, V> Flow<Pair<K, V>>.sendTo(
         kafka: KafkaConfig,
-        vararg topics: Topic<K, V>,
+        vararg topics: KafkaTopic<K, V>,
         init: Producer.Builder<K, V>.() -> Unit = {}
 ) = this.apply {
     val producer = producer(kafka, *topics) { init() }
@@ -106,7 +111,7 @@ fun <K, V> Flow<Pair<K, V>>.sendTo(
 @ExperimentalCoroutinesApi
 fun <K, V> Flow<Pair<K, V>>.sendAndReceiveRecords(
         kafka: KafkaConfig,
-        vararg topics: Topic<K, V>,
+        vararg topics: KafkaTopic<K, V>,
         init: Producer.Builder<K, V>.() -> Unit = {}
 ) = this.run {
     val recordChannel = Channel<RecordMetadata>(Channel.UNLIMITED)
@@ -119,7 +124,7 @@ fun <K, V> Flow<Pair<K, V>>.sendAndReceiveRecords(
 
 fun <K, V> Collection<Pair<K, V>>.sendTo(
         kafka: KafkaConfig,
-        vararg topics: Topic<K, V>,
+        vararg topics: KafkaTopic<K, V>,
         init: Producer.Builder<K, V>.() -> Unit = {}
 ) = this.apply {
     runBlocking {
@@ -131,7 +136,7 @@ fun <K, V> Collection<Pair<K, V>>.sendTo(
 
 fun <K, V> Map<K, V>.sendTo(
     kafka: KafkaConfig,
-    vararg topics: Topic<K, V>,
+    vararg topics: KafkaTopic<K, V>,
     init: Producer.Builder<K, V>.() -> Unit = {}
 ) = this.apply {
     runBlocking {

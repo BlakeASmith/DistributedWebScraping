@@ -2,6 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="081b00ed-8b7b-4e23-8741-a5b4fabdff4b" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../clientlib/src/main/kotlin/csc/distributed/webscraper/Loaders.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../clientlib/src/main/kotlin/csc/distributed/webscraper/PageLoader.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../clientlib/src/main/kotlin/csc/distributed/webscraper/Topics.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../clientlib/src/main/kotlin/csc/distributed/webscraper/clients.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../kafka/src/main/kotlin/ReadWriteTopic.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ClientProxyServer/ProxyClient/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../ClientProxyServer/ProxyClient/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ClientProxyServer/ProxyClient/src/main/kotlin/Application.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../ClientProxyServer/ProxyClient/src/main/kotlin/Application.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ClientProxyServer/ProxyClient/src/test/kotlin/Tests.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../ClientProxyServer/ProxyClient/src/test/kotlin/Tests.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ClientProxyServer/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../ClientProxyServer/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ClientProxyServer/src/Application.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../ClientProxyServer/src/Application.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../client/src/main/kotlin/Main.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../clientlib/src/main/kotlin/csc/distributed/webscraper/plugins/webscraper.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../clientlib/src/main/kotlin/csc/distributed/webscraper/services/Service.kt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../clientproxy/.idea/.gitignore" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../clientproxy/.idea/compiler.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../clientproxy/.idea/gradle.xml" beforeDir="false" />
@@ -15,7 +28,12 @@
       <change beforePath="$PROJECT_DIR$/../clientproxy/gradlew.bat" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../clientproxy/settings.gradle" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../clientproxy/src/main/kotlin/Main.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docker/usedvic_wordcount/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../docker/usedvic_wordcount/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kafka/src/main/kotlin/Consumer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../kafka/src/main/kotlin/Consumer.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kafka/src/main/kotlin/Producer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../kafka/src/main/kotlin/Producer.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PluginProvider.ipr" beforeDir="false" afterPath="$PROJECT_DIR$/PluginProvider.ipr" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PluginProvider.iws" beforeDir="false" afterPath="$PROJECT_DIR$/PluginProvider.iws" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/main.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

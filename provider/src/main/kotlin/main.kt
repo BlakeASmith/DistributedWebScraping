@@ -1,12 +1,12 @@
 import ca.blakeasmith.kkafka.jvm.*
-import csc.distributed.webscraper.plugins.*
-import csc.distributed.webscraper.services.Service
+import csc.distributed.webscraper.Scraper
+import csc.distributed.webscraper.config.Config
+import csc.distributed.webscraper.types.Service
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.serialization.builtins.list
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonConfiguration
-import org.apache.kafka.common.serialization.StringSerializer
 import java.io.File
 
 val json = Json(JsonConfiguration.Stable)
@@ -35,21 +35,18 @@ fun writeExampleJson(file: File){
 @FlowPreview
 fun main(args: Array<String>) {
     val kafka = KafkaConfig(Config.get().bootstraps.map { BootstrapServer.fromString(it) })
-    val webscraper = ScrapingApplication("provider", kafka)
 
     ArgumentParser<File, Unit>{ File(it) }
             .async("--genexample"){ writeExampleJson(this) }
             .async("--jars"){
-                jarsIn(this).map { it.nameWithoutExtension to it.readBytes() }
-                    .asFlow()
-                    .sendAndReceiveRecords(kafka, webscraper.pluginsTopic)
-                        .onEach { println("sent ${it} to Kafka") }
-                        .collect()
+                val plugs = jarsIn(this).map { it.nameWithoutExtension to it.readBytes() }
+                        .onEach { println("sending $it to kafka") }
+                Scraper.Plugins(kafka)
+                        .writeFrom(plugs.asFlow())
+                        .join()
             }.async("--services"){
-                json.parse(Service.serializer().list, readText())
-                    .map { it.name to it }.asFlow()
-                    .sendAndReceiveRecords(kafka, webscraper.servicesTopic)
-                    .onEach { println("sent $it to kafka") }
-                    .collect()
+                val services = json.parse(Service.serializer().list, readText())
+                    .map { it.name to it }.asFlow().onEach { println("sending $it to kafka") }
+                Scraper.Services(kafka).writeFrom(services).join()
             }.parse(args)
 }

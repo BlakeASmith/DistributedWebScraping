@@ -34,15 +34,12 @@ services:
       - ./plugins:/plugins
       - ./services:/services
 
-
   producer:
     image: blakeasmith/kafka_webscraper_producer
     environment:
-      WEBSCRAPER_CONFIG: "/config/config.json"
-    volumes: 
-      - ./config:/config
-    depends_on: 
-      - provider
+            WEBSCRAPER_BOOTSTRAPS: "kafka:9092"
+            DELAY_BETWEEN_JOBS: "500"
+            WEBSCRAPER_DEBUG: "false"
     logging:
       driver: none
 

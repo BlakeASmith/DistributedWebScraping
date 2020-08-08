@@ -1,24 +1,32 @@
 package csc.distributed.webscraper.proxy
 
-import csc.distributed.webscraper.plugins.Job
-import csc.distributed.webscraper.plugins.JobResult
-import csc.distributed.webscraper.plugins.Plugin
-import csc.distributed.webscraper.plugins.loadPluginFromByteArray
+import csc.distributed.webscraper.Loaders
+import csc.distributed.webscraper.plugins.*
+import csc.distributed.webscraper.types.Job
+import csc.distributed.webscraper.types.JobResult
+import csc.distributed.webscraper.types.ScrapingResult
 import io.ktor.client.*
 import io.ktor.client.engine.apache.Apache
 import io.ktor.client.features.json.*
 import io.ktor.client.request.get
 import io.ktor.client.request.post
-import io.ktor.client.statement.HttpResponse
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import org.jsoup.Jsoup
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonConfiguration
 import java.net.ConnectException
 
+suspend fun <R> HttpClient.tryRepeating(_delay: Long, operation: suspend HttpClient.() -> R): R = kotlin.runCatching {
+    operation()
+}.getOrElse { println(it); if(it !is ConnectException) throw(it) ; delay(_delay); tryRepeating(_delay, operation) }
+
 val SERVER_URL = System.getenv("PROXY_SERVER") ?: "http://0.0.0.0:8080"
+
 
 suspend fun jobsAsFlow(client: HttpClient) = flow {
     while (true) {
@@ -35,29 +43,38 @@ suspend fun jobsAsFlow(client: HttpClient) = flow {
 
 val plugins = mutableMapOf<String, Plugin>()
 
-suspend fun <R> HttpClient.tryRepeating(_delay: Long, operation: suspend HttpClient.() -> R): R = kotlin.runCatching {
-    operation()
-}.getOrElse { println(it); if(it !is ConnectException) throw(it) ; delay(_delay); tryRepeating(_delay, operation) }
-
 suspend fun HttpClient.sendCompleteJob(result: JobResult) = tryRepeating(100){
-    println("sending completed job ${result.job.Id}")
-    post<JobResult>("$SERVER_URL/complete") { body = result }
+    println("sending completed job")
+    post<Boolean>("$SERVER_URL/complete") {
+        contentType(ContentType.Application.Json)
+        body = result
+    }
 }
 
 suspend fun HttpClient.getPlugin(name: String) = tryRepeating(100){
-    plugins[name] = loadPluginFromByteArray(get<ByteArray>("$SERVER_URL/plugin/$name"))
+    plugins.getOrPut(name) {  loadPluginFromByteArray(get<ByteArray>("$SERVER_URL/plugin/$name")) }
 }
+
+suspend fun process(job: Job, client: HttpClient): List<ScrapingResult> =
+    job.Urls.map { Loaders.Jsoup.runCatching { load(it) }.getOrNull() }.filterNotNull()
+        .flatMap { doc -> job.Plugins.map { ScrapingResult(doc.location(), it, client.getPlugin(it).scrape(doc)) } }
+
 
 suspend fun main(): Unit  {
     val client = HttpClient(Apache) {
-        install(JsonFeature) {
+        install(JsonFeature){
             serializer = GsonSerializer()
+        }
+        engine {
+            socketTimeout = Int.MAX_VALUE
         }
     }
 
     jobsAsFlow(client)
-            .onEach { println(it) }
-            .collect()
+        .map { it to  process(it, client) }
+        .onEach { (job, results) -> client.sendCompleteJob(JobResult(job, results)) }
+        .onEach { println("processed ${it.first.Id}") }
+        .collect()
 }
 
 

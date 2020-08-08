@@ -4,15 +4,19 @@ import ca.blakeasmith.kkafka.jvm.serialization.KeyValueSerialization
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import org.apache.kafka.clients.consumer.ConsumerConfig
+import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.clients.consumer.OffsetResetStrategy
 import org.apache.kafka.common.TopicPartition
 import org.apache.kafka.common.serialization.StringDeserializer
-import org.apache.kafka.common.serialization.StringSerializer
 import java.time.Duration
 
+interface KafkaTopic<K, V>{
+    val name: String
+    val consumer: KeyValueSerialization<K, V>
+}
 
-data class Topic<K, V>(val name: String, val consumer: KeyValueSerialization<K, V>)
+data class Topic<K, V>(override val name: String, override val consumer: KeyValueSerialization<K, V>): KafkaTopic<K, V>
 
 @ExperimentalCoroutinesApi
 fun consumer(group: String, kafkaConfig: KafkaConfig, init: Consumer.Builder.() -> Unit) =
@@ -27,8 +31,23 @@ fun <K, T> KafkaConsumer<K, T>.asFlow(pollLength: Duration= Duration.ofSeconds(5
         .asFlow()
         .onCompletion { close() }
 
+interface KConsumer{
+
+    fun <K, V> open(topic: KafkaTopic<K, V>,
+                    pollLength: Duration = Duration.ofSeconds(5),
+                    init: KafkaConsumer<K, V>.() -> Unit = {}
+    ): Flow<ConsumerRecord<K, V>>
+
+    fun <K, V> readPartitions(topic: KafkaTopic<K, V>, vararg partition: Int, pollLength: Duration = Duration.ofSeconds(4)) : Flow<Pair<K, V>>
+
+    fun <K, V> read(topic: KafkaTopic<K, V>) = open(topic)
+            .map { it.key() to it.value() }
+
+    suspend fun <K, V> readAll(topic: KafkaTopic<K, V>): Map<K, V>
+}
+
 @ExperimentalCoroutinesApi
-class Consumer(val group: String, val kafkaConfig: KafkaConfig, val config: ConsumerConfig) {
+class Consumer(val group: String, val kafkaConfig: KafkaConfig, val config: ConsumerConfig): KConsumer {
 
     companion object {
         fun committing(group: String, kafkaConfig: KafkaConfig) =
@@ -83,7 +102,7 @@ class Consumer(val group: String, val kafkaConfig: KafkaConfig, val config: Cons
 
     private val partitions = mutableMapOf<String, List<TopicPartition>>()
 
-    private fun <K, V> kafkaConsumer(topic: Topic<K, V>) =
+    private fun <K, V> kafkaConsumer(topic: KafkaTopic<K, V>) =
             KafkaConsumer<K, V>(config.originals().apply {
                 this[ConsumerConfig.KEY_DESERIALIZER_CLASS_DOC] =
                         topic.consumer.keyDeserializer::class.java
@@ -91,23 +110,24 @@ class Consumer(val group: String, val kafkaConfig: KafkaConfig, val config: Cons
                         topic.consumer.valueDeserializer::class.java
             })
 
-    fun <K, V> open(topic: Topic<K, V>,
-                    pollLength: Duration = Duration.ofSeconds(5),
-                    init: KafkaConsumer<K, V>.() -> Unit = {}
+    override fun <K, V> open(topic: KafkaTopic<K, V>,
+                    pollLength: Duration,
+                    init: KafkaConsumer<K, V>.() -> Unit
     ) =
             kafkaConsumer(topic)
                     .apply { subscribe(listOf(topic.name)) }
                     .apply(init).asFlow(pollLength)
 
-    fun <K, V> readPartitions(topic: Topic<K, V>, vararg partition: Int, pollLength: Duration = Duration.ofSeconds(4)) =
+    override fun <K, V> readPartitions(topic: KafkaTopic<K, V>, vararg partition: Int, pollLength: Duration) =
             kafkaConsumer(topic)
                     .apply { assign(partition.map { TopicPartition(topic.name, it) }) }
-                    .asFlow()
+                    .asFlow(pollLength)
+                    .map { it.key() to it.value() }
 
-    fun <K, V> read(topic: Topic<K, V>) = open(topic)
+    override fun <K, V> read(topic: KafkaTopic<K, V>) = open(topic)
         .map { it.key() to it.value() }
 
-    suspend fun <K, V> readAll(topic: Topic<K, V>): Map<K, V> {
+    override suspend fun <K, V> readAll(topic: KafkaTopic<K, V>): Map<K, V> {
         val endOffsets = mutableMapOf<Int, Long>()
         return open(topic){
             partitionsFor(topic.name).map {
