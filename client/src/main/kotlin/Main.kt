@@ -27,6 +27,7 @@ suspend fun main(){
             .onEach { (job, results) ->
                 results.map { it.url to it }.asFlow()
                         .sendAndReceiveRecords(config, Scraper.Client.Output(job.Service))
+                        .onEach { println("Sent $it to ${job.Service}") }
                         .collect()
                 client.completed.write(null, job)
             }

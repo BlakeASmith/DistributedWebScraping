@@ -6,7 +6,9 @@ import csc.distributed.webscraper.plugins.loadPluginFromByteArray
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.map
+import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.jsoup.nodes.Document
+import java.util.*
 
 interface Loader<T>{
     fun load(key: String): T
@@ -24,7 +26,10 @@ object Loaders{
     @ExperimentalCoroutinesApi
     @FlowPreview
     class Plugin(kafkaConfig: KafkaConfig): ResolverLoader<csc.distributed.webscraper.plugins.Plugin>({
-        Consumer.UUID(kafkaConfig, false)
+        consumer(UUID.randomUUID().toString(), kafkaConfig){
+            autocommit(false)
+            set(ConsumerConfig.FETCH_MAX_BYTES_CONFIG, Int.MAX_VALUE)
+        }
                 .read(Scraper.Plugins(kafkaConfig))
                 .map { it.first to loadPluginFromByteArray(it.second) }
                 .resolver()

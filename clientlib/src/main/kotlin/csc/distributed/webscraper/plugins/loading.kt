@@ -63,7 +63,7 @@ fun loadPlugin(path: String, nameFilter: String = "Plugin"): Plugin = loadPlugin
  * @return a LoadedRoverPlugin which accesses the methods of the plugin via reflection
  */
 fun loadPlugin(jar: JarFile, nameFilter: String = "Plugin") = loadClassesFromJar(jar, nameFilter)
-        .find { cls -> cls.annotatedInterfaces.find { it.type.typeName == "Plugin" } != null }!!
+        .find { it.annotatedInterfaces.find { it.type.typeName == "Plugin" } != null  }!!
         .also { println("loaded ${it.name}") }
         .let { LoadedPlugin(it) as Plugin }
 
