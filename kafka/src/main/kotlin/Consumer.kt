@@ -44,6 +44,8 @@ interface KConsumer{
             .map { it.key() to it.value() }
 
     suspend fun <K, V> readAll(topic: KafkaTopic<K, V>): Map<K, V>
+
+    fun <K, V, R> readWithConsumer(topic: KafkaTopic<K, V>, op: (KafkaConsumer<K, V>, Flow<ConsumerRecord<K, V>>) -> R): R
 }
 
 @ExperimentalCoroutinesApi
@@ -127,6 +129,7 @@ class Consumer(val group: String, val kafkaConfig: KafkaConfig, val config: Cons
     override fun <K, V> read(topic: KafkaTopic<K, V>) = open(topic)
         .map { it.key() to it.value() }
 
+
     override suspend fun <K, V> readAll(topic: KafkaTopic<K, V>): Map<K, V> {
         val endOffsets = mutableMapOf<Int, Long>()
         return open(topic){
@@ -143,5 +146,15 @@ class Consumer(val group: String, val kafkaConfig: KafkaConfig, val config: Cons
             .toList()
             .toMap()
     }
+
+
+    override fun <K, V, R> readWithConsumer(topic: KafkaTopic<K, V>, op: (KafkaConsumer<K, V>, Flow<ConsumerRecord<K, V>>) -> R): R =
+                kafkaConsumer(topic)
+                        .run {
+                            subscribe(listOf(topic.name))
+                            op(this, this.asFlow())
+                        }
+
+
 
 }

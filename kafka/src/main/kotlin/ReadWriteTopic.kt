@@ -4,7 +4,9 @@ import ca.blakeasmith.kkafka.jvm.serialization.KeyValueSerialization
 import ca.blakeasmith.kkafka.jvm.serialization.StringSerialization
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import org.apache.kafka.clients.consumer.ConsumerRecord
+import org.apache.kafka.clients.consumer.KafkaConsumer
 
 interface WriteableKafkaTopic<K, V>: KafkaTopic<K, V>{
     fun write(k: K, v: V): WriteableKafkaTopic<K, V>
@@ -17,6 +19,7 @@ interface WriteableKafkaTopic<K, V>: KafkaTopic<K, V>{
 interface ReadableKafakTopic<K ,V>: KafkaTopic<K, V>{
     fun read(): Flow<Pair<K, V>>
     fun open(): Flow<ConsumerRecord<K, V>>
+    fun <R> readWithConsumer(op: (KafkaConsumer<K, V>, Flow<ConsumerRecord<K, V>>) -> R): R
 }
 
 interface ReadWriteKafkaTopic<K, V>: ReadableKafakTopic<K, V>, WriteableKafkaTopic<K, V>
@@ -30,8 +33,8 @@ class ReadableTopic<K, V> (
 
     private val _consumer by lazy { consumerInit() }
     override fun read(): Flow<Pair<K, V>> = _consumer.read(this)
-
     override fun open(): Flow<ConsumerRecord<K, V>> = _consumer.open(this)
+    override fun <R> readWithConsumer(op: (KafkaConsumer<K, V>, Flow<ConsumerRecord<K, V>>) -> R): R= _consumer.readWithConsumer(this, op)
 }
 
 @ExperimentalCoroutinesApi

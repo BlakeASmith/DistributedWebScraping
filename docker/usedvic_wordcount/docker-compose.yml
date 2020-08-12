@@ -40,8 +40,8 @@ services:
             WEBSCRAPER_BOOTSTRAPS: "kafka:9092"
             DELAY_BETWEEN_JOBS: "500"
             WEBSCRAPER_DEBUG: "false"
-    logging:
-      driver: none
+    #logging:
+      #driver: none
 
   client:
     image: blakeasmith/kafka_webscraper_client

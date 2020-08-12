@@ -10,6 +10,7 @@ repositories {
     mavenCentral()
     flatDir {
         dirs "../clientlib/build/libs"
+        dirs "../clientlib/definitions/build/libs"
         dirs "../kafka/build/libs"
     }
 }
@@ -24,7 +25,8 @@ dependencies {
     compile 'org.apache.kafka:kafka-clients:2.0.0'
     compile group: 'org.jsoup', name: 'jsoup', version: '1.11.3'
     compile(name:"kafka", ext:"jar")
-    compile(name:"clientlib-1.0", ext:"jar")
+    compile(name:"clientlib", ext:"jar")
+    compile(name:"clientlib.definitions", ext:"jar")
 
     // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
     //compile group: 'ch.qos.logback', name: 'logback-classic', version: '0.9.26'

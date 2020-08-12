@@ -1,11 +1,13 @@
 package csc.distributed
 
 import ca.blakeasmith.kkafka.jvm.*
-import csc.distributed.webscraper.Loaders
+import csc.distributed.webscraper.PluginLoader
 import csc.distributed.webscraper.ResolverLoader
 import csc.distributed.webscraper.Scraper
 import csc.distributed.webscraper.config.Config
-import csc.distributed.webscraper.types.JobResult
+import csc.distributed.webscraper.definitions.types.JobMetadata
+import csc.distributed.webscraper.definitions.types.JobResult
+import csc.distributed.webscraper.types.JsoupLoader
 import io.ktor.application.*
 import io.ktor.response.*
 import io.ktor.routing.*
@@ -21,35 +23,8 @@ val kafka = KafkaConfig(Config.get().bootstraps.map { BootstrapServer.fromString
     println("initialized Kafka Config $it")
 }
 
-@FlowPreview
-@ExperimentalCoroutinesApi
-val scrapingClient = Scraper.Client(kafka, Loaders.Plugin(kafka), Loaders.Jsoup)
-
-@ObsoleteCoroutinesApi
-val consumerContext = CoroutineScope(newFixedThreadPoolContext(2, "client"))
-
-@ObsoleteCoroutinesApi
-@FlowPreview
-@ExperimentalCoroutinesApi
-val jobs = scrapingClient.jobs
-    .read()
-    .map { (_, job) -> job }
-    .onEach { println("collected Job ${it.Id}") }
-    .produceIn(consumerContext)
-
-@FlowPreview
-@ExperimentalCoroutinesApi
-val plugins = ResolverLoader {
-    Scraper.Plugins(kafka).readableBy { Consumer.UUID(kafka, false) }
-        .read().resolver()
-}
 
 
-@FlowPreview
-@ExperimentalCoroutinesApi
-suspend fun sendResult(result: JobResult) {
-    scrapingClient.completed.write(null, result.job)
-}
 
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
@@ -64,7 +39,36 @@ fun Application.module(testing: Boolean = false) {
         gson {  }
     }
 
+    val scrapingClient = Scraper.Client(kafka, PluginLoader(kafka), JsoupLoader)
+
+    val consumerContext = CoroutineScope(newFixedThreadPoolContext(2, "client"))
+
+    val jobs = scrapingClient.jobs
+            .map { (_, job) -> job }
+            .onEach { println("collected Job ${it.Id}") }
+            .produceIn(consumerContext)
+
+    @FlowPreview
+    @ExperimentalCoroutinesApi
+    suspend fun sendResult(result: JobResult) {
+        Scraper.Client.Output(result.jobMetadata.job.Service)
+                .writeableBy(kafka)
+                .writeFrom(result.results.map { it.url to it })
+                .join()
+        scrapingClient.completeJob(result.jobMetadata)
+    }
+
+    @ExperimentalCoroutinesApi
+    val plugins = ResolverLoader {
+        Scraper.Plugins(kafka).readableBy { Consumer.UUID(kafka, false) }
+                .read().resolver()
+    }
+
     routing {
+        get("/") {
+            call.respondText("Hello World")
+        }
+
         get("/jobs") {
             call.application.log.debug("received job request")
             call.respond(jobs.receive())

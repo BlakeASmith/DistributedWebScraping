@@ -1,2 +1,2 @@
 #!/bin/sh
-java -jar proxyclient*.jar
+java -jar proxyclient.jar

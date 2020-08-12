@@ -1,12 +1,9 @@
 import com.google.gson.GsonBuilder
+import csc.distributed.webscraper.definitions.plugins.Plugin
 import org.jsoup.nodes.Document
 
 
 data class WCResult(val word: String, val occ: Int)
-
-interface Plugin {
-    fun scrape(doc: Document): String
-}
 
 class WCPlugin: Plugin {
     private val gson = GsonBuilder().setPrettyPrinting().create()

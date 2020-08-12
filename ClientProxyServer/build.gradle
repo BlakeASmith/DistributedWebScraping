@@ -15,7 +15,6 @@ apply plugin: 'kotlinx-serialization'
 
 
 group 'csc.distributed'
-version '0.0.1'
 mainClassName = "io.ktor.server.netty.EngineMain"
 
 sourceSets {
@@ -33,6 +32,7 @@ repositories {
 
     flatDir {
         dirs "../clientlib/build/libs"
+        dirs "../clientlib/definitions/build/libs"
         dirs "../kafka/build/libs"
     }
 }
@@ -56,7 +56,8 @@ dependencies {
     implementation 'org.apache.kafka:kafka-clients:2.0.0'
     implementation group: 'org.jsoup', name: 'jsoup', version: '1.11.3'
     implementation 'com.google.code.gson:gson:2.8.6'
-    implementation(name:"clientlib-1.0", ext:"jar")
+    implementation(name:"clientlib", ext:"jar")
+    implementation(name:"clientlib.definitions", ext:"jar")
     implementation(name:"kafka", ext:"jar")
 }
 

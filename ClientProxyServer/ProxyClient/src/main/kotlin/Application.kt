@@ -1,7 +1,6 @@
 package csc.distributed.webscraper.proxy
 
-import csc.distributed.webscraper.Loaders
-import csc.distributed.webscraper.proxy.csc.distributed.webscraper.proxy.connection.ProxyClient
+import csc.distributed.webscraper.types.JsoupLoader
 import io.ktor.client.*
 import io.ktor.client.engine.apache.Apache
 import io.ktor.client.features.json.*
@@ -20,7 +19,7 @@ suspend fun main(): Unit  {
         }
     }
 
-    ProxyClient(client, SERVER_URL, Loaders.Jsoup, true)
+    ProxyClient(client, SERVER_URL, JsoupLoader, true)
             .start()
             .join()
 }

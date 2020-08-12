@@ -44,15 +44,19 @@ services:
     logging:
       driver: none
 
-  proxy:
-    image: blakeasmith/webscraper_proxy_server
-    ports:
-        - "8080:8080"
+  #proxy:
+    #image: blakeasmith/webscraper_proxy_server
+    #ports:
+        #- "8080:8080"
+    #environment:
+      #WEBSCRAPER_BOOTSTRAPS: "kafka:9092"
+
+  #proxyclient:
+    #image: blakeasmith/webscraper_proxy_client
+    #environment:
+        #PROXY_SERVER: "http://proxy:8080"
+  client:
+    image: blakeasmith/kafka_webscraper_client
     environment:
       WEBSCRAPER_BOOTSTRAPS: "kafka:9092"
-
-  proxyclient:
-    image: blakeasmith/webscraper_proxy_client
-    environment:
-        PROXY_SERVER: "http://proxy:8080"
 

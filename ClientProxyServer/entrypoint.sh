@@ -1,2 +1,2 @@
 #!/bin/sh
-java -jar proxy*.jar
+java -jar proxy.jar

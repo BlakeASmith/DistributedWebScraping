@@ -32,6 +32,26 @@ fun writeExampleJson(file: File){
 }
 
 @ExperimentalCoroutinesApi
+fun logForServices(services: List<Service>, kafka: KafkaConfig): List<Job>{
+    val logDir = File("logs").apply {
+        if (!exists()) mkdirs()
+    }
+
+    return services.map {
+        val log = File("${logDir.path}/${it.name}.log").apply {
+            if (!exists()) createNewFile()
+        }
+
+        Scraper.Client.Output(it.name).readableBy { Consumer.committing("logger", kafka) }
+                .read()
+                .map { (_, result) -> result }
+                .onEach { result ->
+                    log.appendText("${result.data}\n\n")
+                }.launchIn(GlobalScope)
+    }
+}
+
+@ExperimentalCoroutinesApi
 @FlowPreview
 fun main(args: Array<String>) {
     val kafka = KafkaConfig(Config.get().bootstraps.map { BootstrapServer.fromString(it) })
@@ -48,5 +68,11 @@ fun main(args: Array<String>) {
                 val services = json.parse(Service.serializer().list, readText())
                     .map { it.name to it }.asFlow().onEach { println("sending $it to kafka") }
                 Scraper.Services(kafka).writeFrom(services).join()
+                if("--log" in args){
+                        logForServices(services.map { it.second }.toList(), kafka)
+                                .forEach { it.join() }
+                }
             }.parse(args)
+
+
 }

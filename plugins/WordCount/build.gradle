@@ -8,14 +8,14 @@ group 'csc.distributed'
 repositories {
     mavenCentral()
     flatDir {
-        dirs "../../clientlib/build/libs"
+        dirs "../../clientlib/definitions/build/libs"
     }
 }
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     testCompile group: 'junit', name: 'junit', version: '4.12'
-    implementation(name:"clientlib-1.0", ext:"jar");
+    implementation(name:"clientlib.definitions", ext:"jar");
     compile 'com.google.code.gson:gson:2.8.6'
     compile group: 'org.jsoup', name: 'jsoup', version: '1.11.3'
 }
