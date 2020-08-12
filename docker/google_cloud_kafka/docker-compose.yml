@@ -3,14 +3,14 @@ version: '3.4'
 
 services:
       
-  producer:
-    image: blakeasmith/kafka_webscraper_producer
-    environment:
-            WEBSCRAPER_BOOTSTRAPS: "35.217.96.115:9092"
-            DELAY_BETWEEN_JOBS: "1000"
-            WEBSCRAPER_DEBUG: "false"
-    logging:
-      driver: none
+  #producer:
+    #image: blakeasmith/kafka_webscraper_producer
+    #environment:
+            #WEBSCRAPER_BOOTSTRAPS: "35.217.96.115:9092"
+            #DELAY_BETWEEN_JOBS: "1000"
+            #WEBSCRAPER_DEBUG: "false"
+    #logging:
+      #driver: none
 
   #provider: 
     #image: blakeasmith/kafka_webscraper_provider
@@ -28,15 +28,15 @@ services:
     #environment:
       #WEBSCRAPER_BOOTSTRAPS: "35.217.96.115:9092"
 
-  proxyclient:
-    image: blakeasmith/webscraper_proxy_client
-    environment:
-        PROXY_SERVER: "http://35.209.173.94:8080"
-
-  #client:
-    #image: blakeasmith/kafka_webscraper_client
+  #proxyclient:
+    #image: blakeasmith/webscraper_proxy_client
     #environment:
-      #WEBSCRAPER_BOOTSTRAPS: "35.217.96.115:9092"
+        #PROXY_SERVER: "http://35.209.173.94:8080"
+
+  client:
+    image: blakeasmith/kafka_webscraper_client
+    environment:
+      WEBSCRAPER_BOOTSTRAPS: "35.217.96.115:9092"
         
   #wordcount_reducer:
     #image: blakeasmith/webscraper_reducer_wordcount
