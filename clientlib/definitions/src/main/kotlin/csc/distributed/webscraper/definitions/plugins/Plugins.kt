@@ -1,6 +1,5 @@
-package csc.distributed.webscraper.plugins
+package csc.distributed.webscraper.definitions.plugins
 
-import kotlinx.serialization.KSerializer
 import org.jsoup.nodes.Document
 import java.io.ByteArrayInputStream
 import java.io.File
@@ -11,7 +10,16 @@ import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import java.util.jar.JarFile
 
+interface Plugin {
+    fun scrape(doc: Document): String
+}
 
+/**
+ * Copies the ByteArray into a file so that it can be read as a JAR,
+ * Then loads it using loadPlugin(jar, "Plugin")
+ *
+ * @param bytes A byte array representing a valid Plugin jar file
+* */
 fun loadPluginFromByteArray(bytes: ByteArray) = run {
     val tmp = createTempFile().apply {
         deleteOnExit()
@@ -72,11 +80,10 @@ fun loadAllFromDir(path: String) = File(path).apply {
         createNewFile()
         mkdir()
     }
-    
+
 }.walk().drop(1)
         .filter { it.extension == "jar" }
         .map { JarFile(it) }
         .associateBy { it.name }
         .mapValues { (_, jar) -> loadPlugin(jar) }
         .toMutableMap()
-

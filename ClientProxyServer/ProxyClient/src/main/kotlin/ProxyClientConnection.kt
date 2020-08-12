@@ -1,13 +1,11 @@
-package csc.distributed.webscraper.proxy.csc.distributed.webscraper.proxy.connection
+package csc.distributed.webscraper.proxy
 
-import csc.distributed.webscraper.Loader
-import csc.distributed.webscraper.Loaders
-import csc.distributed.webscraper.plugins.Plugin
-import csc.distributed.webscraper.plugins.loadPluginFromByteArray
-import csc.distributed.webscraper.proxy.SERVER_URL
-import csc.distributed.webscraper.types.Job
-import csc.distributed.webscraper.types.JobResult
-import csc.distributed.webscraper.types.ScrapingResult
+import csc.distributed.webscraper.definitions.plugins.Plugin
+import csc.distributed.webscraper.definitions.plugins.loadPluginFromByteArray
+import csc.distributed.webscraper.definitions.types.Job
+import csc.distributed.webscraper.definitions.types.JobResult
+import csc.distributed.webscraper.definitions.types.ScrapingResult
+import csc.distributed.webscraper.types.Loader
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.post
