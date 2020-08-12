@@ -4,8 +4,8 @@ RUN unset GOROOT
 
 ENV GO111MODULE=on 
 
-COPY ./install.sh .
-RUN ./install.sh .
+# COPY ./install.sh .
+# RUN ./install.sh .
 
 RUN mkdir webscraper 
 WORKDIR webscraper
