@@ -1,79 +1,268 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <option name="DEFAULT_COMPILER" value="Javac"/>
     <resourceExtensions>
-      <entry name=".+\.(properties|xml|html|dtd|tld)"/>
-      <entry name=".+\.(gif|png|jpeg|jpg)"/>
+      <entry name=".+\.(properties|xml|html|dtd|tld)" />
+      <entry name=".+\.(gif|png|jpeg|jpg)" />
     </resourceExtensions>
     <wildcardResourcePatterns>
-      <entry name="!?*.class"/>
-      <entry name="!?*.scala"/>
-      <entry name="!?*.groovy"/>
-      <entry name="!?*.java"/>
+      <entry name="!?*.class" />
+      <entry name="!?*.scala" />
+      <entry name="!?*.groovy" />
+      <entry name="!?*.java" />
     </wildcardResourcePatterns>
-    <annotationProcessing enabled="false" useClasspath="true"/>
-    <bytecodeTargetLevel target="11"/>
+    <bytecodeTargetLevel target="11" />
   </component>
-  <component name="CopyrightManager" default="">
-    <module2copyright/>
-  </component>
+  <component name="CopyrightManager" default="" />
   <component name="DependencyValidationManager">
-    <option name="SKIP_IMPORT_STATEMENTS" value="false"/>
+    <option name="SKIP_IMPORT_STATEMENTS" value="false" />
   </component>
-  <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false"/>
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="GradleMigrationSettings" migrationVersion="1" />
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleHome" value="/usr/share/java/gradle" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+          </set>
+        </option>
+        <option name="useQualifiedModuleNames" value="true" />
+      </GradleProjectSettings>
+    </option>
+  </component>
   <component name="GradleUISettings">
-    <setting name="root"/>
+    <setting name="root" />
   </component>
   <component name="GradleUISettings2">
-    <setting name="root"/>
+    <setting name="root" />
   </component>
-  <component name="IdProvider" IDEtalkID="11DA1DB66DD62DDA1ED602B7079FE97C"/>
+  <component name="IdProvider" IDEtalkID="11DA1DB66DD62DDA1ED602B7079FE97C" />
+  <component name="InspectionProjectProfileManager">
+    <profile version="1.0">
+      <option name="myName" value="Project Default" />
+    </profile>
+    <version value="1.0" />
+  </component>
   <component name="JavadocGenerationManager">
-    <option name="OUTPUT_DIRECTORY"/>
-    <option name="OPTION_SCOPE" value="protected"/>
-    <option name="OPTION_HIERARCHY" value="true"/>
-    <option name="OPTION_NAVIGATOR" value="true"/>
-    <option name="OPTION_INDEX" value="true"/>
-    <option name="OPTION_SEPARATE_INDEX" value="true"/>
-    <option name="OPTION_DOCUMENT_TAG_USE" value="false"/>
-    <option name="OPTION_DOCUMENT_TAG_AUTHOR" value="false"/>
-    <option name="OPTION_DOCUMENT_TAG_VERSION" value="false"/>
-    <option name="OPTION_DOCUMENT_TAG_DEPRECATED" value="true"/>
-    <option name="OPTION_DEPRECATED_LIST" value="true"/>
-    <option name="OTHER_OPTIONS" value=""/>
-    <option name="HEAP_SIZE"/>
-    <option name="LOCALE"/>
-    <option name="OPEN_IN_BROWSER" value="true"/>
+    <option name="OTHER_OPTIONS" value="" />
   </component>
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/PluginProvider.iml" filepath="$PROJECT_DIR$/PluginProvider.iml"/>
+      <module fileurl="file://$PROJECT_DIR$/csc.distributed.webscraper.PluginProvider.iml" filepath="$PROJECT_DIR$/csc.distributed.webscraper.PluginProvider.iml" />
+      <module fileurl="file://$PROJECT_DIR$/csc.distributed.webscraper.PluginProvider.main.iml" filepath="$PROJECT_DIR$/csc.distributed.webscraper.PluginProvider.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/csc.distributed.webscraper.PluginProvider.test.iml" filepath="$PROJECT_DIR$/csc.distributed.webscraper.PluginProvider.test.iml" />
     </modules>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" assert-keyword="true" jdk-15="true" project-jdk-type="JavaSDK" assert-jdk-15="true" project-jdk-name="11">
-    <output url="file://$PROJECT_DIR$/out"/>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+  <component name="RemoteRepositoriesConfiguration">
+    <remote-repository>
+      <option name="id" value="central" />
+      <option name="name" value="Maven Central repository" />
+      <option name="url" value="https://repo1.maven.org/maven2" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="jboss.community" />
+      <option name="name" value="JBoss Community repository" />
+      <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="MavenRepo" />
+      <option name="name" value="MavenRepo" />
+      <option name="url" value="https://repo.maven.apache.org/maven2/" />
+    </remote-repository>
   </component>
   <component name="SvnBranchConfigurationManager">
-    <option name="mySupportsUserInfoFilter" value="true"/>
+    <option name="mySupportsUserInfoFilter" value="true" />
   </component>
   <component name="VcsDirectoryMappings">
-    <mapping directory="" vcs=""/>
+    <mapping directory="$PROJECT_DIR$/.." vcs="Git" />
+  </component>
+  <component name="libraryTable">
+    <library name="Gradle: :clientlib-1.0:">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/../clientlib/build/libs/clientlib-1.0.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="Gradle: :kafka:">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/../kafka/build/libs/kafka.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="Gradle: junit:junit:4.12">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/junit/junit/4.12/2973d150c0dc1fefe998f834810d68f278ea58ec/junit-4.12.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/junit/junit/4.12/941a8be4506c65f0a9001c08812fb7da1e505e21/junit-4.12-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/junit/junit/4.12/a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa/junit-4.12-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: org.apache.kafka:kafka-clients:2.0.0">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.kafka/kafka-clients/2.0.0/48bcf5ebb6effdaffbc2f725aae954f764d25341/kafka-clients-2.0.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.kafka/kafka-clients/2.0.0/46feee9a55757addd1bfc8e30057518dbc2519bf/kafka-clients-2.0.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.kafka/kafka-clients/2.0.0/ade98037394648bc8d43ded3191926c75b1df402/kafka-clients-2.0.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: org.hamcrest:hamcrest-core:1.3">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.3/42a25dc3219429f0e5d060061f71acb49bf010a0/hamcrest-core-1.3.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.3/ad09811315f1d4f5756986575b0ea16b99cd686f/hamcrest-core-1.3-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.3/1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b/hamcrest-core-1.3-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.3.72" type="kotlin.common">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.3.72/6ca8bee3d88957eaaaef077c41c908c9940492d8/kotlin-stdlib-common-1.3.72.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.3.72/b1d2ee58cf8c842c5143315cff20019a6173378d/kotlin-stdlib-common-1.3.72-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.3.72/8c35588215bc56f828c189e9edc37ee51672cf5c/kotlin-stdlib-common-1.3.72-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.72">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk7/1.3.72/3adfc2f4ea4243e01204be8081fe63bde6b12815/kotlin-stdlib-jdk7-1.3.72.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk7/1.3.72/d5c341c5580f6d1289efe06247f4818e57ad24eb/kotlin-stdlib-jdk7-1.3.72-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk7/1.3.72/e83fed78d9bc2951a2c7e457969d5fd171cb9d5f/kotlin-stdlib-jdk7-1.3.72-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.72">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk8/1.3.72/916d54b9eb6442b615e6f1488978f551c0674720/kotlin-stdlib-jdk8-1.3.72.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk8/1.3.72/ec2720a30a88d8460b719051818e2172120d7961/kotlin-stdlib-jdk8-1.3.72-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.3.72">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.3.72/8032138f12c0180bc4e51fe139d4c52b46db6109/kotlin-stdlib-1.3.72.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.3.72/b1d2ee58cf8c842c5143315cff20019a6173378d/kotlin-stdlib-1.3.72-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.3.72/28f81264fad20dd20cc692003f4a27d355632073/kotlin-stdlib-1.3.72-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.8">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlinx/kotlinx-coroutines-core/1.3.8/f62be6d4cbf27781c2969867b4ed952f38378492/kotlinx-coroutines-core-1.3.8.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlinx/kotlinx-coroutines-core/1.3.8/32b65a5470fd1f114f68a6b29543a8722213f22/kotlinx-coroutines-core-1.3.8-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlinx/kotlinx-coroutines-core/1.3.8/ca9712a05e48a925faeeb75e89feaa4eba685ecf/kotlinx-coroutines-core-1.3.8-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlinx/kotlinx-serialization-runtime/0.20.0/fa78723d3114632b1563f0701162dee0d4d8d5ea/kotlinx-serialization-runtime-0.20.0.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlinx/kotlinx-serialization-runtime/0.20.0/471f0b8fc480c32842bcfd113ac80f3d0614a427/kotlinx-serialization-runtime-0.20.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: org.jetbrains:annotations:13.0">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/919f0dfe192fb4e063e7dacadee7f8bb9a2672a9/annotations-13.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/73368c3b0887f3adc2c2730dd1b95d7c3781aaf3/annotations-13.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/5991ca87ef1fb5544943d9abc5a9a37583fabe03/annotations-13.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: org.jsoup:jsoup:1.11.3">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jsoup/jsoup/1.11.3/36da09a8f68484523fa2aaa100399d612b247d67/jsoup-1.11.3.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jsoup/jsoup/1.11.3/6f80d79cac45d7e4ab91ad9515f097411510f8b4/jsoup-1.11.3-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jsoup/jsoup/1.11.3/871302b15d8cee9bfb393c4f1d0386b17646d8d1/jsoup-1.11.3-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: org.lz4:lz4-java:1.4.1">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lz4/lz4-java/1.4.1/ad89b11ac280a2992d65e078af06f6709f1fe2fc/lz4-java-1.4.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lz4/lz4-java/1.4.1/8aff06da3f00905a608081ffc5649e59b2e2e838/lz4-java-1.4.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lz4/lz4-java/1.4.1/ab0ba618d0a72efcb1cab0a1c0e1eead174ffaba/lz4-java-1.4.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: org.slf4j:slf4j-api:1.7.25">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.25/da76ca59f6a57ee3102f8f9bd9cee742973efa8a/slf4j-api-1.7.25.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.25/f003e89ddebdbaca5cf3fc7cc0c67c88c2ca1a3c/slf4j-api-1.7.25-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.25/962153db4a9ea71b79d047dfd1b2a0d80d8f4739/slf4j-api-1.7.25-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: org.xerial.snappy:snappy-java:1.1.7.1">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.xerial.snappy/snappy-java/1.1.7.1/d5190b41f3de61e3b83d692322d58630252bc8c3/snappy-java-1.1.7.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.xerial.snappy/snappy-java/1.1.7.1/ab9efb9c6862e9894a346af4f16bd25504b972e6/snappy-java-1.1.7.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.xerial.snappy/snappy-java/1.1.7.1/1b2180f596c29c385dd1da67645597c5a5edfe0c/snappy-java-1.1.7.1-sources.jar!/" />
+      </SOURCES>
+    </library>
   </component>
   <component name="masterDetails">
     <states>
       <state key="ArtifactsStructureConfigurable.UI">
         <UIState>
           <splitter-proportions>
-            <SplitterProportionsDataImpl/>
+            <SplitterProportionsDataImpl />
           </splitter-proportions>
-          <settings/>
+          <settings />
         </UIState>
       </state>
       <state key="Copyright.UI">
         <UIState>
           <splitter-proportions>
-            <SplitterProportionsDataImpl/>
+            <SplitterProportionsDataImpl />
           </splitter-proportions>
         </UIState>
       </state>
@@ -83,7 +272,7 @@
             <SplitterProportionsDataImpl>
               <option name="proportions">
                 <list>
-                  <option value="0.2"/>
+                  <option value="0.2" />
                 </list>
               </option>
             </SplitterProportionsDataImpl>
@@ -94,9 +283,9 @@
       <state key="ScopeChooserConfigurable.UI">
         <UIState>
           <splitter-proportions>
-            <SplitterProportionsDataImpl/>
+            <SplitterProportionsDataImpl />
           </splitter-proportions>
-          <settings/>
+          <settings />
         </UIState>
       </state>
     </states>

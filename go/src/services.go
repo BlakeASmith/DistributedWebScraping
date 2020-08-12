@@ -7,6 +7,9 @@ type Service struct {
 	RootDomains []string
 	Filters []string
 	Plugins []string
+	
+	HashTable map[string]bool		//todo replace with distributed 
+	//delay int
 }
 
 func DeserializeService(bytes []byte) *Service {

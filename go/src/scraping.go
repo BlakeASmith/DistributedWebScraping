@@ -60,14 +60,29 @@ func restrictDomain(baseuri string, urls []string) []string {
 }
 
 // crawl all pages without leaving a set domain. Only return urls which have not yet been seen
-func crawl(root string, path string, inputchan chan string, depth int, ht map[string]bool, ignores []string) {
-	if depth == 0 {
-		return
-	}
+func crawl(root string, path string, inputchan chan string, depth int, ht map[string]bool, ignores []string, plugins []string, name string) {
+	log.Println("Starting crawl at depth ", depth, "at ", root, path)
 	if doc, err := getDocument(root + path); err == nil {
 		urls := restrictDomain(root, normalizeUrls(root,
 			getLinks(doc)))
-
+		
+		if depth == 6 {		//TODO depth value (Tune somehow, time process vs latency??)
+			serviceChan := make(chan Service, 50)
+			for _, url := range urls{
+				log.Println(url)
+				serviceChan <- Service{
+					Name: name,
+					RootDomains: []string{url},
+					Filters: ignores,
+					Plugins: plugins,
+					HashTable: ht,
+				}
+			
+			}
+			sendNewService(serviceChan)
+			return
+		}
+		
 		for _, url := range urls {
 			if val, ok := ht[url]; !ok || !val {
 				shouldIgnore := false
@@ -88,11 +103,7 @@ func crawl(root string, path string, inputchan chan string, depth int, ht map[st
 		for _, url := range urls {
 			if _, ok := ht[url]; !ok {
 				ht[url] = true
-				if depth%6 == 0 {
-					crawl(root, strings.Replace(url, root, "", 1), inputchan, depth-1, ht, ignores)
-				} else {
-					crawl(root, strings.Replace(url, root, "", 1), inputchan, depth-1, ht, ignores)
-				}
+				crawl(root, strings.Replace(url, root, "", 1), inputchan, depth+1, ht, ignores, plugins, name)
 			}
 		}
 	} else {
@@ -129,4 +140,12 @@ func makeJobChannel(urlchan chan string, chunksize int, plugins []string, servic
 		}
 	}()
 	return jobChan
+}
+
+
+func sendNewService(serviceChan chan Service){
+	config := getConfig()
+	kaf := Kafka{ Bootstraps:config.Bootstraps }
+	producer := kaf.Producer()
+	PushServicesToKafka(producer, serviceChan)
 }

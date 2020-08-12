@@ -3,7 +3,6 @@ package main
 import "log"
 import "encoding/json"
 import "strconv"
-import "time"
 
 type Job struct {
 	Id int
@@ -26,6 +25,14 @@ func (j Job) Value() []byte {
 	return json
 }
 
+func (s Service) Value() []byte{
+	json, err := json.Marshal(s)
+	if err != nil {
+		panic(err)
+	}
+	return json
+}
+
 func DeserializeJob(job []byte) *Job {
 	var djob Job
 	json.Unmarshal(job, &djob)
@@ -33,17 +40,28 @@ func DeserializeJob(job []byte) *Job {
 }
 
 func main() {
+
 	config := getConfig()
 	log.Println("using config ", config)
 
 	kaf := Kafka{ Bootstraps:config.Bootstraps }
-
 	producer := kaf.Producer()
 
-	for service := range ServicesChannel(&kaf){
-		log.Println("received service " + service.Name)
-		go PushJobsToKafka(producer, JobChannelFor(&service), 200 * time.Millisecond)
+	if (config.Debug){
+		test := make(chan string)
+		test2 := make (map[string] bool)
+		log.Println("Sanity")
+		go crawl("http://usedvictoria.com", "", test, -1, test2, []string{""}, []string{""}, "usedvic")
+		for val := range(test){
+			log.Println(val)
+		}
+	} else {
+		for service := range ServicesChannel(&kaf){
+			log.Println("received service " + service.Name)
+			go PushJobsToKafka(producer, JobChannelFor(&service), config.Delay)
+		}
 	}
+
 }
 
 func JobChannelFor(service *Service) chan Job {
@@ -51,7 +69,7 @@ func JobChannelFor(service *Service) chan Job {
 	seen := make(map[string] bool)
 	for _, domain := range service.RootDomains{
 		log.Println("starting crawl on", domain)
-		go crawl(domain, "", urls, -1, seen, service.Filters)
+		go crawl(domain, "", urls, -1, seen, service.Filters, service.Plugins, service.Name)
 	}
 	jobs := makeJobChannel(urls, 10, service.Plugins, service.Name)
 	return jobs
