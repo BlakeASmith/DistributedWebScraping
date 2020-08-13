@@ -1,8 +1,12 @@
 package main
 
-import "log"
-import "encoding/json"
-import "strconv"
+import(
+	"log"
+	"encoding/json"
+	"strconv"
+	"github.com/etcd-io/etcd/clientv3"
+	"time"
+)
 
 type Job struct {
 	Id int
@@ -19,17 +23,13 @@ func (j Job) Key() []byte {
 // serialize Job to a byte array (JSON)
 func (j Job) Value() []byte {
 	json, err := json.Marshal(j)
-	if err != nil {
-		panic(err)
-	}
+	if err != nil {panic(err)}
 	return json
 }
 
 func (s Service) Value() []byte{
 	json, err := json.Marshal(s)
-	if err != nil {
-		panic(err)
-	}
+	if err != nil {panic(err)}
 	return json
 }
 
@@ -46,30 +46,41 @@ func main() {
 
 	kaf := Kafka{ Bootstraps:config.Bootstraps }
 	producer := kaf.Producer()
+	
+	endpoints := []string{"localhost:2379"}
+	dialTimeout := 5 * time.Second
+	// requestTimeout := 5 * time.Second
+	cli, err := clientv3.New(clientv3.Config{
+		Endpoints:   endpoints,
+		DialTimeout: dialTimeout,
+	})
+	if err != nil {log.Fatal(err)}
+	defer cli.Close()
+	
 
 	if (config.Debug){
 		test := make(chan string)
 		test2 := make (map[string] bool)
 		log.Println("Sanity")
-		go crawl("http://usedvictoria.com", "", test, -1, test2, []string{""}, []string{""}, "usedvic")
+		go crawl("http://stackoverflow.com/", "", test, -1, test2, []string{}, []string{}, "usedvic", *cli)
 		for val := range(test){
 			log.Println(val)
 		}
 	} else {
 		for service := range ServicesChannel(&kaf){
 			log.Println("received service " + service.Name)
-			go PushJobsToKafka(producer, JobChannelFor(&service), config.Delay)
+			go PushJobsToKafka(producer, JobChannelFor(&service, *cli), config.Delay)
 		}
 	}
 
 }
 
-func JobChannelFor(service *Service) chan Job {
+func JobChannelFor(service *Service, cli clientv3.Client) chan Job {
 	urls := make(chan string)
 	seen := make(map[string] bool)
 	for _, domain := range service.RootDomains{
 		log.Println("starting crawl on", domain)
-		go crawl(domain, "", urls, -1, seen, service.Filters, service.Plugins, service.Name)
+		go crawl(domain, "", urls, -1, seen, service.Filters, service.Plugins, service.Name, cli)
 	}
 	jobs := makeJobChannel(urls, 10, service.Plugins, service.Name)
 	return jobs
