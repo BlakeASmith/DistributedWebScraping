@@ -1,11 +1,13 @@
 package main
+
 import (
-	"strings"
 	"fmt"
-	"os"
-	"github.com/confluentinc/confluent-kafka-go/kafka"
-	"time"
 	"hash/fnv"
+	"os"
+	"strings"
+	"time"
+
+	"github.com/confluentinc/confluent-kafka-go/kafka"
 )
 
 type Kafka struct {
@@ -26,14 +28,14 @@ func (kaf *Kafka) Producer() *kafka.Producer {
 	return producer
 }
 
-// get a Kafka Consumer 
+// get a Kafka Consumer
 // strategy = "earliest" ==> Kafka will send entries from the earliest committed offset
 // strategy = "latest" ==> Kafka will send the most recent events first
 func (kaf *Kafka) Consumer(groupid string, strategy string, autocommit bool) *kafka.Consumer {
 	consumer, err := kafka.NewConsumer(&kafka.ConfigMap{
-		"bootstrap.servers": strings.Join(kaf.Bootstraps, ","),
-		"group.id":          groupid,
-		"auto.offset.reset": strategy,
+		"bootstrap.servers":  strings.Join(kaf.Bootstraps, ","),
+		"group.id":           groupid,
+		"auto.offset.reset":  strategy,
 		"enable.auto.commit": autocommit,
 	})
 	if err != nil {
@@ -42,22 +44,21 @@ func (kaf *Kafka) Consumer(groupid string, strategy string, autocommit bool) *ka
 	return consumer
 }
 
-
 func consumeAsChannel(consumer *kafka.Consumer) chan kafka.Message {
 	channel := make(chan kafka.Message)
-	go func () {
+	go func() {
 		for {
 			ev := consumer.Poll(100)
 			if ev == nil {
 				continue
 			}
 			switch e := ev.(type) {
-				case *kafka.Message:
-					channel <- *e
-				case kafka.Error:
-					fmt.Fprintf(os.Stderr, "%% Error: %v: %v\n", e.Code(), e)
-				default:
-					fmt.Printf("Ignored %v\n", e)
+			case *kafka.Message:
+				channel <- *e
+			case kafka.Error:
+				fmt.Fprintf(os.Stderr, "%% Error: %v: %v\n", e.Code(), e)
+			default:
+				fmt.Printf("Ignored %v\n", e)
 			}
 		}
 	}()
@@ -70,11 +71,11 @@ func ConsumeTopicAsChannel(topic string, consumer *kafka.Consumer) chan kafka.Me
 }
 
 // get a channel of Services to start processing
-func ServicesChannel(kafka *Kafka) chan Service{
+func ServicesChannel(kafka *Kafka) chan Service {
 	cons := kafka.Consumer("golang", "earliest", false)
 	serviceChannel := ConsumeTopicAsChannel("services", cons)
 	deserialized := make(chan Service)
-	go func () {
+	go func() {
 		for message := range serviceChannel {
 			deserialized <- *DeserializeService(message.Value)
 		}
@@ -84,11 +85,11 @@ func ServicesChannel(kafka *Kafka) chan Service{
 }
 
 // get a channel of all the completed jobs
-func CompletedJobsChannel(kafka *Kafka) chan Job{
+func CompletedJobsChannel(kafka *Kafka) chan Job {
 	cons := kafka.Consumer("golang", "earliest", true)
 	jobChannel := ConsumeTopicAsChannel("completed", cons)
 	deserialized := make(chan Job)
-	go func () {
+	go func() {
 		for message := range jobChannel {
 			deserialized <- *DeserializeJob(message.Value)
 		}
@@ -106,12 +107,12 @@ func SelectPartition(job *Job, nPartitions uint32) int32 {
 func PushJobsToKafka(producer *kafka.Producer, channel chan Job, delay time.Duration) {
 	delivery := make(chan kafka.Event)
 	jobtopic := "jobs"
-	go func () {
+	go func() {
 		for it := range channel {
 			producer.Produce(
 				&kafka.Message{
 					TopicPartition: kafka.TopicPartition{Topic: &jobtopic, Partition: kafka.PartitionAny},
-					Value: it.Value(),
+					Value:          it.Value(),
 				},
 				delivery,
 			)
@@ -124,18 +125,17 @@ func PushJobsToKafka(producer *kafka.Producer, channel chan Job, delay time.Dura
 //Qfunc
 func PushServicesToKafka(producer *kafka.Producer, channel chan Service) {
 	delivery := make(chan kafka.Event)
-	go func () {
+	go func() {
 		for it := range channel {
 			jobtopic := "services"
 			producer.Produce(
 				&kafka.Message{
 					TopicPartition: kafka.TopicPartition{Topic: &jobtopic, Partition: kafka.PartitionAny},
-					Value: it.Value(),		//serialized to json
-					},
+					Value:          it.Value(), //serialized to json
+				},
 				delivery,
 			)
 			fmt.Println("sent to ", jobtopic)
 		}
 	}()
 }
-

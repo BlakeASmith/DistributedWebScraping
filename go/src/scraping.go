@@ -1,13 +1,13 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net/http"
 	"strings"
 	"sync"
-	"context"
 	"time"
-	
+
 	"github.com/PuerkitoBio/goquery"
 	"github.com/etcd-io/etcd/clientv3"
 )
@@ -68,30 +68,30 @@ func crawl(root string, path string, inputchan chan string, depth int, ht map[st
 	if doc, err := getDocument(root + path); err == nil {
 		urls := restrictDomain(root, normalizeUrls(root,
 			getLinks(doc)))
-		
-		if depth == 6 {		//TODO depth value (Tune somehow, time process vs latency??)
+
+		if depth == 6 { //TODO depth value (Tune somehow, time process vs latency??)
 			serviceChan := make(chan Service, 50)
-			for _, url := range urls{
+			for _, url := range urls {
 				// log.Println(url)
 				serviceChan <- Service{
-					Name: name,
+					Name:        name,
 					RootDomains: []string{url},
-					Filters: ignores,
-					Plugins: plugins,
-					HashTable: ht,
+					Filters:     ignores,
+					Plugins:     plugins,
+					HashTable:   ht,
 				}
-			
+
 			}
 			sendNewService(serviceChan)
 			return
 		}
-		
+
 		for _, url := range urls {
-			
-			if getValue(url, cli) != name{
+
+			if getValue(url, cli) != name {
 				shouldIgnore := false
 				for _, ignore := range ignores {
-					if strings.Contains(url, ignore){
+					if strings.Contains(url, ignore) {
 						shouldIgnore = true
 					}
 				}
@@ -100,7 +100,7 @@ func crawl(root string, path string, inputchan chan string, depth int, ht map[st
 					inputchan <- url
 					makeKey(url, name, cli)
 					log.Println(getValue(url, cli))
-					
+
 				}
 			} else {
 				// log.Println("already seen ", url)
@@ -127,17 +127,17 @@ func makeJobChannel(urlchan chan string, chunksize int, plugins []string, servic
 	go func() {
 		for {
 			wg.Add(N)
-			for i:= 0; i < N; i++ {
+			for i := 0; i < N; i++ {
 				chunk := make([]string, 0, chunksize)
 				for i := 0; i < chunksize; i++ {
 					chunk = append(chunk, <-urlchan)
 				}
 
 				jobIds += 1
-				go func () {
+				go func() {
 					jobChan <- Job{
-						Id:   jobIds,
-						Urls: chunk,
+						Id:      jobIds,
+						Urls:    chunk,
 						Plugins: plugins,
 						Service: service,
 					}
@@ -150,33 +150,36 @@ func makeJobChannel(urlchan chan string, chunksize int, plugins []string, servic
 	return jobChan
 }
 
-func makeKey(url string, name string, cli clientv3.Client){		//context?
+func makeKey(url string, name string, cli clientv3.Client) { //context?
 	_, err := cli.Put(context.TODO(), url, name) //20 GOTO 10
-	if err != nil {log.Fatal(err)}
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
-func getValue(key string, cli clientv3.Client) string{
+func getValue(key string, cli clientv3.Client) string {
 	requestTimeout := 5 * time.Second
 	ctx, cancel := context.WithTimeout(context.Background(), requestTimeout)
 
 	resp, err := cli.Get(ctx, key)
 	cancel()
-	if err != nil {log.Fatal(err)}
+	if err != nil {
+		log.Fatal(err)
+	}
 	// for _, ev := range resp.Kvs {
-		// log.Printf("%s : %s\n", ev.Key, ev.Value)
+	// log.Printf("%s : %s\n", ev.Key, ev.Value)
 	// }
 	val := resp.Kvs
-	if val==nil{
+	if val == nil {
 		return ""
 	} else {
 		return string(val[0].Value)
 	}
 }
 
-
-func sendNewService(serviceChan chan Service){
+func sendNewService(serviceChan chan Service) {
 	config := getConfig()
-	kaf := Kafka{ Bootstraps:config.Bootstraps }
+	kaf := Kafka{Bootstraps: config.Bootstraps}
 	producer := kaf.Producer()
 	PushServicesToKafka(producer, serviceChan)
 }

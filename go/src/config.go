@@ -1,16 +1,17 @@
 package main
 
-import "os"
-import "log"
-import "strings"
-import "strconv"
-import "time"
-
+import (
+	"log"
+	"os"
+	"strconv"
+	"strings"
+	"time"
+)
 
 type Config struct {
 	Bootstraps []string
-	Delay time.Duration
-	Debug bool
+	Delay      time.Duration
+	Debug      bool
 }
 
 func getConfig() *Config {
@@ -39,11 +40,13 @@ func getConfig() *Config {
 	}
 
 	delayAsInt, err := strconv.Atoi(delay)
-	if err != nil { panic(err) }
+	if err != nil {
+		panic(err)
+	}
 	config = Config{
 		Bootstraps: strings.Split(boots, ","),
-		Delay: time.Duration(delayAsInt) * time.Millisecond,
-		Debug: debug,
+		Delay:      time.Duration(delayAsInt) * time.Millisecond,
+		Debug:      debug,
 	}
 	return &config
 }
