@@ -38,8 +38,10 @@ suspend fun main(args: Array<String>) {
 
     val WCService = Service(
             "wcservice",
-            listOf("https://stackoverflow.com"),
-            listOf("#", "twitter", "facebook"),
+            listOf(
+                    "http://wikipedia.com"
+            ),
+            listOf("#"),
             listOf("WordCount")
     )
 
