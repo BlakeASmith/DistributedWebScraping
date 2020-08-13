@@ -24,12 +24,12 @@ services:
     #volumes:
       #- /var/run/docker.sock:/var/run/docker.sock
       
-  producer:
-    image: blakeasmith/kafka_webscraper_producer
-    environment:
-            WEBSCRAPER_BOOTSTRAPS: "35.217.96.115:9092"
-            DELAY_BETWEEN_JOBS: "1"
-            WEBSCRAPER_DEBUG: "false"
+  #producer:
+    #image: blakeasmith/kafka_webscraper_producer
+    #environment:
+            #WEBSCRAPER_BOOTSTRAPS: "35.217.96.115:9092"
+            #DELAY_BETWEEN_JOBS: "2000"
+            #WEBSCRAPER_DEBUG: "false"
     #logging:
       #driver: none
 
@@ -51,10 +51,10 @@ services:
       WEBSCRAPER_BOOTSTRAPS: "35.217.96.115:9092"
              #WEBSCRAPER_BOOTSTRAPS: "kafka:9092"
         
-  wordcount_reducer:
-    image: blakeasmith/webscraper_reducer_wordcount
-    environment:
-      WEBSCRAPER_BOOTSTRAPS: "35.217.96.115:9092"
-    volumes:
-      - ./logs:/logs
+  #wordcount_reducer:
+    #image: blakeasmith/webscraper_reducer_wordcount
+    #environment:
+      #WEBSCRAPER_BOOTSTRAPS: "35.217.96.115:9092"
+    #volumes:
+      #- ./logs:/logs
 

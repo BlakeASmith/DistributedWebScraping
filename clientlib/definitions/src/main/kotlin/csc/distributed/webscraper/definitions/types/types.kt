@@ -30,7 +30,8 @@ data class JobMetadata(
         val job: Job,
         val processingTime: Long,
         val numberOfRecordsProduced: Int,
-        val numberOfUnreachableSites: Int
+        val numberOfUnreachableSites: Int,
+        val timestamp: Long
 ){
     val processingTimePerPage = processingTime / job.Urls.size
 
@@ -53,7 +54,7 @@ data class JobMetadata(
         fun done() = this.run {
             val endTime = LocalDateTime.now()
             val duration = ChronoUnit.MILLIS.between(startTime, endTime)
-            JobMetadata(job, duration, numRecords, numSitesUnreachable)
+            JobMetadata(job, duration, numRecords, numSitesUnreachable, System.currentTimeMillis())
         }
     }
 }
