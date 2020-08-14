@@ -53,10 +53,10 @@ services:
       #WEBSCRAPER_BOOTSTRAPS: "35.217.96.115:9092"
              #WEBSCRAPER_BOOTSTRAPS: "kafka:9092"
         
-  #wordcount_reducer:
-    #image: blakeasmith/webscraper_reducer_wordcount
-    #environment:
-      #WEBSCRAPER_BOOTSTRAPS: "35.217.96.115:9092"
-    #volumes:
-      #- ./logs:/logs
+  wordcount_reducer:
+    image: blakeasmith/webscraper_reducer_wordcount
+    environment:
+      WEBSCRAPER_BOOTSTRAPS: "35.217.96.115:9092"
+    volumes:
+      - ./logs:/logs
 
