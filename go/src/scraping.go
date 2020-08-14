@@ -184,6 +184,7 @@ func sendNewService(serviceChan chan Service) {
 	kaf := Kafka{Bootstraps: config.Bootstraps}
 	producer := kaf.Producer()
 	PushServicesToKafka(producer, serviceChan)
+	producer.Close()
 }
 
 func in (vals []string, val string) bool{

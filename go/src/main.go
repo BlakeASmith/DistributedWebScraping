@@ -45,20 +45,15 @@ func DeserializeJob(job []byte) *Job {
 }
 
 func main() {
-
 	config := getConfig()
-	num_jobs := 50		//todo add to config
 	log.Println("using config ", config)
 
 
-	kaf := Kafka{Bootstraps: config.Bootstraps}
-	producer := kaf.Producer()
 
-	endpoints := []string{"localhost:2379", "localhost:2378", "localhost:2377"}
 	dialTimeout := 5 * time.Second
 	// requestTimeout := 5 * time.Second
 	cli, err := clientv3.New(clientv3.Config{
-		Endpoints:   endpoints,
+		Endpoints:   config.EtcdEndpoints,
 		DialTimeout: dialTimeout,
 	})
 	if err != nil {
@@ -66,36 +61,18 @@ func main() {
 	}
 	defer cli.Close()
 
-	if config.Debug {
-		test := make(chan string)
-		producer := kaf.Producer()
-		
-		for i := 0; i < num_jobs; i++{
-			service := <- ServicesChannel(&kaf)
-			log.Println("received service " + service.Name)
-			go PushJobsToKafka(producer, JobChannelFor(&service, *cli), config.Delay)
-		}
-		
-		log.Println("closing producer")
-		producer.Close()
-		for val := range(test){
-			log.Println(val)
-		}
-		
-	} else {
-		for true{
-			producer := kaf.Producer()
-			// for service := range ServicesChannel(&kaf){
-			for i := 0; i < num_jobs; i++{
-				service := <- ServicesChannel(&kaf)
-				log.Println("received service " + service.Name)
-				go PushJobsToKafka(producer, JobChannelFor(&service, *cli), config.Delay)
-			}
-			producer.Close()
-			log.Println("closing producer")
-		}
-	}
 
+	kaf := Kafka{Bootstraps: config.Bootstraps}
+	producer := kaf.Producer()
+	defer producer.Close()
+
+	receive, commit := kaf.NonCommittingChannel("services", 1)
+	for msg := range receive  {
+		service := DeserializeService(msg.Value)
+		jobs := JobChannelFor(service, *cli)
+		PushJobsToKafka(producer, jobs, config.Delay)
+		commit <- msg
+	}
 }
 
 func JobChannelFor(service *Service, cli clientv3.Client) chan Job {

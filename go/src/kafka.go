@@ -31,7 +31,7 @@ func (kaf *Kafka) Producer() *kafka.Producer {
 // get a Kafka Consumer
 // strategy = "earliest" ==> Kafka will send entries from the earliest committed offset
 // strategy = "latest" ==> Kafka will send the most recent events first
-func (kaf *Kafka) Consumer(groupid string, strategy string, autocommit bool) *kafka.Consumer {
+func (kaf *Kafka) Consumer(groupid string, strategy string, autocommit bool, records int) *kafka.Consumer {
 	consumer, err := kafka.NewConsumer(&kafka.ConfigMap{
 		"bootstrap.servers":  strings.Join(kaf.Bootstraps, ","),
 		"group.id":           groupid,
@@ -70,32 +70,30 @@ func ConsumeTopicAsChannel(topic string, consumer *kafka.Consumer) chan kafka.Me
 	return consumeAsChannel(consumer)
 }
 
-// get a channel of Services to start processing
-func ServicesChannel(kafka *Kafka) chan Service {
-	cons := kafka.Consumer("golang", "earliest", false)
-	serviceChannel := ConsumeTopicAsChannel("services", cons)
-	deserialized := make(chan Service)
+
+func (kaf *Kafka) NonCommittingChannel(topic string, records int) (<-chan kafka.Message, chan<- kafka.Message) {
+	cons := kaf.Consumer("golang", "earliest", false,  records)
+	topicch := ConsumeTopicAsChannel("services", cons)
+	commitCh := make(chan kafka.Message)
 	go func() {
-		for message := range serviceChannel {
-			deserialized <- *DeserializeService(message.Value)
+		for msg := range commitCh{
+			cons.CommitMessage(&msg)
 		}
 	}()
-
-	return deserialized
+	return topicch, commitCh
 }
 
-// get a channel of all the completed jobs
-func CompletedJobsChannel(kafka *Kafka) chan Job {
-	cons := kafka.Consumer("golang", "earliest", true)
-	jobChannel := ConsumeTopicAsChannel("completed", cons)
-	deserialized := make(chan Job)
-	go func() {
-		for message := range jobChannel {
-			deserialized <- *DeserializeJob(message.Value)
-		}
-	}()
-	return deserialized
-}
+//func CompletedJobsChannel(kafka *Kafka) chan Job {
+	//cons := kafka.Consumer("golang", "earliest", false, )
+	//jobChannel := ConsumeTopicAsChannel("completed", cons)
+	//deserialized := make(chan Job)
+	//go func() {
+		//for message := range jobChannel {
+			//deserialized <- *DeserializeJob(message.Value)
+		//}
+	//}()
+	//return deserialized
+//}
 
 func SelectPartition(job *Job, nPartitions uint32) int32 {
 	h := fnv.New32a()

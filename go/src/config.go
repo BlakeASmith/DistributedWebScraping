@@ -10,6 +10,7 @@ import (
 
 type Config struct {
 	Bootstraps []string
+	EtcdEndpoints []string
 	Delay      time.Duration
 	Debug      bool
 }
@@ -17,6 +18,7 @@ type Config struct {
 func getConfig() *Config {
 	var config Config
 	var boots string
+	var etcds string
 	var delay string
 	var debug bool
 
@@ -39,14 +41,23 @@ func getConfig() *Config {
 		debug = true
 	}
 
+	if _etcds, exists := os.LookupEnv("WEBSCRAPER_ETCD_SERVERS"); exists {
+		etcds = _etcds
+	} else {
+		etcds = "localhost:2379"
+		log.Println("WARN: environment variable WEBSCRAPER_ETCD_SERVERS not set, using localhost")
+	}
+
 	delayAsInt, err := strconv.Atoi(delay)
 	if err != nil {
 		panic(err)
 	}
+
 	config = Config{
 		Bootstraps: strings.Split(boots, ","),
 		Delay:      time.Duration(delayAsInt) * time.Millisecond,
 		Debug:      debug,
+		EtcdEndpoints: strings.Split(etcds, ","),
 	}
 	return &config
 }
