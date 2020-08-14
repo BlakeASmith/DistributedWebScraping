@@ -51,7 +51,7 @@ func main() {
 	kaf := Kafka{Bootstraps: config.Bootstraps}
 	producer := kaf.Producer()
 
-	endpoints := []string{"localhost:2379"}
+	endpoints := []string{"localhost:2379", "localhost:2378", "localhost:2377"}
 	dialTimeout := 5 * time.Second
 	// requestTimeout := 5 * time.Second
 	cli, err := clientv3.New(clientv3.Config{
