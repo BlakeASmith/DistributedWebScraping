@@ -63,7 +63,7 @@ func restrictDomain(baseuri string, urls []string) []string {
 }
 
 // crawl all pages without leaving a set domain. Only return urls which have not yet been seen
-func crawl(root string, path string, inputchan chan string, depth int, ht map[string]bool, ignores []string, plugins []string, name string, cli clientv3.Client) {
+func crawl(root string, path string, inputchan chan string, depth int, ignores []string, plugins []string, name string, cli clientv3.Client) {
 	log.Println("Starting crawl at depth ", depth, "at ", root, path)
 	if doc, err := getDocument(root + path); err == nil {
 		urls := restrictDomain(root, normalizeUrls(root,
@@ -78,28 +78,27 @@ func crawl(root string, path string, inputchan chan string, depth int, ht map[st
 					RootDomains: []string{url},
 					Filters:     ignores,
 					Plugins:     plugins,
-					HashTable:   ht,
 				}
 
 			}
 			sendNewService(serviceChan)
 			return
 		}
-
+		
 		for _, url := range urls {
 
-			if getValue(url, cli) != name {
+			if !in(getValue(url, cli), name) {
 				shouldIgnore := false
 				for _, ignore := range ignores {
-					if strings.Contains(url, ignore) {
+					if strings.Contains(strings.TrimPrefix(url, root), ignore){
 						shouldIgnore = true
 					}
 				}
 				if !shouldIgnore {
-					// log.Println("pushing ", url)
+					log.Println("pushing ", url)
 					inputchan <- url
 					makeKey(url, name, cli)
-					log.Println(getValue(url, cli))
+					log.Println(arr_to_str(getValue(url, cli)))
 
 				}
 			} else {
@@ -108,10 +107,8 @@ func crawl(root string, path string, inputchan chan string, depth int, ht map[st
 		}
 
 		for _, url := range urls {
-			if _, ok := ht[url]; !ok {
-				ht[url] = true
-				// makeKey(url, name, cli)	//TODO add to list instead of overwriting
-				crawl(root, strings.Replace(url, root, "", 1), inputchan, depth+1, ht, ignores, plugins, name, cli)
+			if !in(getValue(url, cli), name) {
+				crawl(root, strings.Replace(url, root, "", 1), inputchan, depth+1, ignores, plugins, name, cli)
 			}
 		}
 	} else {
@@ -151,13 +148,20 @@ func makeJobChannel(urlchan chan string, chunksize int, plugins []string, servic
 }
 
 func makeKey(url string, name string, cli clientv3.Client) { //context?
-	_, err := cli.Put(context.TODO(), url, name) //20 GOTO 10
+	cur_val := getValue(url, cli)
+	cur_val = append(cur_val, name)
+	cur_val_str := arr_to_str(cur_val)
+	// for _,a := range cur_val{
+		// print(a, "\n")
+	// }
+	// print(cur_val_str, "\n")
+	_, err := cli.Put(context.TODO(), url, cur_val_str) 
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-func getValue(key string, cli clientv3.Client) string {
+func getValue(key string, cli clientv3.Client) []string {
 	requestTimeout := 5 * time.Second
 	ctx, cancel := context.WithTimeout(context.Background(), requestTimeout)
 
@@ -166,14 +170,12 @@ func getValue(key string, cli clientv3.Client) string {
 	if err != nil {
 		log.Fatal(err)
 	}
-	// for _, ev := range resp.Kvs {
-	// log.Printf("%s : %s\n", ev.Key, ev.Value)
-	// }
+	
 	val := resp.Kvs
 	if val == nil {
-		return ""
+		return []string{}
 	} else {
-		return string(val[0].Value)
+		return str_to_arr(string(val[0].Value))
 	}
 }
 
@@ -182,4 +184,21 @@ func sendNewService(serviceChan chan Service) {
 	kaf := Kafka{Bootstraps: config.Bootstraps}
 	producer := kaf.Producer()
 	PushServicesToKafka(producer, serviceChan)
+}
+
+func in (vals []string, val string) bool{
+	for _,a := range vals {
+		if a==val{
+			return true
+		}
+	}
+	return false
+}
+
+func arr_to_str(vals []string) string{
+	return strings.Join(vals, " ")
+}
+
+func str_to_arr(val string) []string{
+	return strings.Split(val, " ")
 }

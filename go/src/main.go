@@ -45,6 +45,7 @@ func DeserializeJob(job []byte) *Job {
 }
 
 func main() {
+
 	config := getConfig()
 	log.Println("using config ", config)
 
@@ -65,12 +66,10 @@ func main() {
 
 	if config.Debug {
 		test := make(chan string)
-		test2 := make(map[string]bool)
 		log.Println("Sanity")
-		go crawl("http://stackoverflow.com/", "", test, -1, test2, []string{}, []string{}, "usedvic", *cli)
+		go crawl("http://github.com", "", test, -1, []string{}, []string{}, "usedvic", *cli)
 		for val := range test {
-			// log.Println(val)
-			val = val
+			log.Println(val)
 		}
 	} else {
 		for service := range ServicesChannel(&kaf) {
@@ -83,10 +82,9 @@ func main() {
 
 func JobChannelFor(service *Service, cli clientv3.Client) chan Job {
 	urls := make(chan string)
-	seen := make(map[string]bool)
 	for _, domain := range service.RootDomains {
 		log.Println("starting crawl on", domain)
-		go crawl(domain, "", urls, -1, seen, service.Filters, service.Plugins, service.Name, cli)
+		go crawl(domain, "", urls, -1, service.Filters, service.Plugins, service.Name, cli)
 	}
 	jobs := makeJobChannel(urls, 10, service.Plugins, service.Name)
 	return jobs
