@@ -1,16 +1,17 @@
 package main
 
-import(
-	"log"
+import (
 	"encoding/json"
+	"log"
 	"strconv"
-	"github.com/etcd-io/etcd/clientv3"
 	"time"
+
+	"github.com/etcd-io/etcd/clientv3"
 )
 
 type Job struct {
-	Id int
-	Urls []string
+	Id      int
+	Urls    []string
 	Plugins []string
 	Service string
 }
@@ -23,13 +24,17 @@ func (j Job) Key() []byte {
 // serialize Job to a byte array (JSON)
 func (j Job) Value() []byte {
 	json, err := json.Marshal(j)
-	if err != nil {panic(err)}
+	if err != nil {
+		panic(err)
+	}
 	return json
 }
 
-func (s Service) Value() []byte{
+func (s Service) Value() []byte {
 	json, err := json.Marshal(s)
-	if err != nil {panic(err)}
+	if err != nil {
+		panic(err)
+	}
 	return json
 }
 
@@ -45,21 +50,23 @@ func main() {
 	num_jobs := 50		//todo add to config
 	log.Println("using config ", config)
 
-	kaf := Kafka{ Bootstraps:config.Bootstraps }
-	
-	
-	endpoints := []string{"localhost:2379"}
+
+	kaf := Kafka{Bootstraps: config.Bootstraps}
+	producer := kaf.Producer()
+
+	endpoints := []string{"localhost:2379", "localhost:2378", "localhost:2377"}
 	dialTimeout := 5 * time.Second
 	// requestTimeout := 5 * time.Second
 	cli, err := clientv3.New(clientv3.Config{
 		Endpoints:   endpoints,
 		DialTimeout: dialTimeout,
 	})
-	if err != nil {log.Fatal(err)}
+	if err != nil {
+		log.Fatal(err)
+	}
 	defer cli.Close()
-	
 
-	if (config.Debug){
+	if config.Debug {
 		test := make(chan string)
 		producer := kaf.Producer()
 		
@@ -93,11 +100,10 @@ func main() {
 
 func JobChannelFor(service *Service, cli clientv3.Client) chan Job {
 	urls := make(chan string)
-	for _, domain := range service.RootDomains{
+	for _, domain := range service.RootDomains {
 		log.Println("starting crawl on", domain)
 		go crawl(domain, "", urls, -1, service.Filters, service.Plugins, service.Name, cli)
 	}
 	jobs := makeJobChannel(urls, 10, service.Plugins, service.Name)
 	return jobs
 }
-
