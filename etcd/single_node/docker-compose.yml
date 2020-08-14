@@ -1,4 +1,4 @@
-version: '2'
+version: "2"
 
 services:
   etcd:
@@ -15,4 +15,3 @@ services:
 volumes:
   etcd_data:
     driver: local
-
