@@ -42,10 +42,11 @@ func DeserializeJob(job []byte) *Job {
 func main() {
 
 	config := getConfig()
+	num_jobs := 50		//todo add to config
 	log.Println("using config ", config)
 
 	kaf := Kafka{ Bootstraps:config.Bootstraps }
-	producer := kaf.Producer()
+	
 	
 	endpoints := []string{"localhost:2379"}
 	dialTimeout := 5 * time.Second
@@ -60,15 +61,31 @@ func main() {
 
 	if (config.Debug){
 		test := make(chan string)
-		log.Println("Sanity")
-		go crawl("http://github.com", "", test, -1, []string{}, []string{}, "usedvic", *cli)
+		producer := kaf.Producer()
+		
+		for i := 0; i < num_jobs; i++{
+			service := <- ServicesChannel(&kaf)
+			log.Println("received service " + service.Name)
+			go PushJobsToKafka(producer, JobChannelFor(&service, *cli), config.Delay)
+		}
+		
+		log.Println("closing producer")
+		producer.Close()
 		for val := range(test){
 			log.Println(val)
 		}
+		
 	} else {
-		for service := range ServicesChannel(&kaf){
-			log.Println("received service " + service.Name)
-			go PushJobsToKafka(producer, JobChannelFor(&service, *cli), config.Delay)
+		for true{
+			producer := kaf.Producer()
+			// for service := range ServicesChannel(&kaf){
+			for i := 0; i < num_jobs; i++{
+				service := <- ServicesChannel(&kaf)
+				log.Println("received service " + service.Name)
+				go PushJobsToKafka(producer, JobChannelFor(&service, *cli), config.Delay)
+			}
+			producer.Close()
+			log.Println("closing producer")
 		}
 	}
 
