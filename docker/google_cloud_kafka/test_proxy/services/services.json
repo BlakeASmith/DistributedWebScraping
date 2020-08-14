@@ -1,0 +1,14 @@
+[
+  {
+    "name": "test",
+    "rootDomains": [
+      "https://stackoverflow.com"
+    ],
+    "filters": [
+      "#"
+    ],
+    "plugins": [
+      "wordcount"
+    ]
+  }
+]

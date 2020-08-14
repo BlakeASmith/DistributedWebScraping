@@ -69,8 +69,10 @@ func main() {
 	receive, commit := kaf.NonCommittingChannel("services", 1)
 	for msg := range receive  {
 		service := DeserializeService(msg.Value)
+		print(service)
 		jobs := JobChannelFor(service, *cli)
 		PushJobsToKafka(producer, jobs, config.Delay)
+		print("committed service")
 		commit <- msg
 	}
 }

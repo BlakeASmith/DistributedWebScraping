@@ -95,7 +95,7 @@ suspend fun <R> HttpClient.tryRepeating(
         errorCh: SendChannel<Throwable>,
         operation: suspend HttpClient.() -> R): R = kotlin.runCatching {
     operation()
-}.getOrElse { errorCh.send(it); if(it !is ConnectException) throw(it) ; delay(_delay); tryRepeating(_delay, errorCh, operation) }
+}.getOrElse { println(it); errorCh.send(it) ; delay(_delay); tryRepeating(_delay, errorCh, operation) }
 
 
 

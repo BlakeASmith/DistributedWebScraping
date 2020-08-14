@@ -39,7 +39,7 @@ suspend fun main(args: Array<String>) {
     val WCService = Service(
             "wcservice",
             listOf(
-                    "http://wikipedia.com"
+                    "http://books.toscrape.com/"
             ),
             listOf("#"),
             listOf("WordCount")

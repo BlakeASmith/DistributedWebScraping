@@ -1,0 +1,3 @@
+include 'definitions'
+findProject(':definitions')?.name = 'clientlib.definitions'
+
