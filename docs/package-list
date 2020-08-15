@@ -1,8 +1,0 @@
-$dokka.format:html
-$dokka.linkExtension:html
-$dokka.location:csc.distributed.webscraper.kafka$produceTo(kotlinx.coroutines.flow.Flow((kotlin.Pair((csc.distributed.webscraper.kafka.produceTo.K, csc.distributed.webscraper.kafka.produceTo.V)))), csc.distributed.webscraper.kafka.Production((csc.distributed.webscraper.kafka.produceTo.K, csc.distributed.webscraper.kafka.produceTo.V)), kotlin.Boolean)csc.distributed.webscraper.kafka/kotlinx.coroutines.flow.-flow/produce-to.html
-$dokka.location:csc.distributed.webscraper.kafka$produceWithConfirmation(kotlinx.coroutines.flow.Flow((kotlin.Pair((csc.distributed.webscraper.kafka.produceWithConfirmation.K, csc.distributed.webscraper.kafka.produceWithConfirmation.V)))), csc.distributed.webscraper.kafka.Production((csc.distributed.webscraper.kafka.produceWithConfirmation.K, csc.distributed.webscraper.kafka.produceWithConfirmation.V)), kotlin.Boolean)csc.distributed.webscraper.kafka/kotlinx.coroutines.flow.-flow/produce-with-confirmation.html
-$dokka.location:csc.distributed.webscraper.kafka$resolver(kotlinx.coroutines.flow.Flow((kotlin.Pair((csc.distributed.webscraper.kafka.resolver.T, csc.distributed.webscraper.kafka.resolver.V)))))csc.distributed.webscraper.kafka/kotlinx.coroutines.flow.-flow/resolver.html
-csc.distributed.webscraper.kafka
-csc.distributed.webscraper.plugins
-csc.distributed.webscraper.services
