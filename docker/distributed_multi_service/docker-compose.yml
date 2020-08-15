@@ -1,0 +1,40 @@
+version: '2'
+
+services:
+  etcd:
+    image: docker.io/bitnami/etcd:3-debian-10
+    environment:
+      - ALLOW_NONE_AUTHENTICATION=yes
+      - ETCD_ADVERTISE_CLIENT_URLS=http://etcd-server:2379
+    volumes:
+      - ./conf:/opt/bitnami/etcd/conf/
+    ports:
+      - "2379:2379"
+      - "2380:2380"
+    #logging:
+      #driver: none
+
+  #client:
+    #image: blakeasmith/kafka_webscraper_client
+    #environment:
+      #WEBSCRAPER_BOOTSTRAPS: "kafka:9092"
+      #WEBSCRAPER_BOOTSTRAPS: "35.217.96.115:9092"
+
+  producer:
+    image: blakeasmith/kafka_webscraper_producer
+    environment:
+            #WEBSCRAPER_BOOTSTRAPS: "kafka:9092"
+            WEBSCRAPER_BOOTSTRAPS: "35.217.96.115:9092"
+            WEBSCRAPER_ETCD_SERVERS: "etcd:2379"
+            DELAY_BETWEEN_JOBS: "1"
+            WEBSCRAPER_DEBUG: "false"
+    #logging:
+      #driver: none
+  
+  wordcount_reducer:
+    image: blakeasmith/webscraper_reducer_wordcount
+    environment:
+      #WEBSCRAPER_BOOTSTRAPS: "kafka:9092"
+      WEBSCRAPER_BOOTSTRAPS: "35.217.96.115:9092"
+    volumes:
+      - ./logs:/logs
