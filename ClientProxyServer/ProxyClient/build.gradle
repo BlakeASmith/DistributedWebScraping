@@ -1,0 +1,79 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
+    }
+}
+
+apply plugin: 'kotlin'
+apply plugin: 'kotlinx-serialization'
+
+group 'csc.distributed.webscraper.proxy'
+
+repositories {
+    mavenLocal()
+    jcenter()
+    maven { url 'https://kotlin.bintray.com/ktor' }
+    maven { url 'https://kotlin.bintray.com/kotlinx' }
+    flatDir {
+        dirs "../../kafka/build/libs"
+        dirs "../../clientlib/definitions/build/libs"
+    }
+}
+
+configurations {
+    extraLibs
+}
+
+dependencies {
+
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    compile "io.ktor:ktor-client-apache:$ktor_version"
+    compile "io.ktor:ktor-client-core:$ktor_version"
+    compile "io.ktor:ktor-client-core-jvm:$ktor_version"
+    compile "io.ktor:ktor-client-json-jvm:$ktor_version"
+    compile "io.ktor:ktor-client-gson:$ktor_version"
+    compile group: 'org.jsoup', name: 'jsoup', version: '1.11.3'
+
+
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.3"
+    compile 'org.apache.kafka:kafka-clients:2.0.0'
+
+    compile 'com.google.code.gson:gson:2.8.6'
+    compile(name:"clientlib.definitions", ext:"jar")
+    compile("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0")
+
+
+    configurations.implementation.extendsFrom(configurations.extraLibs)
+
+    testCompile group: 'org.jetbrains.kotlin', name: 'kotlin-test-junit', version: '1.4.0-rc'
+    api "io.ktor:ktor-client-mock-jvm:$ktor_version"
+}
+
+task FatJar(type: Jar){
+    manifest {
+        attributes(
+                'Main-Class': 'csc.distributed.webscraper.proxy.ApplicationKt'
+        )
+    }
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+jar {
+    archiveName("proxyclient.jar")
+    manifest {
+        attributes(
+                'Main-Class': 'csc.distributed.webscraper.proxy.ApplicationKt'
+        )
+    }
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+
+}

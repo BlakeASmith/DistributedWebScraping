@@ -1,15 +1,21 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net/http"
 	"strings"
 	"sync"
+	"time"
+	"regexp"
+	"net/url"
 
 	"github.com/PuerkitoBio/goquery"
+	"github.com/etcd-io/etcd/clientv3"
+	"github.com/temoto/robotstxt"
 )
 
-// get a goquery document from a url
+// fetch HTML from the given url and parse it into a goquery document
 func getDocument(url string) (*goquery.Document, error) {
 	response, err := http.Get(url)
 	if err != nil {
@@ -24,10 +30,10 @@ func getDocument(url string) (*goquery.Document, error) {
 	return document, nil
 }
 
-// get all links from a goquery Document
+// extract all hrefs from a goquery document and return as a slice
 func getLinks(doc *goquery.Document) []string {
 	links := make([]string, 0)
-	doc.Find("a").Each(func(foo int, elem *goquery.Selection) {
+	doc.Find("a").Each(func(n int, elem *goquery.Selection) {
 		href, exists := elem.Attr("href")
 		if exists {
 			links = append(links, href)
@@ -36,19 +42,23 @@ func getLinks(doc *goquery.Document) []string {
 	return links
 }
 
-// add the baseuri to any urls which do not contain it
-// required for interpreting relative urls
+// convert any relative links to absolute URLs
 func normalizeUrls(baseuri string, urls []string) []string {
 	for i, url := range urls {
-		if !strings.Contains(url, "http") &&
-			!strings.Contains(url, baseuri) &&
-			!strings.Contains(url, "www.") {
-			urls[i] = baseuri + url
+		if !strings.Contains(url, baseuri)  {
+			if strings.Contains(url, "http"){ continue }
+			if strings.HasPrefix(url, "/"){
+				urls[i] = baseuri + url
+			} else {
+				urls[i] = baseuri + "/" + url
+			}
 		}
 	}
 	return urls
 }
 
+// restructs urls to the given base domain, returns those urls 
+// under the same base domain as a slice
 func restrictDomain(baseuri string, urls []string) []string {
 	restricted := make([]string, 0)
 	for _, url := range urls {
@@ -59,74 +69,179 @@ func restrictDomain(baseuri string, urls []string) []string {
 	return restricted
 }
 
-// crawl all pages without leaving a set domain. Only return urls which have not yet been seen
-func crawl(root string, path string, inputchan chan string, depth int, ht map[string]bool, ignores []string) {
-	if depth == 0 {
+func ShouldIgnore(root string, url string, filters []string) bool {
+	path := strings.TrimPrefix(url, root)
+	for _, ignore := range filters {
+		if m, err := regexp.MatchString(ignore, path); err != nil || m {
+			return true
+		}
+	}
+	return false
+}
+
+func IsLegal(url string) bool {
+	if strings.Contains(url, "../") {
+		return false
+	}
+	//if m, err := regexp.Match(".*//.*//.*", []byte(url)); err != nil || m {
+		//return false
+	//}
+	return true
+}
+
+func FilterIllegalAndSeenUrls(root string, urls []string, service *Service,  cli *clientv3.Client, robots *robotstxt.RobotsData) []string {
+	newUrls := make([]string, 0)
+	for _, url := range urls {
+		if in(getValue(url, cli), service.Name) { continue } // url has already been discovered
+		if ShouldIgnore(root, url, service.Filters) { continue } // url contains illegal path
+		if !IsLegal(url) { continue }
+		if robots != nil {
+			allowed := robots.TestAgent(url, "csc462-Bot")
+			if !allowed { log.Println(url, "dissalowed in robots.txt"); continue }
+		}
+		newUrls = append(newUrls, url)
+	}
+	return newUrls
+}
+
+// recursivley crawl the urls given in a Service to a set depth level, 
+// then create new Service definitions from the urls discovered at that depth
+func crawl(startUrl *url.URL, inputchan chan string,
+	service *Service, cli *clientv3.Client, depth int, wg *sync.WaitGroup, robots *robotstxt.RobotsData) {
+
+	wg.Add(1)
+	defer wg.Done()
+
+	log.Println("Starting crawl at depth ", depth, "at ", startUrl.String())
+
+	// try to get the document at the given url
+	doc, err := getDocument(startUrl.String())
+	if err != nil {
+		log.Println("could not get document from ", startUrl.String())
 		return
 	}
-	if doc, err := getDocument(root + path); err == nil {
-		urls := restrictDomain(root, normalizeUrls(root,
-			getLinks(doc)))
+	log.Println("retreived document from ", startUrl.String())
 
-		for _, url := range urls {
-			if val, ok := ht[url]; !ok || !val {
-				shouldIgnore := false
-				for _, ignore := range ignores {
-					if strings.Contains(url, ignore){
-						shouldIgnore = true
-					}
+	normalizedUrls := normalizeUrls(startUrl.Scheme + "://" + startUrl.Host, getLinks(doc))
+	urls := restrictDomain(startUrl.Scheme + "://" + startUrl.Host, normalizedUrls)
+	newUrls := FilterIllegalAndSeenUrls(startUrl.Scheme + "://" + startUrl.Host, urls, service, cli, robots)
+	log.Println("retreived and filtered links from ", startUrl.String())
+
+	if len(newUrls) == 0 { print("returning, no new Urls on this page"); return }
+
+
+	log.Println("sending new urls ", newUrls)
+	for _, url := range newUrls {
+		log.Println("discovered ", url)
+		inputchan <- url // send discovered url to be grouped into a job
+		makeKey(url, service.Name, cli) // mark url as seen for this service
+	}
+
+	//TODO: add target depth to service definition
+	if depth == 1 {
+		// create and send new services so that work can be distributed amungst 
+		// other producer nodes
+		serviceChan := make(chan Service)
+		sendNewService(serviceChan)
+		groupSize := 5 // TODO: make group size configurable
+		grp := make([]string, 0, groupSize)
+		for i, url := range newUrls {
+		        log.Println("creating service for ", url)
+			grp = append(grp, url)
+			if i % groupSize == 0 {
+				serviceChan <- Service{
+					Name:        service.Name,
+					RootDomains: grp,
+					Filters:     service.Filters,
+					Plugins:     service.Plugins,
 				}
-				if !shouldIgnore {
-					log.Println("pushing ", url)
-					inputchan <- url
-				}
-			} else {
-				//log.Println("already seen ", url)
+				grp = make([]string, 0, groupSize)
 			}
 		}
+		return
+	}
 
-		for _, url := range urls {
-			if _, ok := ht[url]; !ok {
-				ht[url] = true
-				if depth%6 == 0 {
-					crawl(root, strings.Replace(url, root, "", 1), inputchan, depth-1, ht, ignores)
-				} else {
-					crawl(root, strings.Replace(url, root, "", 1), inputchan, depth-1, ht, ignores)
-				}
-			}
+	// recursive step
+	for _, _url := range newUrls {
+		log.Println("recursing on ", _url)
+		parsed, err :=  url.Parse(_url)
+		if err != nil {
+			log.Println(_url, " is not a valid URL")
+			continue
 		}
-	} else {
-		log.Println("could not get document from ", root+path)
+		crawl(parsed, inputchan, service, cli, depth+1, wg, robots)
 	}
 }
 
 func makeJobChannel(urlchan chan string, chunksize int, plugins []string, service string) chan Job {
 	jobChan := make(chan Job)
-	var jobIds int = 0
-	N := 5
-	var wg sync.WaitGroup
+	jobIds := 0
 	go func() {
 		for {
-			wg.Add(N)
-			for i:= 0; i < N; i++ {
-				chunk := make([]string, 0, chunksize)
-				for i := 0; i < chunksize; i++ {
-					chunk = append(chunk, <-urlchan)
-				}
-
-				jobIds += 1
-				go func () {
-					jobChan <- Job{
-						Id:   jobIds,
-						Urls: chunk,
-						Plugins: plugins,
-						Service: service,
-					}
-					wg.Done()
-				}()
+			chunk := make([]string, 0, chunksize)
+			for i := 0; i < chunksize; i++ {
+				chunk = append(chunk, <-urlchan)
 			}
-			wg.Wait()
+			jobIds += 1
+			jobChan <- Job{
+				Id:      jobIds,
+				Urls:    chunk,
+				Plugins: plugins,
+				Service: service,
+			}
 		}
 	}()
 	return jobChan
+}
+
+func makeKey(url string, name string, cli *clientv3.Client) { //context?
+	cur_val := getValue(url, cli)
+	cur_val = append(cur_val, name)
+	cur_val_str := arr_to_str(cur_val)
+	_, err := cli.Put(context.TODO(), url, cur_val_str) 
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func getValue(key string, cli *clientv3.Client) []string {
+	requestTimeout := 5 * time.Second
+	ctx, cancel := context.WithTimeout(context.Background(), requestTimeout)
+
+	resp, err := cli.Get(ctx, key)
+	cancel()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	val := resp.Kvs
+	if val == nil {
+		return []string{}
+	} else {
+		return str_to_arr(string(val[0].Value))
+	}
+}
+
+func sendNewService(serviceChan chan Service) {
+	config := getConfig()
+	kaf := Kafka{Bootstraps: config.Bootstraps}
+	producer := kaf.Producer()
+	PushServicesToKafka(producer, serviceChan)
+}
+
+func in (vals []string, val string) bool{
+	for _,a := range vals {
+		if a==val{
+			return true
+		}
+	}
+	return false
+}
+
+func arr_to_str(vals []string) string{
+	return strings.Join(vals, " ")
+}
+
+func str_to_arr(val string) []string{
+	return strings.Split(val, " ")
 }

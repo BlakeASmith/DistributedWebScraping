@@ -1,13 +1,20 @@
 package main
 
-import "log"
-import "encoding/json"
-import "strconv"
-import "time"
+import (
+	"encoding/json"
+	"log"
+	"strconv"
+	"time"
+	"sync"
+	"github.com/etcd-io/etcd/clientv3"
+	"net/http"
+	"net/url"
+	"github.com/temoto/robotstxt"
+)
 
 type Job struct {
 	Id int
-	Urls []string
+	Urls    []string
 	Plugins []string
 	Service string
 }
@@ -26,34 +33,80 @@ func (j Job) Value() []byte {
 	return json
 }
 
+func (s Service) Value() []byte {
+	json, err := json.Marshal(s)
+	if err != nil {
+		panic(err)
+	}
+	return json
+}
+
 func DeserializeJob(job []byte) *Job {
 	var djob Job
 	json.Unmarshal(job, &djob)
 	return &djob
 }
 
+// connect to Etcd 
+func initEtcd(config *Config) *clientv3.Client{
+	dialTimeout := 5 * time.Second
+	// requestTimeout := 5 * time.Second
+	cli, err := clientv3.New(clientv3.Config{
+		Endpoints:   config.EtcdEndpoints,
+		DialTimeout: dialTimeout,
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	return cli
+}
+
 func main() {
+	// load configuration from environment variables
 	config := getConfig()
 	log.Println("using config ", config)
 
-	kaf := Kafka{ Bootstraps:config.Bootstraps }
+	cli := initEtcd(config)
+	defer cli.Close()
 
+	kaf := Kafka{Bootstraps: config.Bootstraps}
 	producer := kaf.Producer()
+	defer producer.Close()
 
-	for service := range ServicesChannel(&kaf){
-		log.Println("received service " + service.Name)
-		go PushJobsToKafka(producer, JobChannelFor(&service), 200 * time.Millisecond)
+	receive, commit := kaf.NonCommittingChannel("services", 1)
+	for msg := range receive  {
+		service := DeserializeService(msg.Value)
+		wg := sync.WaitGroup{}
+		jobs := JobChannelFor(service, cli, &wg)
+		PushJobsToKafka(producer, jobs, config.Delay)
+		println("wating for ", service, "to be processed")
+		wg.Wait()
+		print("committing", service)
+		commit <- msg
 	}
 }
 
-func JobChannelFor(service *Service) chan Job {
+func GetRobotsTxt(url *url.URL) *robotstxt.RobotsData{
+	robotsurl := url.Scheme + "://" + url.Host + "/robots.txt"
+	log.Println(robotsurl)
+	resp, err := http.Get(robotsurl)
+	if err != nil { log.Println("could not get ", robotsurl); return nil }
+	defer resp.Body.Close()
+	robots, err := robotstxt.FromResponse(resp)
+	if err != nil { log.Println("invalid robots.txt", err); return nil }
+	return robots
+}
+
+
+func JobChannelFor(service *Service, cli *clientv3.Client, wg *sync.WaitGroup) chan Job {
 	urls := make(chan string)
-	seen := make(map[string] bool)
-	for _, domain := range service.RootDomains{
-		log.Println("starting crawl on", domain)
-		go crawl(domain, "", urls, -1, seen, service.Filters)
+	for _, domain := range service.RootDomains {
+		parsed, err := url.Parse(domain)
+		if err != nil { log.Println("illegal url"); continue }
+		robots := GetRobotsTxt(parsed)
+		go crawl(parsed, urls, service, cli, 0, wg, robots)
 	}
+	// TODO: add job size to service definition
 	jobs := makeJobChannel(urls, 10, service.Plugins, service.Name)
 	return jobs
 }
-

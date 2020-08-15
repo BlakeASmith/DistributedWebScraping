@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="081b00ed-8b7b-4e23-8741-a5b4fabdff4b" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../ClientProxyServer/ProxyClient/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../ClientProxyServer/ProxyClient/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ClientProxyServer/ProxyClient/entrypoint.sh" beforeDir="false" afterPath="$PROJECT_DIR$/../ClientProxyServer/ProxyClient/entrypoint.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ClientProxyServer/ProxyClient/resources/application.conf" beforeDir="false" afterPath="$PROJECT_DIR$/../ClientProxyServer/ProxyClient/resources/application.conf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ClientProxyServer/ProxyClient/src/main/kotlin/Application.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../ClientProxyServer/ProxyClient/src/main/kotlin/Application.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ClientProxyServer/ProxyClient/src/main/kotlin/ProxyClientConnection.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../ClientProxyServer/ProxyClient/src/main/kotlin/ProxyClientConnection.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ClientProxyServer/ProxyClient/src/test/kotlin/Tests.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../ClientProxyServer/ProxyClient/src/test/kotlin/Tests.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ClientProxyServer/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../ClientProxyServer/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ClientProxyServer/entrypoint.sh" beforeDir="false" afterPath="$PROJECT_DIR$/../ClientProxyServer/entrypoint.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ClientProxyServer/src/Application.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../ClientProxyServer/src/Application.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../android2/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../android2/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../android2/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../android2/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../android2/app/src/main/java/Permissions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../android2/app/src/main/java/Permissions.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../android2/app/src/main/java/csc/distributed/webscraper/android/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../android2/app/src/main/java/csc/distributed/webscraper/android/MainActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../android2/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../android2/app/src/main/res/layout/activity_main.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../android2/app/src/main/res/layout/server_info_input_layout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../android2/app/src/main/res/layout/server_info_input_layout.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../android2/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../android2/gradle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../client/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../client/src/main/kotlin/Main.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../clientlib/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../clientlib/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../clientlib/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../clientlib/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../clientlib/definitions/src/main/kotlin/Loaders.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../clientlib/definitions/src/main/kotlin/Loaders.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../clientlib/definitions/src/main/kotlin/csc/distributed/webscraper/definitions/types/types.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../clientlib/definitions/src/main/kotlin/csc/distributed/webscraper/definitions/types/types.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../clientlib/src/main/kotlin/csc/distributed/webscraper/Loaders.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../clientlib/src/main/kotlin/csc/distributed/webscraper/Loaders.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../clientlib/src/main/kotlin/csc/distributed/webscraper/Serdes.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../clientlib/src/main/kotlin/csc/distributed/webscraper/Serdes.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../clientlib/src/main/kotlin/csc/distributed/webscraper/Topics.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../clientlib/src/main/kotlin/csc/distributed/webscraper/Topics.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../clientproxy/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../clientproxy/.idea/compiler.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../clientproxy/.idea/gradle.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../clientproxy/.idea/jarRepositories.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../clientproxy/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../clientproxy/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../clientproxy/build.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../clientproxy/gradle.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../clientproxy/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../clientproxy/gradlew" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../clientproxy/gradlew.bat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../clientproxy/settings.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../clientproxy/src/main/kotlin/Main.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docker/google_cloud_kafka/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../docker/google_cloud_kafka/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docker/test_proxy/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../docker/test_proxy/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docker/test_proxy/services/services.json" beforeDir="false" afterPath="$PROJECT_DIR$/../docker/test_proxy/services/services.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docker/usedvic_wordcount/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../docker/usedvic_wordcount/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kafka/src/main/kotlin/Consumer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../kafka/src/main/kotlin/Consumer.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kafka/src/main/kotlin/ReadWriteTopic.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../kafka/src/main/kotlin/ReadWriteTopic.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../plugins/WordCount/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../plugins/WordCount/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../plugins/WordCount/src/main/kotlin/Plugin.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../plugins/WordCount/src/main/kotlin/Plugin.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../plugins/WordCountReduction/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../plugins/WordCountReduction/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../plugins/WordCountReduction/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../plugins/WordCountReduction/src/main/kotlin/Main.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PluginProvider.iws" beforeDir="false" afterPath="$PROJECT_DIR$/PluginProvider.iws" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/ArgumentParser.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ArgumentParser.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/main.kt" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand />
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectId" id="1fX3rtYgPX2GQi1HrdqBvofi50x" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../ClientProxyServer" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.17" />
+    <property name="project.structure.side.proportion" value="0.2" />
+  </component>
+  <component name="RunManager">
+    <configuration name="provider [jar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="jar" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.provider [jar]" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="081b00ed-8b7b-4e23-8741-a5b4fabdff4b" name="Default Changelist" comment="" />
+      <created>1596350811323</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1596350811323</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="769" y="173" key="#Project_Structure" timestamp="1596777988306">
+      <screen x="0" y="0" width="2560" height="1080" />
+    </state>
+    <state x="769" y="173" key="#Project_Structure/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1596777988306" />
+    <state x="1069" y="354" key="FileChooserDialogImpl" timestamp="1596782455426">
+      <screen x="0" y="0" width="2560" height="1080" />
+    </state>
+    <state x="1069" y="354" key="FileChooserDialogImpl/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1596782455426" />
+    <state width="2518" height="285" key="GridCell.Tab.0.bottom" timestamp="1596782456446">
+      <screen x="0" y="0" width="2560" height="1080" />
+    </state>
+    <state width="2518" height="285" key="GridCell.Tab.0.bottom/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1596782456446" />
+    <state width="2518" height="285" key="GridCell.Tab.0.center" timestamp="1596782456445">
+      <screen x="0" y="0" width="2560" height="1080" />
+    </state>
+    <state width="2518" height="285" key="GridCell.Tab.0.center/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1596782456445" />
+    <state width="2518" height="285" key="GridCell.Tab.0.left" timestamp="1596782456445">
+      <screen x="0" y="0" width="2560" height="1080" />
+    </state>
+    <state width="2518" height="285" key="GridCell.Tab.0.left/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1596782456445" />
+    <state width="2518" height="285" key="GridCell.Tab.0.right" timestamp="1596782456446">
+      <screen x="0" y="0" width="2560" height="1080" />
+    </state>
+    <state width="2518" height="285" key="GridCell.Tab.0.right/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1596782456446" />
+    <state x="769" y="173" key="SettingsEditor" timestamp="1596777588415">
+      <screen x="0" y="0" width="2560" height="1080" />
+    </state>
+    <state x="769" y="173" key="SettingsEditor/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1596777588415" />
+    <state x="943" y="269" width="672" height="678" key="search.everywhere.popup" timestamp="1597270109671">
+      <screen x="0" y="0" width="2560" height="1080" />
+    </state>
+    <state x="943" y="269" width="672" height="678" key="search.everywhere.popup/0.0.2560.1080/259.1080.1920.1080@0.0.2560.1080" timestamp="1597270109671" />
+  </component>
+</project>

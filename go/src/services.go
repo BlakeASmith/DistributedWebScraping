@@ -3,10 +3,13 @@ package main
 import "encoding/json"
 
 type Service struct {
-	Name string
+	Name        string
 	RootDomains []string
-	Filters []string
-	Plugins []string
+	Filters     []string
+	Plugins     []string
+
+	HashTable map[string]bool //todo replace with distributed
+	//delay int
 }
 
 func DeserializeService(bytes []byte) *Service {
@@ -14,5 +17,3 @@ func DeserializeService(bytes []byte) *Service {
 	json.Unmarshal(bytes, &service)
 	return &service
 }
-
-

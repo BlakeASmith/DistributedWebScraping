@@ -4,8 +4,8 @@ RUN unset GOROOT
 
 ENV GO111MODULE=on 
 
-COPY ./install.sh .
-RUN ./install.sh .
+# COPY ./install.sh .
+# RUN ./install.sh .
 
 RUN mkdir webscraper 
 WORKDIR webscraper
@@ -16,7 +16,6 @@ RUN go mod download
 
 COPY . .
 
-ENV WEBSCRAPER_BOOTSTRAPS="localhost:9092"
 RUN export 
 RUN (cd src; go build -o $GOPATH/bin/webscraper)
 

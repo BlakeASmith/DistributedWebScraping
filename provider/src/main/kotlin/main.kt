@@ -1,14 +1,15 @@
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import csc.distributed.webscraper.kafka.*
-import csc.distributed.webscraper.plugins.*
-import csc.distributed.webscraper.services.Service
-import csc.distributed.webscraper.services.ServiceSerializer
+import ca.blakeasmith.kkafka.jvm.*
+import csc.distributed.webscraper.Scraper
+import csc.distributed.webscraper.config.Config
+import csc.distributed.webscraper.types.Service
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import org.apache.kafka.common.serialization.StringSerializer
+import kotlinx.serialization.builtins.list
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonConfiguration
 import java.io.File
-import java.time.Duration
+
+val json = Json(JsonConfiguration.Stable)
 
 fun jarsIn(dir: File) = dir.walk()
         .drop(1) // drop the directory itself
@@ -19,12 +20,9 @@ fun openFileArgument(args: Array<String>, arg: String) = args.withIndex()
                 ?.let { args[it.index+1] }
                 ?.let { File(it) }
 
-fun parseServicesFromJson(json: String, gson: Gson = Gson()) =
-        gson.fromJson<Array<Service>>(json, Array<Service>::class.java)
-
 fun writeExampleJson(file: File){
-    val service = Service("example", listOf("https://www.example.com"), listOf("/dontlook"), "<ip>" to 6969 , listOf("wordcount"))
-    GsonBuilder().setPrettyPrinting().create().toJson(mutableListOf(service))
+    val service = Service("example", listOf("https://www.example.com"), listOf("/dontlook") , listOf("wordcount"))
+    json.stringify(Service.serializer().list, listOf(service))
             .let {json ->
                 file.apply {
                     if (!exists()) createNewFile()
@@ -34,25 +32,47 @@ fun writeExampleJson(file: File){
 }
 
 @ExperimentalCoroutinesApi
+fun logForServices(services: List<Service>, kafka: KafkaConfig): List<Job>{
+    val logDir = File("logs").apply {
+        if (!exists()) mkdirs()
+    }
+
+    return services.map {
+        val log = File("${logDir.path}/${it.name}.log").apply {
+            if (!exists()) createNewFile()
+        }
+
+        Scraper.Client.Output(it.name).readableBy { Consumer.committing("logger", kafka) }
+                .read()
+                .map { (_, result) -> result }
+                .onEach { result ->
+                    log.appendText("${result.data}\n\n")
+                }.launchIn(GlobalScope)
+    }
+}
+
+@ExperimentalCoroutinesApi
 @FlowPreview
 fun main(args: Array<String>) {
-    val kafka = Kafka(Config.get().bootstraps)
-    val serviceProduction = Producer(kafka, StringSerializer::class.java, ServiceSerializer::class.java)
-            .produceTo("services")
+    val kafka = KafkaConfig(Config.get().bootstraps.map { BootstrapServer.fromString(it) })
 
     ArgumentParser<File, Unit>{ File(it) }
             .async("--genexample"){ writeExampleJson(this) }
             .async("--jars"){
-                jarsIn(this).map { it.nameWithoutExtension to it.readBytes() }
-                        .asFlow()
-                        .produceTo(pluginProduction(kafka))
-                        .onEach { println("sent ${it.first} to Kafka, size is ${it.second.size} bytes") }
-                        .collect()
+                val plugs = jarsIn(this).map { it.nameWithoutExtension to it.readBytes() }
+                        .onEach { println("sending $it to kafka") }
+                Scraper.Plugins(kafka)
+                        .writeFrom(plugs.asFlow())
+                        .join()
             }.async("--services"){
-                parseServicesFromJson(readText())
-                        .map { it.name to it }.asFlow()
-                        .produceTo(serviceProduction)
-                        .onEach { println("sent $it to kafka") }
-                        .collect()
+                val services = json.parse(Service.serializer().list, readText())
+                    .map { it.name to it }.asFlow().onEach { println("sending $it to kafka") }
+                Scraper.Services(kafka).writeFrom(services).join()
+                if("--log" in args){
+                        logForServices(services.map { it.second }.toList(), kafka)
+                                .forEach { it.join() }
+                }
             }.parse(args)
+
+
 }
