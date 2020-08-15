@@ -47,7 +47,7 @@ services:
             WEBSCRAPER_BOOTSTRAPS: "kafka:9092"
             #WEBSCRAPER_BOOTSTRAPS: "35.217.96.115:9092"
             WEBSCRAPER_ETCD_SERVERS: "etcd:2379"
-            DELAY_BETWEEN_JOBS: "100"
+            DELAY_BETWEEN_JOBS: "1"
             WEBSCRAPER_DEBUG: "false"
     #logging:
       #driver: none

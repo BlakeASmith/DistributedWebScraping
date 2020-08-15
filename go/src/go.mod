@@ -13,8 +13,11 @@ require (
 	github.com/gogo/protobuf v1.3.1 // indirect
 	github.com/golang/protobuf v1.4.2
 	github.com/google/uuid v1.1.1 // indirect
+	github.com/goware/urlx v0.3.1 // indirect
 	github.com/json-iterator/go v1.1.10 // indirect
 	github.com/modern-go/reflect2 v1.0.1 // indirect
+	github.com/samclarke/robotstxt v0.0.0-20171127213916-2817654b7988 // indirect
+	github.com/temoto/robotstxt v1.1.1 // indirect
 	go.etcd.io/etcd v3.3.22+incompatible // indirect
 	go.uber.org/zap v1.15.0 // indirect
 	// google.golang.org/grpc v1.30.0
