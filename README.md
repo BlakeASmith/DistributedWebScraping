@@ -79,7 +79,7 @@ To build all of the images at once simply run
 Each project has it's own _build.sh_ script for building and tagging the images.
 Note that all of the _Kotlin_ projects are build to a jar file (by gradle) on the
 host machine and then copied into the image. Otherwise all of the dependencies would have to
-be downloaded on each build of the container. The builds are ran using a gradle wrapper, so
+be downloaded on each build of the container. The buids are ran using a gradle wrapper, so
 the correct version of gradle should be installed automatically.
 
 ## Running Test Cases
@@ -99,3 +99,4 @@ to scale the number of clients & kafka nodes you can use `--scale`
 # run 3 clients and 3 kafka nodes
 sudo docker-compose up --scale client=3 kafka=3
 ```
+l
