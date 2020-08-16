@@ -8,6 +8,24 @@ on the cluster without going offline.
 
 A diagram showing the basic architecture ![here](docs/diagrams/kafka_archetecture.pdf "Architecture Diagram")
 
+## Requirements
+
+To run the application you will need
+
+- [Docker](https://docs.docker.com/desktop/)
+- [Docker-compose](https://docs.docker.com/compose/install/)
+
+If you'd like to build the application on your own you will need
+
+- [Golang 1.14](https://golang.org/doc/install)
+- [Graddle](https://gradle.org/install/)
+- [Java 11](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html)
+- [Intellij](https://www.jetbrains.com/idea/download/#section=linux)
+
+## Documents
+
+An in depth analysis of the project can be viewed in the [Report Phase II](./docs/csc462-project-report-phase-II.pdf) document.
+
 ## Components
 
 ### Client Library
@@ -99,4 +117,5 @@ to scale the number of clients & kafka nodes you can use `--scale`
 # run 3 clients and 3 kafka nodes
 sudo docker-compose up --scale client=3 kafka=3
 ```
+
 l
