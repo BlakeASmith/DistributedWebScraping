@@ -117,5 +117,3 @@ to scale the number of clients & kafka nodes you can use `--scale`
 # run 3 clients and 3 kafka nodes
 sudo docker-compose up --scale client=3 kafka=3
 ```
-
-l
