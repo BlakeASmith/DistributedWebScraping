@@ -102,7 +102,7 @@ Test cases are ran via **docker-compose** and located under [./docker](./docker 
 Assuming **docker** and **docker-compose** are installed and running on your machine, you can run examples like this;
 
 ```bash
-cd testscripts/docker/usedvic_wordcount
+cd docker/local_single_producer
 sudo docker-compose up
 ```
 
