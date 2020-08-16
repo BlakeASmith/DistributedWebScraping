@@ -1,3 +1,7 @@
+<!---
+The nomenclature is jank, look at the Glossary in the paper
+nomenclature
+-->
 # Distributed Web Scraping
 
 A distributed web scraping framework which allows for multiple tasks to be
