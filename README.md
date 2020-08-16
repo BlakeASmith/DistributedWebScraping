@@ -30,18 +30,18 @@ An in depth analysis of the project can be viewed in the [Report Phase II](./doc
 
 ### Client Library
 
-a library for defining plugins & services (how to scrape urls, and which urls to scrape)
+A library for defining plugins & services (how to scrape urls, and which urls to scrape)
 
 - create new plugins which define how to scrape data from the pages
 - define services to run over the cluster (start urls, illegal urls, etc)
 - collect results of a running service (via a Kafka topic)
 
-see the ![README](clientlib/README.md "clientlib README") which describes how to use the client library to
+See the ![README](clientlib/README.md "clientlib README") which describes how to use the client library to
 define new plugins and services, as well as how to submit serivices and receive the results.
 
 ### Crawling "Producer" Nodes
 
-nodes which crawl pages and produce URLs to be scraped
+Nodes which crawl pages and produce URLs to be scraped
 
 - written in _Golang_
 - receive service definitions at runtime via a Kafka topic
@@ -58,8 +58,8 @@ Client "scraper" nodes which take the URLs provided by the producer nodes and ru
 - dynamically load plugins (which define scraping tasks)
 - produce JSON data to a different kafka topic (with the same name as the service) for each service - this is how the clients will receive the results
 
-see the ![README](client/README.md "client README") which shows how to use the client library to
-add new plugins & services, as well as how to receive the results from those services.
+See the ![README](client/README.md "client README") which shows how to use the client library to
+Add new plugins & services, as well as how to receive the results from those services.
 
 ### Logger (for Testing)
 
