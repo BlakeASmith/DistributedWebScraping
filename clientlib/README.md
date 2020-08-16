@@ -9,7 +9,7 @@ less friendly to use from java or other JVM languages. Particularly consuming an
 heavily on Kotlin coroutines & Flows. see ![kotlinx-coroutines-rx2](https://github.com/Kotlin/kotlinx.coroutines/tree/master/reactive/kotlinx-coroutines-rx2) which
 proides conversiosn between Kotlin coroutine constructs and equivilent RxJava constructs.
 
-As of now the library needs to be included manually using the output jar file in ![clientlib/build/libs](/build/libs "libs").
+As of now the library needs to be included manually using the output jar files in ![clientlib/build/libs](/build/libs "libs") and ![clientlib/definitions/build/libs](/definitions/build/libs).
 In future we would like to have the library available via *Maven*. It is packaged into two separate artifacts. *clientlib.definitions* contains
 the type definitions, as well as any code relating to Plugin development. The *clientlib* package contains any code which communicates 
 with the Kafka cluster. 

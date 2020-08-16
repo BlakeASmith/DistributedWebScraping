@@ -37,7 +37,7 @@ suspend fun main(args: Array<String>) {
         .also { plugins.close() }
 
     val WCService = Service(
-            "wcservice",
+            "wcservice2",
             listOf(
                     //"http://books.toscrape.com/"
                     //"https://wiki.manjaro.org/index.php?title=Main_Page"

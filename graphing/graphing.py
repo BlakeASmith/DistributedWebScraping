@@ -7,64 +7,60 @@ import datetime
 from pathlib import Path
 from types import SimpleNamespace
 from functools import reduce
+import pandas as pd
 
-data = [SimpleNamespace(**json.loads(text)) for text in Path(sys.argv[1]).read_text().split("\n") if text]
-data = sorted(data, key = lambda jb: jb.timestamp)
-for ns in data:
-    ns.job = SimpleNamespace(**ns.job)
+def fetch_metadata(filename):
+    data = [json.loads(text) for text in Path(filename).read_text().split("\n") if text]
+    data = sorted(data, key = lambda jb: jb["timestamp"])
+    times = [jb["timestamp"] for jb in data]
+    mintime = min(times)
+    for d in data:
+        d["timestamp"] = (d["timestamp"] - mintime)/60000
+    records_produced = [jb["numberOfRecordsProduced"] for jb in data]
+    processing_time = [jb["processingTimePerPage"] for jb in data]
+    for i, jb in enumerate(data):
+        jb["totalRecordsProducedAtTime"] = sum(records_produced[:i+1])
+        jb["toatAvgProcessingTime"] = sum(processing_time[:i+1]) / (i+1)
+    intranges = list(range(0, 1400, 100))
+    ranges = [f"{n}ms" for n in  intranges]
 
-urls = [url for d in data for url in d.job.Urls ]
-print(len(urls) == len(set(urls)))
+    for jb in data:
+        for i, n in enumerate(intranges):
+            if jb["processingTimePerPage"] <= n and "processingTimePerPageGroup" not in jb:
+                jb["processingTimePerPageGroup"] = ranges[i]
+    return pd.DataFrame(data)
 
-
-times = [jb.timestamp for jb in data]
-mintime = min(times)
-adjusted_times = [(tm - mintime)/60000 for tm in times]
-print(adjusted_times[:10])
-print(sum(adjusted_times) / len(adjusted_times))
-
-records_produced = [jb.numberOfRecordsProduced for jb in data]
-processing_time = [jb.processingTimePerPage for jb in data]
-records_over_time = []
-processing_time_over_time = []
-for i, jb in enumerate(data):
-    records_over_time.append(sum(records_produced[:i+1]))
-    processing_time_over_time.append(sum(processing_time[:1+1]) / (i+1))
-
-
-num_records = reduce(lambda a, b: a+b, [jb.numberOfRecordsProduced for jb in data])
-num_unreachable = reduce(lambda a, b: a+b, [jb.numberOfUnreachableSites for jb in data])
-average_times = [int(jb.processingTimePerPage) for jb in data]
-average_proc_time = sum(average_times) / len(data)
-total_time = reduce(lambda a, b: a+b, [int(jb.processingTime) for jb in data])
-
-print(f"Number of Records: {num_records}")
-print(f"Number of Jobs: {len(data)}")
-print(f"Number of Unreachable Sites: {num_unreachable}")
-print(f"Average processing time per page: {average_proc_time}ms")
-print(f"Total Cumulative Proccessing Time: {datetime.timedelta(milliseconds=total_time)}ms")
-
+def add_traces_for_dataframe(dataframe, fig):
+    fig.add_trace(
+            go.Scatter(
+                x=dataframe["timestamp"], 
+                y=dataframe["toatAvgProcessingTime"],
+            ),
+        row=2, col=1
+    )
+    fig.add_trace(
+        go.Scatter(x=dataframe["timestamp"], y=dataframe["totalRecordsProducedAtTime"]),
+        row=1, col=1
+    )
 
 
-fig = make_subplots(rows=2, cols=1,  subplot_titles=("Number of Pages Processed Over Time", "Average Proccessing Time Per Page Over Time"), shared_xaxes=True)
+with open("graphs.json") as gr:
+    graphs = json.load(gr)
 
-fig.add_trace(
-        go.Scatter(
-            x=adjusted_times, 
-            y=records_over_time,
-        ),
-    row=1, col=1
-)
+for graph in graphs:
+    fig = go.Figure()
+    fig = make_subplots(rows=2, cols=1,  subplot_titles=("Number of Pages Processed Over Time", "Average Proccessing Time Per Page Over Time")) 
+    dataframe = fetch_metadata(graph["filename"])
+    hist = px.histogram(dataframe, x="processingTimePerPageGroup", title=f"Processing Time Per Page Across Jobs: {graph['title']}", 
+            labels={'processingTimePerPageGroup':"Processing Time Per Page"}, width=1000)
+    hist.update_xaxes(categoryorder="category ascending")
+    hist.show()
 
-fig.add_trace(
-    go.Scatter(x=adjusted_times, y=processing_time_over_time),
-    row=2, col=1
-)
+    add_traces_for_dataframe(dataframe, fig)
+    fig.update_xaxes(title_text="Real Time in Mins")
+    fig.update_yaxes(title_text="Number of Pages Processed", row=1, col=1)
+    fig.update_yaxes(title_text="Average Processing Time Per Page (ms)", row=2, col=1)
 
-fig.update_xaxes(title_text="Real Time in Seconds")
-fig.update_yaxes(title_text="Number of Pages Processed", row=1, col=1)
-fig.update_yaxes(title_text="Average Processing Time Per Page (ms)", row=2, col=1)
-
-fig.update_layout(title_text="Word Count on https://www.merriam-webster.com/ On a Single Machine Running 1 Producer and 3 Clients", width=1000)
-fig.show()
-
+    fig.update_layout(title_text=f"Word Count on {graph['site']}: {graph['title']}", width=1000, 
+            showlegend=False)
+    fig.show()
