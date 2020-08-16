@@ -6,8 +6,6 @@ In addition new functionality can be added at runtime via plugins (packaged in J
 many different workflows to be run over the cluster at the same time, and for new tasks to be performed
 on the cluster without going offline.
 
-A diagram showing the basic architecture ![here](docs/diagrams/kafka_archetecture.pdf "Architecture Diagram")
-
 ## Requirements
 
 To run the application you will need
