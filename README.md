@@ -48,7 +48,7 @@ Nodes which crawl pages and produce URLs to be scraped
 - crawl the internet starting from the base domains specified for the service
 - ensure **at most once** processing via a distributed hash table of discovered domains - separate hash table per service, shared between all nodes responsible for a given service
 - produce jobs (groups of urls) to a kafka topic
-- see the ![README](go/README.md "go README")
+
 
 ### Scraping "Client" Nodes
 
