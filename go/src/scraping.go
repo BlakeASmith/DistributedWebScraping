@@ -57,7 +57,7 @@ func normalizeUrls(baseuri string, urls []string) []string {
 	return urls
 }
 
-// restructs urls to the given base domain, returns those urls 
+// restricts urls to the given base domain, returns those urls 
 // under the same base domain as a slice
 func restrictDomain(baseuri string, urls []string) []string {
 	restricted := make([]string, 0)
@@ -79,6 +79,7 @@ func ShouldIgnore(root string, url string, filters []string) bool {
 	return false
 }
 
+//remove relative links that look unique but aren't
 func IsLegal(url string) bool {
 	if strings.Contains(url, "../") {
 		return false
