@@ -10,7 +10,9 @@ heavily on Kotlin coroutines & Flows. see ![kotlinx-coroutines-rx2](https://gith
 proides conversiosn between Kotlin coroutine constructs and equivilent RxJava constructs.
 
 As of now the library needs to be included manually using the output jar file in ![clientlib/build/libs](/build/libs "libs").
-In future we would like to have the library available via *Maven*.
+In future we would like to have the library available via *Maven*. It is packaged into two separate artifacts. *clientlib.definitions* contains
+the type definitions, as well as any code relating to Plugin development. The *clientlib* package contains any code which communicates 
+with the Kafka cluster. 
 
 In intellij you can add it by selecting `File > Project Structure > Modules > Dependencies` and clicking the `+` icon.
 
@@ -27,21 +29,12 @@ repositories {
 
 dependencies {
     ...
-    compile(name:"clientlib", ext:"jar")
-    ...
-}
-```
-
-You will also need to add in the dependencies for the library, as noted you may require additional dependencies in non-Kotlin projects
-
-```gradle
-dependencies {
-    ...
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.3"
     implementation 'org.apache.kafka:kafka-clients:2.0.0'
     implementation group: 'org.jsoup', name: 'jsoup', version: '1.11.3'
     implementation 'com.google.code.gson:gson:2.8.6'
     compile(name:"clientlib", ext:"jar")
+    compile(name:"clientlib.definitions", ext:"jar")
     ...
 }
 ```
@@ -65,27 +58,6 @@ To create a new plugin, simply create a class implementing the Plugin interface.
 The `Document` passed to the scrape function provides a Jquery-like interface to the *DOM*. Here we're just returning the URL.
 
 Produce a Jar file containing your Plugin class and any required dependencies (Jsoup can be exluded as it is already present at the client).
-
-## Pushing a plugin to Kafka
-
-Here is how you would send the plugin to Kafka;
-
-```kotlin
-import csc.distributed.webscraper.kafka.Kafka
-import csc.distributed.webscraper.plugins.webscraper
-...
-
-val kafka = Kafka(
-	bootstraps = listOf("kafka1:9092", "kafka2:9092") // kafka servers to try connecting to
-)
-
-val pluginChannel = pluginProduction(kafka)
-
-suspend fun main() {
-	val myPluginJar = File("/path/to/plugin/jar")
-	pluginChannel.sendComplete(myPluginJar.name, myPluginJar.readBytes()) // sendComplete blocks until kafka has received the message
-}
-```
 
 # Defining Services
 
@@ -117,57 +89,52 @@ val myService = Service(
 )
 ```
 
-Then, send the Service to Kafka so that the scraping can begin!
+## Pushing a plugin & service to Kafka
+
+Once you have defined your Plugin and Service, you can submit it and collect the
+results as follows;
 
 ```kotlin
 import csc.distributed.webscraper.kafka.Kafka
 import csc.distributed.webscraper.plugins.webscraper
-
-val kafka = Kafka(
-	bootstraps = listOf("kafka1:9092", "kafka2:9092") // kafka servers to try connecting to
-)
-
-val serviceChannel = serviceProduction(kafka) // exposes a Kafka producer as a Channel
-
-suspend fun main() {
-	serviceChannel.sendComplete(myService.name to myService) // sendComplete blocks until kafka has received the message
-}
-```
-
-Assuming all of the specified plugins have been submitted, your service is be up and running!
-
-## Receiving Results
-
-For the sake of this example we will assume we are going to recieve the results in the same process 
-which we submitted the service, but this doesn't at all need to be the case.
-
-The results are best consumed as a *Flow*. Here I use Gson to read the json data.
-
-```kotlin
-import csc.distributed.webscraper.plugins.webscraper
 ...
+...
+import csc.distributed.webscraper.Scraper
+import ca.blakeasmith.kKafka.jvm.*
 
-val kafka = Kafka(
-	bootstraps = listOf("kafka1:9092", "kafka2:9092") // kafka servers to try connecting to
-)
+@Serializable
+data class MyPluginResult(...)
 
-val serviceChannel = serviceProduction(kafka) // exposes a Kafka producer as a Channel
+fun main() {
+    val myService = Service(
+	    name = "example",
+	    rootDomains = listOf("https://www.scrapethissite.com"),
+	    filters = listOf("#", "/dontlook", "/garbage path"),
+	    plugins = listOf("myPlugin")
+    )
+   
+    val myPlugin = File("path/to/myPlugin.jar")
 
-data class MyProducedData(val field1, val field2)
+    val config = KafkaConfig(listof("<ip>:<addr>"))
+    Scraper.Services(config)
+             .write(myService.name, myService)
+             .close()
 
-suspend fun main() {
-	serviceChannel.sendComplete(myService.name to myService) // sendComplete blocks until kafka has received the message
-	val gson = Gson()
-	outputConsumer(myService.name).asFlow()
-		.map { ((url, plugin), json) ->
-			gson.fromJson(json, MyProducedData::class.java)
-		}.onEach { 
-			println(it)
-		}.collect()
+    Scraper.Plugins(config)
+             .write("myPlugin", myPlugin.readBytes())
+             .close()
+
+    Scraper.Output(myService.name, MyPluginResult.serializer().list)
+           .read("my_Kafka_group_id") // returns a Flow
+           .forEach { (url, pluginName, pluginResult)
+               println(pluginResult)  
+           }.collect()            
 }
 
-
 ```
+
+
+
 
 
 
