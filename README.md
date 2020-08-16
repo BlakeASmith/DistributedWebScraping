@@ -58,13 +58,6 @@ Client "scraper" nodes which take the URLs provided by the producer nodes and ru
 - dynamically load plugins (which define scraping tasks)
 - produce JSON data to a different kafka topic (with the same name as the service) for each service - this is how the clients will receive the results
 
-See the ![README](client/README.md "client README") which shows how to use the client library to
-Add new plugins & services, as well as how to receive the results from those services.
-
-### Logger (for Testing)
-
-The ![logger](ResultLogger "logger README") reads from the output topics for all running services and logs the output for each to it's own file
-
 ### Provider
 
 The ![provider](provider "provider README")/uploader is used to initialize a set of plugins and services at startup time.
