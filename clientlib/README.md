@@ -4,10 +4,10 @@ Define new plugins & services for the Distributed Web Scraper!
 
 # Installation
 
-The library is written in **Kotlin**, but should be accessable from other JVM languages. However the API may be 
+The library is written in **Kotlin**, but should be accessible from other JVM languages. However the API may be 
 less friendly to use from java or other JVM languages. Particularly consuming and producing to topics relies 
 heavily on Kotlin coroutines & Flows. see ![kotlinx-coroutines-rx2](https://github.com/Kotlin/kotlinx.coroutines/tree/master/reactive/kotlinx-coroutines-rx2) which
-proides conversiosn between Kotlin coroutine constructs and equivilent RxJava constructs.
+provides conversion between Kotlin coroutine constructs and equivalent RxJava constructs.
 
 As of now the library needs to be included manually using the output jar files in ![clientlib/build/libs](/build/libs "libs") and ![clientlib/definitions/build/libs](/definitions/build/libs).
 In future we would like to have the library available via *Maven*. It is packaged into two separate artifacts. *clientlib.definitions* contains
