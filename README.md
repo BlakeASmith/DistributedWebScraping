@@ -95,7 +95,7 @@ the correct version of gradle should be installed automatically.
 
 ## Running Test Cases
 
-Test cases are ran via **docker-compose** and located under [testscripts/docker](testscripts/docker "tests").
+Test cases are ran via **docker-compose** and located under [./docker](./docker "tests").
 
 Assuming **docker** and **docker-compose** are installed and running on your machine, you can run examples like this;
 
